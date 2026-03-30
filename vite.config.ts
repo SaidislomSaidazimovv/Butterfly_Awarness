@@ -1,3 +1,4 @@
+import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import tailwindcss from "@tailwindcss/vite";
@@ -10,7 +11,22 @@ const __dirname = path.dirname(__filename);
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss(), viteSingleFile()],
+  plugins: [
+    {
+      name: "staging-1-middleware",
+      configureServer(server) {
+        server.middlewares.use("/staging-1", (req, res, next) => {
+          const filePath = path.resolve(__dirname, "public/staging-1.html");
+          const content = fs.readFileSync(filePath, "utf-8");
+          res.setHeader("Content-Type", "text/html");
+          res.end(content);
+        });
+      },
+    },
+    react(),
+    tailwindcss(),
+    viteSingleFile(),
+  ],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),
