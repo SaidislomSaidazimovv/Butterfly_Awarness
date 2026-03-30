@@ -1,5 +1,7 @@
 import { useState, useRef } from "react";
+import { Routes, Route } from "react-router-dom";
 import { motion, useScroll, useTransform, MotionValue, useMotionValueEvent } from "framer-motion";
+import Stage1 from "./pages/Stage1";
 
 const quoteText = "Sometimes the bravest thing you can do is make a simple gesture. The Butterfly is that gesture — a beacon of hope in the darkest moments.";
 const quoteWords = quoteText.split(" ");
@@ -46,7 +48,7 @@ import {
   Play
 } from "lucide-react";
 
-export default function App() {
+function Home() {
 
   const aboutRef = useRef<HTMLElement>(null);
   const guideVideoRef = useRef<HTMLVideoElement>(null);
@@ -933,5 +935,14 @@ export default function App() {
         </div>
       </footer>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/stage-1" element={<Stage1 />} />
+    </Routes>
   );
 }
