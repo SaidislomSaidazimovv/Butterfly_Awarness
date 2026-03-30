@@ -942,7 +942,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/stage-1" element={<Stage1 />} />
+      <Route path="/staging-1" element={<Stage1 />} />
     </Routes>
   );
 }
