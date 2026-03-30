@@ -1356,7 +1356,456 @@ footer {
 
   .bottom-bar-inner { max-width: 1440px; }
 }
+.btn-signin {
+  background: transparent;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--hair);
+  cursor: pointer;
+  transition: background var(--transition);
+  white-space: nowrap;
+}
+.btn-signin:hover { background: var(--surface); }
+.user-menu-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+.user-menu-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--surface);
+  border: 1px solid var(--hair);
+  border-radius: var(--radius-pill);
+  padding: 6px 12px 6px 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  transition: background var(--transition);
+}
+.user-menu-btn:hover { background: var(--hair); }
+.user-avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  text-transform: uppercase;
+}
+.user-menu-name {
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.user-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: var(--bg);
+  border: 1px solid var(--hair);
+  border-radius: 14px;
+  box-shadow: var(--shadow-float);
+  min-width: 200px;
+  padding: 8px;
+  z-index: 9100;
+}
+.user-dropdown-email {
+  font-size: 12px;
+  color: var(--caption);
+  padding: 6px 8px;
+  word-break: break-all;
+}
+.user-dropdown-divider {
+  height: 1px;
+  background: var(--hair);
+  margin: 6px 0;
+}
+.user-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 9px 10px;
+  border-radius: 10px;
+  border: none;
+  background: none;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  cursor: pointer;
+  transition: background var(--transition);
+  text-align: left;
+}
+.user-dropdown-item:hover { background: var(--surface); }
+.user-dropdown-signout { color: var(--danger); }
+.user-dropdown-signout:hover { background: #FFF0EF; }
+.auth-overlay {
+  position: fixed; inset: 0; z-index: 9800;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(4px);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s;
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.auth-overlay.open { opacity: 1; pointer-events: all; }
+.auth-modal {
+  width: 100%; max-width: 420px;
+  background: var(--bg);
+  border-radius: 24px;
+  padding: 32px 28px 28px;
+  position: relative;
+  transform: translateY(16px) scale(0.98);
+  opacity: 0;
+  transition: transform 0.3s cubic-bezier(0.32,0.72,0,1), opacity 0.3s;
+}
+.auth-overlay.open .auth-modal { transform: translateY(0) scale(1); opacity: 1; }
+.auth-modal-handle {
+  width: 36px; height: 4px; border-radius: 2px;
+  background: var(--hair); margin: 0 auto 20px;
+}
+.auth-modal-close {
+  position: absolute; top: 16px; right: 20px;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--surface); border: none;
+  font-size: 18px; color: var(--muted);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+}
+.auth-modal-title { font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.auth-modal-sub { font-size: 14px; color: var(--caption); margin-bottom: 24px; }
+.auth-field-row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+.auth-label { font-size: 13px; font-weight: 600; color: var(--text); }
+.auth-input {
+  background: var(--surface); border: 1px solid var(--hair);
+  border-radius: 10px; padding: 12px 14px;
+  font-family: var(--font); font-size: 15px; color: var(--text);
+  outline: none; transition: border-color var(--transition);
+}
+.auth-input:focus { border-color: var(--accent); }
+.auth-error { font-size: 13px; min-height: 18px; margin-bottom: 8px; }
+.auth-submit {
+  width: 100%; background: var(--accent); color: #fff;
+  font-size: 16px; font-weight: 700;
+  padding: 14px; border-radius: var(--radius-pill);
+  border: none; cursor: pointer; margin-bottom: 16px;
+  transition: background var(--transition);
+}
+.auth-submit:hover { background: #005fa3; }
+.auth-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+.auth-toggle-text { font-size: 14px; color: var(--caption); text-align: center; }
+.auth-toggle-link {
+  color: var(--accent); font-weight: 600; background: none;
+  border: none; cursor: pointer; font-size: 14px;
+  text-decoration: underline;
+}
+.auth-google-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 13px;
+  border-radius: var(--radius-pill);
+  border: 1.5px solid var(--hair);
+  background: var(--bg);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  margin-bottom: 12px;
+  transition: background var(--transition), border-color var(--transition);
+}
+.auth-google-btn:hover {
+  background: var(--surface);
+  border-color: var(--caption);
+}
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  color: var(--caption);
+  font-size: 13px;
+}
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--hair);
+}
 </style>
+
+<script>
+(function(f,b){if(!b.__SV){var e,g,i,h;window.mixpanel=b;b._i=[];b.init=function(e,f,c){function g(a,d){var b=d.split(".");2==b.length&&(a=a[b[0]],d=b[1]);a[d]=function(){a.push([d].concat(Array.prototype.slice.call(arguments,0)))}}var a=b;"undefined"!==typeof c?a=b[c]=[]:c="mixpanel";a.people=a.people||[];a.toString=function(a){var d="mixpanel";"mixpanel"!==c&&(d+="."+c);a||(d+=" (stub)");return d};a.people.toString=function(){return a.toString(1)+".people (stub)"};i="disable time_event track track_pageview track_links track_forms track_with_groups add_group set_group remove_group register register_once alias unregister identify name_tag set_config reset opt_in_tracking opt_out_tracking has_opted_in_tracking has_opted_out_tracking clear_opt_in_out_tracking start_batch_senders people.set people.set_once people.unset people.increment people.append people.union people.track_charge people.clear_charges people.delete_user people.remove".split(" ");for(h=0;h<i.length;h++)g(a,i[h]);var j="set set_once union unset remove delete".split(" ");a.get_group=function(){function b(c){d[c]=function(){call2_args=arguments;call2=[c].concat(Array.prototype.slice.call(call2_args,0));a.push([e].concat(call2))}}for(var d={},e=["get_group"].concat(Array.prototype.slice.call(arguments,0)),c=0;c<j.length;c++)b(j[c]);return d};b._i.push([e,f,c])};b.__SV=1.2;e=f.createElement("script");e.type="text/javascript";e.async=!0;e.src="https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";g=f.getElementsByTagName("script")[0];g.parentNode.insertBefore(e,g)}})(document,window.mixpanel||[]);
+mixpanel.init('5b892f00119d3bb2c7a37246b57daa08', {debug: false, track_pageview: true, persistence: 'localStorage', ignore_dnt: true, api_host: 'https://api-eu.mixpanel.com'});
+window.track = function(event, props) {
+  try { mixpanel.track(event, props || {}); } catch(e) {}
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+window.addEventListener('DOMContentLoaded', function() {
+// ===================== SUPABASE CONFIG =====================
+// Replace these with your actual values from Supabase Settings > API
+const SUPABASE_URL = 'https://eegwdlywdxgxbgshrazl.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVlZ3dkbHl3ZHhneGJnc2hyYXpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NTcxMzQsImV4cCI6MjA5MDQzMzEzNH0.vW8y3ZzBHfizGnymvgo-PL3So6ZZ428N7owKvzel98U';
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+
+
+// ===================== AUTH STATE =====================
+let currentUser = null;
+
+// Check auth state on load
+supabase.auth.getSession().then(({ data: { session } }) => {
+  if (session) {
+    currentUser = session.user;
+    updateAuthUI(true);
+  }
+});
+
+supabase.auth.onAuthStateChange((_event, session) => {
+  currentUser = session?.user ?? null;
+  updateAuthUI(!!session);
+});
+
+async function updateAuthUI(isLoggedIn) {
+  const signInBtn = document.getElementById('signInBtn');
+  const userMenu = document.getElementById('userMenu');
+  if (signInBtn) signInBtn.style.display = isLoggedIn ? 'none' : 'inline-flex';
+  if (userMenu) userMenu.style.display = isLoggedIn ? 'inline-flex' : 'none';
+  if (isLoggedIn && currentUser) {
+    const email = currentUser.email || '';
+    const name = currentUser.user_metadata?.display_name || email.split('@')[0] || 'Account';
+    const avatar = document.getElementById('userAvatar');
+    const menuName = document.getElementById('userMenuName');
+    const dropEmail = document.getElementById('userDropdownEmail');
+    if (avatar) avatar.textContent = name.charAt(0).toUpperCase();
+    if (menuName) menuName.textContent = name;
+    if (dropEmail) dropEmail.textContent = email;
+    // Update country_code for existing users if null
+    if (currentUser) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('country_code')
+        .eq('id', currentUser.id)
+        .single();
+      if (profile && !profile.country_code) {
+        const cc = getCountryCode();
+        if (cc) {
+          await supabase
+            .from('profiles')
+            .update({ country_code: cc })
+            .eq('id', currentUser.id);
+        }
+      }
+    }
+  }
+}
+
+function toggleUserDropdown() {
+  const dropdown = document.getElementById('userDropdown');
+  if (!dropdown) return;
+  const isOpen = dropdown.style.display === 'block';
+  dropdown.style.display = isOpen ? 'none' : 'block';
+}
+
+// ===================== REAL COUNTER FROM DB =====================
+async function loadRealCount() {
+  try {
+    const { count, error } = await supabase
+      .from('hand_raises')
+      .select('*', { count: 'exact', head: true });
+    const total = (!error && count !== null) ? count : 0;
+    globalCount = total;
+    if (heroCountEl) heroCountEl.textContent = formatNum(globalCount);
+  } catch(e) {
+    // silent fail
+  }
+}
+loadRealCount();
+
+// ===================== SAVE HAND RAISE TO DB =====================
+function getCountryCode() {
+  try {
+    const lang = navigator.language || navigator.languages?.[0] || '';
+    const parts = lang.split('-');
+    if (parts.length > 1) return parts[parts.length - 1].toUpperCase();
+    return null;
+  } catch(e) {
+    return null;
+  }
+}
+
+async function saveHandRaise() {
+  try {
+    const sessionId = localStorage.getItem('bc_session') || crypto.randomUUID();
+    localStorage.setItem('bc_session', sessionId);
+
+    // Check if already raised (by session or user)
+    if (currentUser) {
+      const { data: existing } = await supabase
+        .from('hand_raises')
+        .select('id')
+        .eq('user_id', currentUser.id)
+        .single();
+      if (existing) return; // already raised
+    } else {
+      const { data: existing } = await supabase
+        .from('hand_raises')
+        .select('id')
+        .eq('session_id', sessionId)
+        .single();
+      if (existing) return; // already raised
+    }
+
+    await supabase.from('hand_raises').insert({
+      session_id: sessionId,
+      user_id: currentUser ? currentUser.id : null,
+      country_code: getCountryCode()
+    });
+  } catch(e) {
+    // silent fail
+  }
+}
+
+// ===================== SAVE EMAIL TO DB =====================
+async function saveEmail(email) {
+  try {
+    const { error } = await supabase
+      .from('email_reminders')
+      .insert({ email });
+    if (error && error.code === '23505') {
+      return { success: false, message: 'Already subscribed!' };
+    }
+    return { success: true };
+  } catch(e) {
+    return { success: false, message: 'Something went wrong.' };
+  }
+}
+
+// ===================== AUTH FUNCTIONS =====================
+function openAuthModal(mode = 'login') {
+  document.getElementById('authOverlay').classList.add('open');
+  document.getElementById('authMode').dataset.mode = mode;
+  document.getElementById('authTitle').textContent = mode === 'login' ? 'Sign in' : 'Create account';
+  document.getElementById('authSubmitBtn').textContent = mode === 'login' ? 'Sign in' : 'Create account';
+  document.getElementById('authToggleText').innerHTML = mode === 'login'
+    ? 'No account? <button onclick="switchAuthMode(\'register\')" class="auth-toggle-link">Sign up</button>'
+    : 'Have an account? <button onclick="switchAuthMode(\'login\')" class="auth-toggle-link">Sign in</button>';
+  document.getElementById('authNameRow').style.display = mode === 'register' ? 'flex' : 'none';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeAuthModal(e) {
+  if (!e || e.target === document.getElementById('authOverlay')) {
+    document.getElementById('authOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+    document.getElementById('authError').textContent = '';
+  }
+}
+
+function switchAuthMode(mode) {
+  openAuthModal(mode);
+}
+
+async function handleGoogleSignIn() {
+  track('google_signin_attempted');
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: window.location.origin + '/staging-1'
+    }
+  });
+  if (error) {
+    document.getElementById('authError').textContent = error.message;
+  }
+}
+
+async function handleAuthSubmit() {
+  const mode = document.getElementById('authMode').dataset.mode;
+  const email = document.getElementById('authEmail').value.trim();
+  const password = document.getElementById('authPassword').value;
+  const name = document.getElementById('authName').value.trim();
+  const errorEl = document.getElementById('authError');
+  const submitBtn = document.getElementById('authSubmitBtn');
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  if (!email || !password) { errorEl.textContent = 'Please fill in all fields.'; return; }
+  if (!emailRegex.test(email)) { errorEl.textContent = 'Please enter a valid email address.'; return; }
+  if (password.length < 6) { errorEl.textContent = 'Password must be at least 6 characters.'; return; }
+  if (mode === 'register' && password.length < 8) { errorEl.textContent = 'Password must be at least 8 characters.'; return; }
+  const honeypot = document.getElementById('authHoneypot');
+  if (honeypot && honeypot.value) { return; }
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Please wait...';
+  errorEl.textContent = '';
+
+  try {
+    if (mode === 'register') {
+      const { error } = await supabase.auth.signUp({
+        email, password,
+        options: {
+          data: {
+            display_name: name || email.split('@')[0],
+            country_code: getCountryCode()
+          }
+        }
+      });
+      if (error) throw error;
+      track('user_registered', { method: 'email' });
+      errorEl.style.color = 'var(--success)';
+      errorEl.textContent = 'Check your email to confirm your account!';
+    } else {
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      track('user_signed_in', { method: 'email' });
+      closeAuthModal();
+    }
+  } catch(e) {
+    errorEl.style.color = 'var(--danger)';
+    errorEl.textContent = e.message || 'Something went wrong.';
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = mode === 'login' ? 'Sign in' : 'Create account';
+  }
+}
+
+async function handleSignOut() {
+  const dropdown = document.getElementById('userDropdown');
+  if (dropdown) dropdown.style.display = 'none';
+  await supabase.auth.signOut();
+  updateAuthUI(false);
+}
+
+// Expose to global scope for onclick handlers
+window.openAuthModal = openAuthModal;
+window.closeAuthModal = closeAuthModal;
+window.switchAuthMode = switchAuthMode;
+window.handleAuthSubmit = handleAuthSubmit;
+window.handleGoogleSignIn = handleGoogleSignIn;
+window.handleSignOut = handleSignOut;
+window.toggleUserDropdown = toggleUserDropdown;
+window.saveHandRaise = saveHandRaise;
+window.saveEmail = saveEmail;
+});
+</script>
+
 </head>
 <body>
 
@@ -1368,7 +1817,7 @@ footer {
 <header class="topbar" role="banner">
   <div class="topbar-inner">
     <a href="/" class="wordmark" aria-label="Butterfly Challenge home">
-      <svg width="20" height="20" viewBox="0 0 40 40" fill="currentColor" aria-hidden="true" style="flex-shrink:0"><path d="M20 8 C14 8 8 12 8 20 C8 14 4 10 4 10 C4 10 8 16 12 20 C8 24 4 30 4 30 C4 30 8 26 8 20 C8 28 14 32 20 32 C26 32 32 28 32 20 C32 26 36 30 36 30 C36 30 32 24 28 20 C32 16 36 10 36 10 C36 10 32 14 32 20 C32 12 26 8 20 8Z" opacity="0.85"/></svg>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0"><path d="M12 12c-3.5-3-6-5.5-6-8.5a3.5 3.5 0 0 1 7 0c0 3-2.5 5.5-6 8.5Z"/><path d="M12 12c3.5-3 6-5.5 6-8.5a3.5 3.5 0 0 0-7 0c0 3 2.5 5.5 6 8.5Z"/><path d="M12 12c0 3-2.5 5.5-6 8.5a3.5 3.5 0 0 1 0-7c3 0 5.5 2.5 6 5.5Z"/><path d="M12 12c0 3 2.5 5.5 6 8.5a3.5 3.5 0 0 0 0-7c-3 0-5.5 2.5-6 5.5Z"/></svg>
       Butterfly Challenge
     </a>
     <nav class="topbar-nav" aria-label="Main navigation">
@@ -1377,6 +1826,22 @@ footer {
       <a href="#faq">FAQ</a>
     </nav>
     <div class="topbar-actions">
+      <button id="signInBtn" class="btn-signin" onclick="openAuthModal('login')" aria-label="Sign in">Sign in</button>
+      <div class="user-menu-wrap" id="userMenu" style="display:none">
+        <button class="user-menu-btn" id="userMenuBtn" onclick="toggleUserDropdown()" aria-label="User menu">
+          <div class="user-avatar" id="userAvatar">U</div>
+          <span class="user-menu-name" id="userMenuName">Account</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="user-dropdown" id="userDropdown" style="display:none">
+          <div class="user-dropdown-email" id="userDropdownEmail"></div>
+          <div class="user-dropdown-divider"></div>
+          <button class="user-dropdown-item user-dropdown-signout" onclick="handleSignOut()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Sign out
+          </button>
+        </div>
+      </div>
       <a href="https://google.com" class="topbar-safe-exit" aria-label="Safe exit to Google">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
         Safe Exit
@@ -1856,7 +2321,7 @@ footer {
   <div class="footer-top">
     <div class="footer-col footer-col-brand">
       <div class="footer-brand-row">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 12c-3.5-3-6-5.5-6-8.5a3.5 3.5 0 0 1 7 0c0 3-2.5 5.5-6 8.5Z"/><path d="M12 12c3.5-3 6-5.5 6-8.5a3.5 3.5 0 0 0-7 0c0 3 2.5 5.5 6 8.5Z"/><path d="M12 12c0 3-2.5 5.5-6 8.5a3.5 3.5 0 0 1 0-7c3 0 5.5 2.5 6 5.5Z"/><path d="M12 12c0 3 2.5 5.5 6 8.5a3.5 3.5 0 0 0 0-7c-3 0-5.5 2.5-6 5.5Z"/></svg>
         <span class="footer-brand">Butterfly Challenge</span>
       </div>
       <p class="footer-org">An initiative of One Humanity Foundation.</p>
@@ -2063,7 +2528,7 @@ footer {
 <!-- ===== JAVASCRIPT ===== -->
 <script>
 // ===================== COUNTER =====================
-let globalCount = 147283;
+let globalCount = 0;
 
 function formatNum(n) {
   return n.toLocaleString('en-US');
@@ -2087,6 +2552,7 @@ if (heroCountEl) {
   setTimeout(() => animateCounter(heroCountEl, globalCount, 1800), 400);
 }
 
+/*
 // Increment periodically
 setInterval(() => {
   const inc = Math.floor(Math.random() * 4) + 1;
@@ -2100,6 +2566,7 @@ setInterval(() => {
   heroCountEl.parentElement.parentElement.appendChild(float);
   float.addEventListener('animationend', () => float.remove());
 }, 3000 + Math.random() * 2000);
+*/
 
 // ===================== SCROLL ARROW =====================
 window.addEventListener('scroll', () => {
@@ -2165,18 +2632,39 @@ function toggleFaq(btn) {
   if (!isOpen) {
     item.classList.add('open');
     btn.setAttribute('aria-expanded', 'true');
+    track('faq_opened', { question: btn.textContent.trim().substring(0, 50) });
   }
 }
 
 // ===================== I DID IT =====================
-let hasCelebrated = false;
+let hasCelebrated = !!localStorage.getItem('bc_did_it');
+
+// Update "I did it" button if already done
+if (hasCelebrated) {
+  const btn = document.getElementById('didItBtn');
+  if (btn) {
+    btn.innerHTML = '<span aria-hidden="true" style="font-size:20px;">✅</span> You raised your hand!';
+    btn.style.background = 'var(--success)';
+    btn.style.animation = 'none';
+    btn.style.cursor = 'default';
+  }
+}
 
 function handleDidIt() {
   if (hasCelebrated) { openShare(); return; }
   hasCelebrated = true;
+  localStorage.setItem('bc_did_it', '1');
+  track('did_it_clicked');
+  const didBtn = document.getElementById('didItBtn');
+  if (didBtn) {
+    didBtn.innerHTML = '<span aria-hidden="true" style="font-size:20px;">✅</span> You raised your hand!';
+    didBtn.style.background = 'var(--success)';
+    didBtn.style.animation = 'none';
+    didBtn.style.cursor = 'default';
+  }
   globalCount += 1;
   heroCountEl.textContent = formatNum(globalCount);
-  // launch confetti
+  saveHandRaise();
   const colors = ['#E8A838','#0072BC','#32C189','#FF6B6B','#A78BFA','#F472B6'];
   for (let i = 0; i < 60; i++) {
     const el = document.createElement('div');
@@ -2202,6 +2690,7 @@ function handleDidIt() {
 
 // ===================== SHARE DRAWER =====================
 function openShare() {
+  track('share_modal_opened');
   document.getElementById('shareOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
@@ -2237,16 +2726,29 @@ function copyCaption() {
     if (btn) { btn.textContent = 'Copied!'; setTimeout(() => btn.textContent = 'Copy', 2000); }
   });
 }
-function handleRemindSubmit() {
+async function handleRemindSubmit() {
   const input = document.querySelector('.share-email-input');
-  if (input && input.value) {
-    alert('You\'re set! We\'ll remind you on May 1.');
+  if (!input || !input.value) return;
+  const email = input.value.trim();
+  const btn = document.querySelector('.share-email-btn');
+  btn.disabled = true;
+  btn.textContent = '...';
+  const result = await saveEmail(email);
+  btn.disabled = false;
+  if (result.success) {
+    track('email_reminder_subscribed');
+    btn.textContent = '✓ Done!';
     input.value = '';
+    setTimeout(() => btn.textContent = 'Remind Me', 2000);
+  } else {
+    btn.textContent = result.message || 'Error';
+    setTimeout(() => btn.textContent = 'Remind Me', 2000);
   }
 }
 
 // ===================== CRISIS MODAL =====================
 function openCrisis() {
+  track('crisis_modal_opened');
   document.getElementById('crisisOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
@@ -2267,8 +2769,53 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     closeCrisis();
     closeShare();
+    closeAuthModal();
+  }
+});
+document.addEventListener('click', function(e) {
+  const wrap = document.getElementById('userMenu');
+  const dropdown = document.getElementById('userDropdown');
+  if (wrap && dropdown && !wrap.contains(e.target)) {
+    dropdown.style.display = 'none';
   }
 });
 </script>
+<div class="auth-overlay" id="authOverlay" role="dialog" aria-modal="true" onclick="closeAuthModal(event)">
+  <div class="auth-modal" onclick="event.stopPropagation()">
+    <div class="auth-modal-handle" aria-hidden="true"></div>
+    <button class="auth-modal-close" onclick="closeAuthModal()" aria-label="Close">×</button>
+    <div id="authMode" data-mode="login"></div>
+    <h2 class="auth-modal-title" id="authTitle">Sign in</h2>
+    <p class="auth-modal-sub">Continue to Butterfly Challenge</p>
+    <div class="auth-field-row" id="authNameRow" style="display:none">
+      <label class="auth-label">Your name (optional)</label>
+      <input id="authName" class="auth-input" type="text" placeholder="Your name" autocomplete="name"/>
+    </div>
+    <div class="auth-field-row">
+      <label class="auth-label">Email</label>
+      <input id="authEmail" class="auth-input" type="email" placeholder="you@email.com" autocomplete="email"/>
+    </div>
+    <div class="auth-field-row">
+      <label class="auth-label">Password</label>
+      <input id="authPassword" class="auth-input" type="password" placeholder="••••••••" autocomplete="current-password"/>
+    </div>
+    <div style="position:absolute;left:-9999px;opacity:0;pointer-events:none;" aria-hidden="true">
+      <input type="text" id="authHoneypot" tabindex="-1" autocomplete="off"/>
+    </div>
+    <p class="auth-error" id="authError"></p>
+    <button class="auth-google-btn" onclick="handleGoogleSignIn()" type="button">
+      <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      Continue with Google
+    </button>
+    <div class="auth-divider">
+      <span>or</span>
+    </div>
+    <button class="auth-submit" id="authSubmitBtn" onclick="handleAuthSubmit()">Sign in</button>
+    <p class="auth-toggle-text" id="authToggleText">
+      No account? <button onclick="switchAuthMode('register')" class="auth-toggle-link">Sign up</button>
+    </p>
+  </div>
+</div>
+
 </body>
 </html>
