@@ -32,7 +32,20 @@ function getCountryCode(): string | null {
   } catch { return null; }
 }
 
-async function saveHandRaise(userId?: string) {
+async function getLocationData(): Promise<{ country: string | null, city: string | null }> {
+  try {
+    const res = await fetch('https://ipapi.co/json/');
+    const data = await res.json();
+    return {
+      country: data.country_code || null,
+      city: data.city || null
+    };
+  } catch {
+    return { country: getCountryCode(), city: null };
+  }
+}
+
+async function saveHandRaise(userId?: string, city?: string | null) {
   try {
     const sessionId = localStorage.getItem('bc_session') || crypto.randomUUID();
     localStorage.setItem('bc_session', sessionId);
@@ -46,7 +59,8 @@ async function saveHandRaise(userId?: string) {
     await supabase.from('hand_raises').insert({
       session_id: sessionId,
       user_id: userId || null,
-      country_code: getCountryCode()
+      country_code: getCountryCode(),
+      city: city || null
     });
   } catch { /* silent */ }
 }
@@ -188,22 +202,24 @@ const faqData: FAQItem[] = [
   }
 ];
 
-// Leaderboard Data
-const countryLeaderboard: LeaderboardItem[] = [
-  { rank: 1, flag: '🇺🇸', name: 'USA', count: 41203 },
-  { rank: 2, flag: '🇬🇧', name: 'UK', count: 18901 },
-  { rank: 3, flag: '🇧🇷', name: 'Brazil', count: 12445 },
-  { rank: 4, flag: '🇳🇬', name: 'Nigeria', count: 9876 },
-  { rank: 5, flag: '🇮🇳', name: 'India', count: 8234 }
-];
+// Leaderboard helpers
+function getFlag(code: string): string {
+  try {
+    return code.toUpperCase().replace(/./g, c =>
+      String.fromCodePoint(127397 + c.charCodeAt(0))
+    );
+  } catch { return '🌍'; }
+}
 
-const cityLeaderboard: LeaderboardItem[] = [
-  { rank: 1, flag: '🏙️', name: 'London', count: 3402 },
-  { rank: 2, flag: '🏙️', name: 'New York City', count: 3108 },
-  { rank: 3, flag: '🏙️', name: 'Lagos', count: 2877 },
-  { rank: 4, flag: '🏙️', name: 'São Paulo', count: 2654 },
-  { rank: 5, flag: '🏙️', name: 'Mumbai', count: 2198 }
-];
+function getCountryName(code: string): string {
+  const names: Record<string, string> = {
+    US: 'USA', GB: 'UK', BR: 'Brazil', NG: 'Nigeria', IN: 'India',
+    DE: 'Germany', FR: 'France', CA: 'Canada', AU: 'Australia', MX: 'Mexico',
+    JP: 'Japan', KR: 'South Korea', IT: 'Italy', ES: 'Spain', RU: 'Russia',
+    UZ: 'Uzbekistan', KZ: 'Kazakhstan', TR: 'Turkey', PK: 'Pakistan', ID: 'Indonesia'
+  };
+  return names[code] || code;
+}
 
 
 function Home() {
@@ -222,6 +238,8 @@ function Home() {
   const [emailSubmitted, setEmailSubmitted] = useState(false);
   const [linkCopied, setLinkCopied] = useState(false);
   const [leaderboardTab, setLeaderboardTab] = useState<'country' | 'city'>('country');
+  const [countryLeaderboard, setCountryLeaderboard] = useState<LeaderboardItem[]>([]);
+  const [cityLeaderboard, setCityLeaderboard] = useState<LeaderboardItem[]>([]);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
   const [selectedCountry, setSelectedCountry] = useState('US');
@@ -271,7 +289,21 @@ function Home() {
       setCurrentUser(session?.user ?? null);
       if (session?.user) backfillCountryCode(session.user);
     });
-    return () => subscription.unsubscribe();
+
+    // Load leaderboard + realtime
+    loadLeaderboard();
+    const channel = supabase
+      .channel('hand_raises_changes')
+      .on('postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'hand_raises' },
+        () => loadLeaderboard()
+      )
+      .subscribe();
+
+    return () => {
+      subscription.unsubscribe();
+      channel.unsubscribe();
+    };
   }, []);
 
   // Track modal opens
@@ -471,6 +503,58 @@ function Home() {
   };
 
   // ===================== AUTH FUNCTIONS =====================
+  async function loadLeaderboard() {
+    try {
+      const { data } = await supabase
+        .from('hand_raises')
+        .select('country_code')
+        .not('country_code', 'is', null);
+
+      if (!data) return;
+
+      const counts: Record<string, number> = {};
+      data.forEach((row: any) => {
+        const code = row.country_code.toUpperCase().slice(0, 2);
+        counts[code] = (counts[code] || 0) + 1;
+      });
+
+      const sorted = Object.entries(counts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5)
+        .map(([code, count], i) => ({
+          rank: i + 1,
+          flag: getFlag(code),
+          name: getCountryName(code),
+          count
+        }));
+
+      setCountryLeaderboard(sorted);
+
+      // Load city data
+      const { data: cityData } = await supabase
+        .from('hand_raises')
+        .select('city')
+        .not('city', 'is', null);
+
+      const cityCounts: Record<string, number> = {};
+      cityData?.forEach((row: any) => {
+        if (row.city) cityCounts[row.city] = (cityCounts[row.city] || 0) + 1;
+      });
+
+      const sortedCities = Object.entries(cityCounts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5)
+        .map(([name, count], i) => ({
+          rank: i + 1,
+          flag: '🏙️',
+          name,
+          count
+        }));
+
+      setCityLeaderboard(sortedCities);
+    } catch { /* silent */ }
+  }
+
   async function backfillCountryCode(user: any) {
     if (!user) return;
     try {
@@ -559,14 +643,15 @@ function Home() {
     return () => document.removeEventListener('click', handler);
   }, []);
 
-  const handleIDidIt = () => {
+  const handleIDidIt = async () => {
     if (hasCelebrated) { setIsShareDrawerOpen(true); return; }
     setHasCelebrated(true);
     localStorage.setItem('bc_did_it', '1');
     track('did_it_clicked');
     setShowPlusOne(true);
     setCounter(prev => prev + 1);
-    saveHandRaise(currentUser?.id);
+    const { city } = await getLocationData();
+    saveHandRaise(currentUser?.id, city);
 
     confetti({
       particleCount: 60,
