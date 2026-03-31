@@ -1,6 +1,5 @@
 {
   "rewrites": [
-    { "source": "/staging-1", "destination": "/staging-1.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
