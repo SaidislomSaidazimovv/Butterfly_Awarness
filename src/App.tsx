@@ -3,9 +3,10 @@ import { createClient } from '@supabase/supabase-js';
 import mixpanel from 'mixpanel-browser';
 
 // ===================== SUPABASE =====================
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVlZ3dkbHl3ZHhneGJnc2hyYXpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NTcxMzQsImV4cCI6MjA5MDQzMzEzNH0.vW8y3ZzBHfizGnymvgo-PL3So6ZZ428N7owKvzel98U';
 const supabase = createClient(
   'https://eegwdlywdxgxbgshrazl.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVlZ3dkbHl3ZHhneGJnc2hyYXpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NTcxMzQsImV4cCI6MjA5MDQzMzEzNH0.vW8y3ZzBHfizGnymvgo-PL3So6ZZ428N7owKvzel98U'
+  SUPABASE_ANON_KEY
 );
 
 // ===================== MIXPANEL =====================
@@ -54,7 +55,21 @@ async function saveEmail(email: string) {
   try {
     const { error } = await supabase.from('email_reminders').insert({ email });
     if (error && error.code === '23505') return { success: false, message: 'Already subscribed!' };
-    return { success: !error };
+    if (error) return { success: false };
+
+    // Send confirmation email via Edge Function
+    try {
+      await fetch('https://eegwdlywdxgxbgshrazl.supabase.co/functions/v1/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+        },
+        body: JSON.stringify({ action: 'confirmation', email, secret: 'butterfly2026secret' })
+      });
+    } catch { /* silent — email failure shouldn't block signup */ }
+
+    return { success: true };
   } catch { return { success: false, message: 'Something went wrong.' }; }
 }
 
@@ -79,6 +94,7 @@ import {
   Share2,
   Copy,
   Check,
+  CheckCircle,
   MapPin,
   Award,
   Users,
@@ -583,6 +599,10 @@ function Home() {
         setIsEmailReminderOpen(false);
         setEmail('');
       }, 2000);
+    } else {
+      setAuthError(result.message || 'Something went wrong. Please try again.');
+      setAuthErrorColor('var(--danger, #FF3B3B)');
+      setTimeout(() => setAuthError(''), 3000);
     }
   };
 
@@ -634,24 +654,24 @@ function Home() {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden lg:flex items-center gap-8">
             <button
               onClick={() => scrollToSection('how-it-works')}
-              className="text-[10px] md:text-sm font-medium hover:text-blue-600 transition-colors"
+              className="text-xs lg:text-sm font-medium hover:text-blue-600 transition-colors"
               style={{ color: COLORS.muted }}
             >
               How It Works
             </button>
             <button
               onClick={() => scrollToSection('for-organizations')}
-              className="text-[10px] md:text-sm font-medium hover:text-blue-600 transition-colors"
+              className="text-xs lg:text-sm font-medium hover:text-blue-600 transition-colors"
               style={{ color: COLORS.muted }}
             >
               For Organizations
             </button>
             <button
               onClick={() => scrollToSection('faq')}
-              className="text-[10px] md:text-sm font-medium hover:text-blue-600 transition-colors"
+              className="text-xs lg:text-sm font-medium hover:text-blue-600 transition-colors"
               style={{ color: COLORS.muted }}
             >
               FAQ
@@ -659,11 +679,11 @@ function Home() {
           </nav>
 
           {/* Right side buttons */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5 sm:gap-2 lg:gap-3">
             {/* Safe Exit (small) */}
             <button
               onClick={handleSafeExit}
-              className="hidden sm:inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full hover:bg-gray-100 transition-colors"
+              className="hidden lg:inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full hover:bg-gray-100 transition-colors"
               style={{ color: COLORS.caption }}
               aria-label="Safe exit - navigate away quickly"
             >
@@ -675,7 +695,7 @@ function Home() {
             {!currentUser ? (
               <button
                 onClick={() => openAuthModal('login')}
-                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-semibold transition-all border"
+                className="hidden sm:inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all border"
                 style={{ color: COLORS.text, borderColor: COLORS.hair, background: 'transparent' }}
               >
                 Sign in
@@ -684,19 +704,19 @@ function Home() {
               <div className="relative" id="user-menu-wrap">
                 <button
                   onClick={toggleUserDropdown}
-                  className="inline-flex items-center gap-2 pl-1.5 pr-3 py-1 rounded-full text-sm font-semibold transition-all border"
+                  className="inline-flex items-center gap-1 sm:gap-2 pl-1 sm:pl-1.5 pr-2 sm:pr-3 py-1 rounded-full text-xs sm:text-sm font-semibold transition-all border"
                   style={{ backgroundColor: COLORS.surface, borderColor: COLORS.hair, color: COLORS.text }}
                 >
                   <div
-                    className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white uppercase"
+                    className="w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center text-[10px] sm:text-xs font-bold text-white uppercase flex-shrink-0"
                     style={{ backgroundColor: COLORS.accent }}
                   >
                     {(currentUser.user_metadata?.display_name || currentUser.email || 'U').charAt(0)}
                   </div>
-                  <span className="max-w-[100px] truncate hidden sm:inline">
+                  <span className="max-w-[80px] lg:max-w-[100px] truncate hidden md:inline">
                     {currentUser.user_metadata?.display_name || currentUser.email?.split('@')[0] || 'Account'}
                   </span>
-                  <ChevronDown className="w-3 h-3" />
+                  <ChevronDown className="w-3 h-3 hidden sm:block" />
                 </button>
                 {userDropdownOpen && (
                   <div
@@ -723,17 +743,17 @@ function Home() {
             {/* Get Support */}
             <button
               onClick={() => setIsCrisisModalOpen(true)}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all hover:opacity-80"
+              className="inline-flex items-center gap-1 sm:gap-2 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold transition-all hover:opacity-80"
               style={{ backgroundColor: COLORS.surface, color: COLORS.text }}
             >
-              <Heart className="w-4 h-4" />
-              <span>Get Support</span>
+              <Heart className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <span className="hidden sm:inline">Get Support</span>
             </button>
 
             {/* Take Challenge CTA (desktop) */}
             <button
               onClick={() => scrollToSection('hero')}
-              className="hidden md:inline-flex items-center gap-2 px-5 py-2 rounded-full text-sm font-semibold text-white transition-all hover:opacity-90"
+              className="hidden lg:inline-flex items-center gap-2 px-5 py-2 rounded-full text-sm font-semibold text-white transition-all hover:opacity-90"
               style={{ backgroundColor: COLORS.accent }}
             >
               Take the Challenge
@@ -742,7 +762,7 @@ function Home() {
             {/* Mobile menu button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-2 rounded-full hover:bg-gray-100"
+              className="lg:hidden p-2 rounded-full hover:bg-gray-100"
               aria-label="Toggle menu"
             >
               <Menu className="w-5 h-5" style={{ color: COLORS.text }} />
@@ -752,7 +772,7 @@ function Home() {
 
         {/* Mobile menu dropdown */}
         {isMobileMenuOpen && (
-          <div className="md:hidden absolute top-12 left-0 right-0 bg-white border-b border-gray-100 shadow-lg">
+          <div className="lg:hidden absolute top-12 left-0 right-0 bg-white border-b border-gray-100 shadow-lg">
             <nav className="p-4 space-y-2">
               <button
                 onClick={() => scrollToSection('how-it-works')}
@@ -811,7 +831,7 @@ function Home() {
 
             {/* Headline */}
             <h1
-              className="text-5xl md:text-8xl font-semibold mb-2 leading-tight"
+              className="text-5xl md:text-7xl xl:text-8xl 2xl:text-9xl font-semibold mb-2 leading-tight"
               style={{ color: COLORS.text, letterSpacing: '-0.02em' }}
             >
               Butterfly Challenge
@@ -904,7 +924,7 @@ function Home() {
           {/* Section header left-aligned to main grid */}
           <div className={`max-w-7xl mx-auto px-5 mb-16 transition-all duration-700 ${visibleSections.has('how-it-works') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
             <h2
-              className="text-3xl md:text-7xl font-bold tracking-tight text-center leading-tight px-8 mx-auto"
+              className="text-3xl md:text-6xl xl:text-7xl 2xl:text-8xl font-bold tracking-tight text-center leading-tight px-8 mx-auto"
               style={{ color: COLORS.text, letterSpacing: '-0.02em' }}
             >
               Four simple steps.<br />
@@ -1019,7 +1039,7 @@ function Home() {
           style={{ backgroundColor: COLORS.surface }}
         >
           <div className={`max-w-7xl mx-auto mb-12 px-5 flex flex-col items-center text-center transition-all duration-700 ${visibleSections.has('video-wall') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-            <h2 className="text-4xl md:text-[56px] font-bold mb-4" style={{ color: COLORS.text, letterSpacing: '-0.02em', lineHeight: 1.1 }}>
+            <h2 className="text-4xl md:text-[48px] xl:text-[56px] 2xl:text-[64px] font-bold mb-4" style={{ color: COLORS.text, letterSpacing: '-0.02em', lineHeight: 1.1 }}>
               People are showing up.
             </h2>
           </div>
@@ -1133,7 +1153,7 @@ function Home() {
               PARTICIPATION
             </p>
 
-            <h2 className="text-4xl md:text-[56px] font-bold mb-5 text-[#1d1d1f] tracking-tight leading-tight">
+            <h2 className="text-4xl md:text-[48px] xl:text-[56px] 2xl:text-[64px] font-bold mb-5 text-[#1d1d1f] tracking-tight leading-tight">
               Already raised your hand?
             </h2>
 
@@ -1145,13 +1165,22 @@ function Home() {
               onClick={handleIDidIt}
               className="relative w-36 h-36 md:w-40 md:h-40 mx-auto rounded-full bg-white shadow-[0_8px_30px_rgb(0,0,0,0.06)] flex flex-col items-center justify-center gap-2 hover:scale-[1.02] hover:shadow-[0_12px_40px_rgb(0,0,0,0.08)] active:scale-[0.98] transition-all cursor-pointer"
             >
-              <Smartphone className="w-8 h-8 md:w-9 md:h-9 text-[#0066cc]" strokeWidth={2} />
-              <span className="text-[#0066cc] font-bold text-sm md:text-[15px] tracking-[0.05em] mt-1">
-                I DID IT
-              </span>
-
-              {/* Subtle pulse ring outerside to draw attention */}
-              <span className="absolute inset-0 rounded-full animate-ping opacity-10" style={{ backgroundColor: '#0066cc', animationDuration: '3s' }} />
+              {hasCelebrated ? (
+                <>
+                  <CheckCircle className="w-8 h-8 md:w-9 md:h-9 text-[#00b18d]" strokeWidth={2} />
+                  <span className="text-[#00b18d] font-bold text-sm md:text-[15px] tracking-[0.05em] mt-1">
+                    YOU DID IT
+                  </span>
+                </>
+              ) : (
+                <>
+                  <Smartphone className="w-8 h-8 md:w-9 md:h-9 text-[#0066cc]" strokeWidth={2} />
+                  <span className="text-[#0066cc] font-bold text-sm md:text-[15px] tracking-[0.05em] mt-1">
+                    I DID IT
+                  </span>
+                  <span className="absolute inset-0 rounded-full animate-ping opacity-10" style={{ backgroundColor: '#0066cc', animationDuration: '3s' }} />
+                </>
+              )}
             </button>
 
           </div>
@@ -1166,7 +1195,7 @@ function Home() {
         >
           <div className="max-w-4xl mx-auto">
             <div className={`text-center mb-12 flex flex-col items-center transition-all duration-700 ${visibleSections.has('leaderboard') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-              <h2 className="text-4xl md:text-[56px] font-bold mb-4" style={{ color: COLORS.text, letterSpacing: '-0.02em', lineHeight: 1.1 }}>
+              <h2 className="text-4xl md:text-[48px] xl:text-[56px] 2xl:text-[64px] font-bold mb-4" style={{ color: COLORS.text, letterSpacing: '-0.02em', lineHeight: 1.1 }}>
                 The wave, live.
               </h2>
               <p className="text-lg md:text-xl" style={{ color: COLORS.muted }}>
@@ -1181,7 +1210,7 @@ function Home() {
             >
               <div
                 ref={globeContainerRef}
-                className="w-full max-w-[500px] aspect-square"
+                className="w-full max-w-[500px] xl:max-w-[650px] 2xl:max-w-[750px] aspect-square"
               />
             </div>
 
@@ -1502,7 +1531,7 @@ function Home() {
           className="py-16 px-5"
           style={{ backgroundColor: COLORS.bg }}
         >
-          <div className="max-w-2xl mx-auto">
+          <div className="max-w-4xl mx-auto">
             <div className={`text-center mb-12 transition-all duration-700 ${visibleSections.has('faq') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
               <h2 className="text-3xl font-bold mb-4" style={{ color: COLORS.text }}>
                 Frequently Asked Questions
@@ -1587,7 +1616,7 @@ function Home() {
 
           </div>
 
-          <div className={`relative z-10 max-w-2xl mx-auto text-center text-white transition-all duration-700 ${visibleSections.has('final-cta') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+          <div className={`relative z-10 max-w-4xl mx-auto text-center text-white transition-all duration-700 ${visibleSections.has('final-cta') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
             <p className="text-lg mb-4 opacity-90">
               One person starts. 3 more continue.
             </p>
@@ -1625,7 +1654,7 @@ function Home() {
           className="py-12 px-5"
           style={{ backgroundColor: COLORS.surface }}
         >
-          <div className="max-w-6xl mx-auto">
+          <div className="max-w-7xl mx-auto">
             {/* Top section */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
               {/* Brand */}
@@ -2253,7 +2282,7 @@ function Home() {
             </button>
 
             <div className="text-center mb-6">
-              <Clock className="w-12 h-12 mx-auto mb-4 text-[#0066cc]" />
+              <Clock className="w-12 h-12 mx-auto mb-4 text-[#00b18d]" />
               <h2 className="text-xl font-bold mb-2 text-[#1d1d1f]">
                 Get a reminder for May 1
               </h2>
@@ -2264,8 +2293,8 @@ function Home() {
 
             {emailSubmitted ? (
               <div className="text-center py-8">
-                <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 bg-[#e6f0fa]">
-                  <Check className="w-8 h-8 text-[#0066cc]" />
+                <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 bg-[#e6f9f1]">
+                  <Check className="w-8 h-8 text-[#00b18d]" />
                 </div>
                 <h3 className="text-lg font-semibold mb-2 text-[#1d1d1f]">
                   You're all set!
@@ -2286,7 +2315,7 @@ function Home() {
                 />
                 <button
                   type="submit"
-                  className="w-full py-3.5 rounded-xl text-base font-semibold text-white transition-all hover:opacity-90 bg-[#0066cc] active:scale-95"
+                  className="w-full py-3.5 rounded-xl text-base font-semibold text-white transition-all hover:opacity-90 bg-[#00b18d] active:scale-95"
                 >
                   Remind Me May 1
                 </button>
