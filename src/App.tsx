@@ -103,7 +103,6 @@ async function loadRealCount(): Promise<number> {
 import {
   Heart,
   ChevronDown,
-  ChevronUp,
   ChevronRight,
   ChevronLeft,
   X,
@@ -121,6 +120,7 @@ import {
   Shield,
   Play,
   ArrowRight,
+  BarChart2,
   Menu,
   Clock,
   GraduationCap,
@@ -247,6 +247,9 @@ function Home() {
   const [counter, setCounter] = useState(0);
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [hasCelebrated, setHasCelebrated] = useState(() => !!localStorage.getItem('bc_did_it'));
+  const [userHandRaiseDate, setUserHandRaiseDate] = useState<string | null>(null);
+  const [isStatsModalOpen, setIsStatsModalOpen] = useState(false);
+  const [closingModal, setClosingModal] = useState<string | null>(null);
   const [showPlusOne, setShowPlusOne] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
   const [isEmailReminderOpen, setIsEmailReminderOpen] = useState(false);
@@ -321,11 +324,19 @@ function Home() {
       if (session) {
         setCurrentUser(session.user);
         backfillCountryCode(session.user);
+        loadUserHandRaiseDate(session.user.id);
+        if (session.user.email) setEmail(session.user.email);
       }
     });
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setCurrentUser(session?.user ?? null);
-      if (session?.user) backfillCountryCode(session.user);
+      if (session?.user) {
+        backfillCountryCode(session.user);
+        loadUserHandRaiseDate(session.user.id);
+        if (session.user.email) setEmail(session.user.email);
+      } else {
+        setEmail('');
+      }
     });
 
     // Load leaderboard + realtime
@@ -381,6 +392,32 @@ function Home() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Scroll lock when any modal is open
+  useEffect(() => {
+    const anyModalOpen =
+      isVideoModalOpen ||
+      isCrisisModalOpen ||
+      isShareDrawerOpen ||
+      isStatsModalOpen ||
+      ugcModalOpen ||
+      authModalOpen ||
+      isEmailReminderOpen;
+
+    if (anyModalOpen) {
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+      document.body.style.overflow = 'hidden';
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    } else {
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+    };
+  }, [isVideoModalOpen, isCrisisModalOpen, isShareDrawerOpen, isStatsModalOpen, ugcModalOpen, authModalOpen, isEmailReminderOpen]);
 
   // Intersection Observer for section visibility
   useEffect(() => {
@@ -565,6 +602,26 @@ function Home() {
   };
 
   // ===================== AUTH FUNCTIONS =====================
+  async function loadUserHandRaiseDate(userId: string) {
+    try {
+      const { data } = await supabase
+        .from('hand_raises')
+        .select('created_at')
+        .eq('user_id', userId)
+        .single();
+      if (data?.created_at) {
+        const date = new Date(data.created_at);
+        const formatted = date.toLocaleDateString('en-US', {
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric'
+        });
+        setUserHandRaiseDate(formatted);
+        setHasCelebrated(true);
+      }
+    } catch { /* silent */ }
+  }
+
   async function loadLeaderboard() {
     try {
       const { data } = await supabase
@@ -639,10 +696,35 @@ function Home() {
     setAuthModalOpen(true);
   };
 
+  const closeVideoModal = () => {
+    setClosingModal('video');
+    setTimeout(() => { setIsVideoModalOpen(false); setClosingModal(null); }, 200);
+  };
+  const closeCrisisModal = () => {
+    setClosingModal('crisis');
+    setTimeout(() => { setIsCrisisModalOpen(false); setClosingModal(null); }, 200);
+  };
+  const closeShareDrawer = () => {
+    setClosingModal('share');
+    setTimeout(() => { setIsShareDrawerOpen(false); setClosingModal(null); }, 200);
+  };
+  const closeEmailModal = () => {
+    setClosingModal('email');
+    setTimeout(() => { setIsEmailReminderOpen(false); setClosingModal(null); }, 200);
+  };
+  const closeStatsModal = () => {
+    setClosingModal('stats');
+    setTimeout(() => { setIsStatsModalOpen(false); setClosingModal(null); }, 200);
+  };
+
   const closeAuthModal = () => {
-    setAuthModalOpen(false);
-    setAuthError('');
-    setAuthErrorColor('');
+    setClosingModal('auth');
+    setTimeout(() => {
+      setAuthModalOpen(false);
+      setClosingModal(null);
+      setAuthError('');
+      setAuthErrorColor('');
+    }, 200);
   };
 
   const handleGoogleSignIn = async () => {
@@ -848,7 +930,7 @@ function Home() {
         file_url: urlData.publicUrl,
         file_type: fileType,
         consent: true,
-        display_name: currentUser?.user_metadata?.display_name || null
+        display_name: currentUser ? getDisplayName() : null
       });
 
       track('ugc_submitted', { file_type: fileType });
@@ -878,21 +960,39 @@ function Home() {
     stopRecording();
     stopCamera();
     if (countdownRef.current) { clearInterval(countdownRef.current); countdownRef.current = null; }
-    if (recordedPreviewUrl) URL.revokeObjectURL(recordedPreviewUrl);
-    setUgcModalOpen(false);
-    setRecordedBlob(null);
-    setRecordedPreviewUrl(null);
-    setUgcConsent(false);
-    setIsRecording(false);
-    setRecordingSeconds(0);
-    setCountdownValue(0);
-    setCameraError(false);
-    setRecordingStep('mode-select');
-    setRecordingMode(null);
+    setClosingModal('ugc');
+    setTimeout(() => {
+      if (recordedPreviewUrl) URL.revokeObjectURL(recordedPreviewUrl);
+      setUgcModalOpen(false);
+      setClosingModal(null);
+      setRecordedBlob(null);
+      setRecordedPreviewUrl(null);
+      setUgcConsent(false);
+      setIsRecording(false);
+      setRecordingSeconds(0);
+      setCountdownValue(0);
+      setCameraError(false);
+      setRecordingStep('mode-select');
+      setRecordingMode(null);
+    }, 200);
   };
 
+  function getAvatarUrl(): string | null {
+    if (currentUser?.user_metadata?.avatar_url) return currentUser.user_metadata.avatar_url;
+    if (currentUser?.user_metadata?.picture) return currentUser.user_metadata.picture;
+    return null;
+  }
+
+  function getDisplayName(): string {
+    if (currentUser?.user_metadata?.full_name) return currentUser.user_metadata.full_name;
+    if (currentUser?.user_metadata?.name) return currentUser.user_metadata.name;
+    if (currentUser?.user_metadata?.display_name) return currentUser.user_metadata.display_name;
+    if (currentUser?.email) return currentUser.email.split('@')[0];
+    return 'User';
+  }
+
   const handleIDidIt = async () => {
-    if (hasCelebrated) { setEmail(''); setEmailSubmitted(false); setIsShareDrawerOpen(true); return; }
+    if (hasCelebrated) { setEmail(currentUser?.email || ''); setEmailSubmitted(false); setIsShareDrawerOpen(true); return; }
     setHasCelebrated(true);
     localStorage.setItem('bc_did_it', '1');
     track('did_it_clicked');
@@ -910,7 +1010,7 @@ function Home() {
 
     setTimeout(() => {
       setShowPlusOne(false);
-      setEmail('');
+      setEmail(currentUser?.email || '');
       setEmailSubmitted(false);
       setIsShareDrawerOpen(true);
     }, 800);
@@ -933,7 +1033,7 @@ function Home() {
       setTimeout(() => {
         setEmailSubmitted(false);
         setIsEmailReminderOpen(false);
-        setEmail('');
+        if (!currentUser) setEmail('');
       }, 2000);
     }
   };
@@ -966,7 +1066,7 @@ function Home() {
 
       {/* ============ TOP NAVBAR ============ */}
       <header
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-200 ${hasScrolled ? 'bg-white/80 backdrop-blur-md' : 'bg-white/80 backdrop-blur-md border-transparent'
+        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${hasScrolled ? 'bg-white/80 backdrop-blur-md' : 'bg-white/80 backdrop-blur-md border-transparent'
           }`}
         style={{ height: '56px' }} // Restored slightly taller original height or kept for better button fit
       >
@@ -1039,26 +1139,51 @@ function Home() {
                   className="inline-flex items-center gap-1 sm:gap-2 pl-1 sm:pl-1.5 pr-2 sm:pr-3 py-1 rounded-full text-xs sm:text-sm font-semibold transition-all border"
                   style={{ backgroundColor: COLORS.surface, borderColor: COLORS.hair, color: COLORS.text }}
                 >
-                  <div
-                    className="w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center text-[10px] sm:text-xs font-bold text-white uppercase flex-shrink-0"
-                    style={{ backgroundColor: COLORS.accent }}
-                  >
-                    {(currentUser.user_metadata?.display_name || currentUser.email || 'U').charAt(0)}
-                  </div>
+                  {getAvatarUrl() ? (
+                    <img src={getAvatarUrl()!} alt="" className="w-5 h-5 sm:w-6 sm:h-6 rounded-full object-cover flex-shrink-0" />
+                  ) : (
+                    <div
+                      className="w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center text-[10px] sm:text-xs font-bold text-white uppercase flex-shrink-0"
+                      style={{ backgroundColor: COLORS.accent }}
+                    >
+                      {getDisplayName().charAt(0).toUpperCase()}
+                    </div>
+                  )}
                   <span className="max-w-[80px] lg:max-w-[100px] truncate hidden md:inline">
-                    {currentUser.user_metadata?.display_name || currentUser.email?.split('@')[0] || 'Account'}
+                    {getDisplayName()}
                   </span>
                   <ChevronDown className="w-3 h-3 hidden sm:block" />
                 </button>
                 {userDropdownOpen && (
                   <div
-                    className="absolute right-0 top-full mt-2 rounded-2xl border shadow-lg p-2 z-50 min-w-[200px]"
+                    className="absolute right-0 top-full mt-2 rounded-2xl border shadow-lg p-2 z-50 min-w-[200px] dropdown-menu"
                     style={{ background: COLORS.bg, borderColor: COLORS.hair }}
                   >
-                    <div className="text-xs px-2 py-1.5 break-all" style={{ color: COLORS.caption }}>
-                      {currentUser.email}
+                    <div className="flex items-center gap-3 px-2 py-2">
+                      {getAvatarUrl() ? (
+                        <img src={getAvatarUrl()!} alt="" className="w-10 h-10 rounded-full object-cover flex-shrink-0" />
+                      ) : (
+                        <div
+                          className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white uppercase flex-shrink-0"
+                          style={{ backgroundColor: COLORS.accent }}
+                        >
+                          {getDisplayName().charAt(0).toUpperCase()}
+                        </div>
+                      )}
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold truncate" style={{ color: COLORS.text }}>{getDisplayName()}</p>
+                        <p className="text-xs truncate" style={{ color: COLORS.caption }}>{currentUser.email}</p>
+                      </div>
                     </div>
                     <div className="h-px my-1.5" style={{ background: COLORS.hair }} />
+                    <button
+                      onClick={() => { setUserDropdownOpen(false); setIsStatsModalOpen(true); }}
+                      className="flex items-center gap-2 w-full px-2.5 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-gray-50"
+                      style={{ color: COLORS.text }}
+                    >
+                      <BarChart2 className="w-3.5 h-3.5" />
+                      My Stats
+                    </button>
                     <button
                       onClick={handleSignOut}
                       className="flex items-center gap-2 w-full px-2.5 py-2 rounded-xl text-sm font-medium transition-colors hover:bg-red-50"
@@ -1489,16 +1614,15 @@ function Home() {
         </section>
 
         {/* ============ FROM THE COMMUNITY ============ */}
-        {communitySubmissions.length > 0 && (
-          <section className="py-16 overflow-hidden" style={{ backgroundColor: COLORS.bg }}>
-            <div className="max-w-7xl mx-auto px-5 text-center mb-10">
-              <p className="text-xs uppercase font-bold tracking-[0.18em] mb-3" style={{ color: COLORS.caption }}>
-                FROM THE COMMUNITY
-              </p>
-              <h2 className="text-3xl md:text-4xl xl:text-5xl font-bold" style={{ color: COLORS.text, letterSpacing: '-0.02em' }}>
-                Your butterflies, your stories.
-              </h2>
-            </div>
+        <section className="py-16 overflow-hidden" style={{ backgroundColor: COLORS.bg }}>
+          <div className="max-w-7xl mx-auto px-5 text-center mb-10">
+            <p className="text-xs uppercase font-bold tracking-[0.18em] mb-3" style={{ color: COLORS.caption }}>
+              FROM THE COMMUNITY
+            </p>
+            <h2 className="text-3xl md:text-4xl xl:text-5xl font-bold" style={{ color: COLORS.text, letterSpacing: '-0.02em' }}>
+              Your butterflies, your stories.
+            </h2>
+          </div>
 
             <style>{`
               @keyframes community-scroll {
@@ -1515,9 +1639,9 @@ function Home() {
               }
             `}</style>
 
+          {communitySubmissions.length > 0 ? (
             <div className="w-full overflow-hidden">
               <div className="animate-community-scroll gap-3 md:gap-4">
-                {/* Duplicate submissions for seamless loop */}
                 {[...communitySubmissions, ...communitySubmissions].map((sub, i) => (
                   <div
                     key={`${sub.id}-${i}`}
@@ -1537,8 +1661,13 @@ function Home() {
                 ))}
               </div>
             </div>
-          </section>
-        )}
+          ) : (
+            <div className="text-center py-12 text-gray-400">
+              <p className="text-lg">Be the first to share your butterfly moment! 🦋</p>
+              <p className="text-sm mt-2">Record yourself doing the gesture and inspire others.</p>
+            </div>
+          )}
+        </section>
 
         {/* ============ SECTION 5: I DID IT ============ */}
         <section
@@ -1557,20 +1686,31 @@ function Home() {
               Already raised your hand?
             </h2>
 
-            <p className="text-lg md:text-xl text-[#8b9298] mb-16 max-w-lg mx-auto">
+            <p className="text-lg md:text-xl text-[#8b9298] mb-8 max-w-lg mx-auto">
               Let the world know you're part of the chain.
             </p>
 
+            {currentUser && userHandRaiseDate && (
+              <p className="text-sm font-medium mb-8 text-[#00b18d]">
+                You raised your hand on {userHandRaiseDate} 🦋
+              </p>
+            )}
+
             <button
               onClick={handleIDidIt}
-              className="relative w-36 h-36 md:w-40 md:h-40 mx-auto rounded-full bg-white shadow-[0_8px_30px_rgb(0,0,0,0.06)] flex flex-col items-center justify-center gap-2 hover:scale-[1.02] hover:shadow-[0_12px_40px_rgb(0,0,0,0.08)] active:scale-[0.98] transition-all cursor-pointer"
+              className="relative w-36 h-36 md:w-40 md:h-40 mx-auto rounded-full bg-white shadow-[0_8px_30px_rgb(0,0,0,0.06)] flex flex-col items-center justify-center gap-1.5 hover:scale-[1.02] hover:shadow-[0_12px_40px_rgb(0,0,0,0.08)] active:scale-[0.98] transition-all cursor-pointer"
             >
               {hasCelebrated ? (
                 <>
                   <CheckCircle className="w-8 h-8 md:w-9 md:h-9 text-[#00b18d]" strokeWidth={2} />
-                  <span className="text-[#00b18d] font-bold text-sm md:text-[15px] tracking-[0.05em] mt-1">
+                  <span className="text-[#00b18d] font-bold text-sm md:text-[15px] tracking-[0.05em]">
                     YOU DID IT
                   </span>
+                  {currentUser && userHandRaiseDate && (
+                    <span className="text-[#00b18d]/60 text-[10px] font-medium">
+                      {userHandRaiseDate}
+                    </span>
+                  )}
                 </>
               ) : (
                 <>
@@ -1965,16 +2105,15 @@ function Home() {
                       className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-colors"
                       style={{ backgroundColor: activeFAQ === index ? COLORS.accentLight : COLORS.surface }}
                     >
-                      {activeFAQ === index ? (
-                        <ChevronUp className="w-5 h-5" style={{ color: COLORS.accent }} />
-                      ) : (
-                        <ChevronDown className="w-5 h-5" style={{ color: COLORS.caption }} />
-                      )}
+                      <ChevronDown
+                        className={`w-5 h-5 faq-chevron ${activeFAQ === index ? 'faq-chevron-open' : ''}`}
+                        style={{ color: activeFAQ === index ? COLORS.accent : COLORS.caption }}
+                      />
                     </div>
                   </button>
 
                   {activeFAQ === index && (
-                    <div className="px-5 pb-5">
+                    <div className="px-5 pb-5 faq-answer-open">
                       <p
                         className="text-sm leading-relaxed"
                         style={{ color: COLORS.muted, lineHeight: '26px' }}
@@ -2038,7 +2177,7 @@ function Home() {
               </button>
 
               <button
-                onClick={() => { track('email_reminder_opened'); setIsEmailReminderOpen(true); }}
+                onClick={() => { track('email_reminder_opened'); setEmail(currentUser?.email || ''); setIsEmailReminderOpen(true); }}
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full border-2 border-white/50 text-white text-base font-semibold transition-all hover:bg-white/10"
               >
                 <Clock className="w-5 h-5" />
@@ -2209,14 +2348,14 @@ function Home() {
 
       {/* Video Modal */}
       {isVideoModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md">
+        <div className={`fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md ${closingModal === 'video' ? 'modal-backdrop-closing' : 'modal-backdrop'}`}>
           <button
-            onClick={() => setIsVideoModalOpen(false)}
+            onClick={closeVideoModal}
             className="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors z-[110]"
           >
             <X className="w-6 h-6 text-white" />
           </button>
-          <div className="w-full max-w-5xl aspect-video bg-black rounded-lg overflow-hidden shadow-2xl relative px-4 md:px-0">
+          <div className={`w-full max-w-5xl aspect-video bg-black rounded-lg overflow-hidden shadow-2xl relative px-4 md:px-0 ${closingModal === 'video' ? 'modal-content-closing' : 'modal-content'}`}>
             <video
               src={compressedVideo}
               autoPlay
@@ -2231,12 +2370,12 @@ function Home() {
       {/* Auth Modal */}
       {authModalOpen && (
         <div
-          className="fixed inset-0 z-[9800] flex items-center justify-center p-5"
+          className={`fixed inset-0 z-[9800] flex items-center justify-center p-5 ${closingModal === 'auth' ? 'modal-backdrop-closing' : 'modal-backdrop'}`}
           style={{ background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' }}
           onClick={closeAuthModal}
         >
           <div
-            className="w-full max-w-[420px] rounded-3xl p-8 relative animate-slide-up"
+            className={`w-full max-w-[420px] rounded-3xl p-8 relative ${closingModal === 'auth' ? 'modal-content-closing' : 'modal-content'}`}
             style={{ background: COLORS.bg }}
             onClick={e => e.stopPropagation()}
           >
@@ -2344,23 +2483,23 @@ function Home() {
 
       {/* Crisis Modal */}
       {isCrisisModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center">
+        <div className={`fixed inset-0 z-50 flex items-end md:items-center justify-center ${closingModal === 'crisis' ? 'modal-backdrop-closing' : 'modal-backdrop'}`}>
           {/* Backdrop */}
           <div
             className="absolute inset-0 bg-black/50"
-            onClick={() => setIsCrisisModalOpen(false)}
+            onClick={closeCrisisModal}
           />
 
           {/* Modal */}
           <div
-            className="relative w-full max-w-lg bg-white rounded-t-3xl md:rounded-3xl p-6 shadow-2xl animate-slide-up"
+            className={`relative w-full max-w-lg bg-white rounded-t-3xl md:rounded-3xl p-6 shadow-2xl ${closingModal === 'crisis' ? 'modal-content-closing' : 'modal-content'}`}
             role="dialog"
             aria-modal="true"
             aria-labelledby="crisis-modal-title"
           >
             {/* Close button */}
             <button
-              onClick={() => setIsCrisisModalOpen(false)}
+              onClick={closeCrisisModal}
               className="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center transition-colors hover:bg-gray-100"
               aria-label="Close"
             >
@@ -2486,23 +2625,23 @@ function Home() {
 
       {/* ============ SHARE MODAL (Apple-style centered) ============ */}
       {isShareDrawerOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+        <div className={`fixed inset-0 z-50 flex items-center justify-center px-4 ${closingModal === 'share' ? 'modal-backdrop-closing' : 'modal-backdrop'}`}>
           {/* Blurred Backdrop */}
           <div
             className="absolute inset-0 bg-black/30 backdrop-blur-md"
-            onClick={() => setIsShareDrawerOpen(false)}
+            onClick={closeShareDrawer}
           />
 
           {/* Modal */}
           <div
-            className="relative w-full max-w-lg bg-white rounded-[1.75rem] p-8 md:p-10 shadow-2xl"
+            className={`relative w-full max-w-lg bg-white rounded-[1.75rem] p-8 md:p-10 shadow-2xl ${closingModal === 'share' ? 'drawer-content-closing' : 'drawer-content'}`}
             role="dialog"
             aria-modal="true"
             style={{ animation: 'slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1)' }}
           >
             {/* Close button */}
             <button
-              onClick={() => setIsShareDrawerOpen(false)}
+              onClick={closeShareDrawer}
               className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#e8e8ed] flex items-center justify-center transition-colors hover:bg-[#d2d2d7]"
               aria-label="Close"
             >
@@ -2660,22 +2799,22 @@ function Home() {
 
       {/* ============ EMAIL REMINDER MODAL ============ */}
       {isEmailReminderOpen && (
-        <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center">
+        <div className={`fixed inset-0 z-50 flex items-end md:items-center justify-center ${closingModal === 'email' ? 'modal-backdrop-closing' : 'modal-backdrop'}`}>
           {/* Backdrop */}
           <div
             className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-            onClick={() => setIsEmailReminderOpen(false)}
+            onClick={closeEmailModal}
           />
 
           {/* Modal */}
           <div
-            className="relative w-full max-w-md bg-white rounded-t-3xl md:rounded-3xl p-6 shadow-2xl animate-slide-up"
+            className={`relative w-full max-w-md bg-white rounded-t-3xl md:rounded-3xl p-6 shadow-2xl ${closingModal === 'email' ? 'modal-content-closing' : 'modal-content'}`}
             role="dialog"
             aria-modal="true"
           >
             {/* Close button */}
             <button
-              onClick={() => setIsEmailReminderOpen(false)}
+              onClick={closeEmailModal}
               className="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center transition-colors hover:bg-gray-100"
               aria-label="Close"
             >
@@ -2732,10 +2871,78 @@ function Home() {
 
 
 
+      {/* ============ MY STATS MODAL ============ */}
+      {isStatsModalOpen && (
+        <div
+          className={`fixed inset-0 z-[9800] flex items-center justify-center p-5 ${closingModal === 'stats' ? 'modal-backdrop-closing' : 'modal-backdrop'}`}
+          style={{ background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' }}
+          onClick={closeStatsModal}
+        >
+          <div
+            className={`w-full max-w-sm rounded-3xl p-8 relative ${closingModal === 'stats' ? 'modal-content-closing' : 'modal-content'}`}
+            style={{ background: COLORS.bg }}
+            onClick={e => e.stopPropagation()}
+          >
+            <button
+              onClick={closeStatsModal}
+              className="absolute top-4 right-5 w-7 h-7 rounded-full flex items-center justify-center text-lg"
+              style={{ background: COLORS.surface, color: COLORS.muted }}
+            >×</button>
+
+            <div className="text-center mb-6">
+              <BarChart2 className="w-10 h-10 mx-auto mb-3" style={{ color: COLORS.accent }} />
+              <h2 className="text-xl font-bold" style={{ color: COLORS.text }}>Your Challenge Stats</h2>
+            </div>
+
+            {userHandRaiseDate ? (
+              <div className="space-y-3">
+                <div className="flex items-center gap-3 p-3.5 rounded-xl" style={{ background: COLORS.surface }}>
+                  <CheckCircle className="w-5 h-5 text-[#00b18d] flex-shrink-0" />
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-wide" style={{ color: COLORS.caption }}>Joined</p>
+                    <p className="text-sm font-bold" style={{ color: COLORS.text }}>{userHandRaiseDate}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 p-3.5 rounded-xl" style={{ background: COLORS.surface }}>
+                  <Globe className="w-5 h-5 flex-shrink-0" style={{ color: COLORS.accent }} />
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-wide" style={{ color: COLORS.caption }}>Global hand count</p>
+                    <p className="text-sm font-bold" style={{ color: COLORS.text }}>{counter.toLocaleString()} hands raised</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 p-3.5 rounded-xl" style={{ background: COLORS.surface }}>
+                  <Users className="w-5 h-5 flex-shrink-0" style={{ color: COLORS.accent }} />
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-wide" style={{ color: COLORS.caption }}>Countries participating</p>
+                    <p className="text-sm font-bold" style={{ color: COLORS.text }}>{countryLeaderboard.length} countries</p>
+                  </div>
+                </div>
+                <p className="text-center text-xs mt-4" style={{ color: COLORS.caption }}>
+                  You're part of something bigger. 🦋
+                </p>
+              </div>
+            ) : (
+              <div className="text-center py-4">
+                <p className="text-sm mb-4" style={{ color: COLORS.muted }}>
+                  You haven't taken the challenge yet!
+                </p>
+                <button
+                  onClick={() => { closeStatsModal(); setTimeout(() => document.getElementById('i-did-it')?.scrollIntoView({ behavior: 'smooth' }), 250); }}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold text-white transition-all hover:opacity-90"
+                  style={{ backgroundColor: COLORS.accent }}
+                >
+                  Take it now <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* ============ UGC RECORD MODAL ============ */}
       {ugcModalOpen && (
-        <div className="fixed inset-0 z-[9800] flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.9)' }}>
-          <div className="w-full h-full max-w-lg mx-auto flex flex-col relative" onClick={e => e.stopPropagation()}>
+        <div className={`fixed inset-0 z-[9800] flex items-center justify-center ${closingModal === 'ugc' ? 'modal-backdrop-closing' : 'modal-backdrop'}`} style={{ background: 'rgba(0,0,0,0.9)' }}>
+          <div className={`w-full h-full max-w-lg mx-auto flex flex-col relative ${closingModal === 'ugc' ? 'modal-content-closing' : 'modal-content'}`} onClick={e => e.stopPropagation()}>
 
             {/* Close button */}
             <button
@@ -3024,11 +3231,79 @@ function Home() {
           }
         }
         
+        /* Modal animations */
+        .modal-backdrop {
+          animation: fadeIn 0.2s ease-out;
+        }
+        .modal-content {
+          animation: slideUp 0.25s ease-out;
+        }
+        .drawer-content {
+          animation: slideFromBottom 0.3s ease-out;
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes slideUp {
+          from { opacity: 0; transform: translateY(20px) scale(0.97); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes slideFromBottom {
+          from { opacity: 0; transform: translateY(100%); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeOut {
+          from { opacity: 1; }
+          to { opacity: 0; }
+        }
+        @keyframes slideDown {
+          from { opacity: 1; transform: translateY(0) scale(1); }
+          to { opacity: 0; transform: translateY(20px) scale(0.97); }
+        }
+        @keyframes slideToBottom {
+          from { opacity: 1; transform: translateY(0); }
+          to { opacity: 0; transform: translateY(100%); }
+        }
+        .modal-backdrop-closing { animation: fadeOut 0.2s ease-in forwards; }
+        .modal-content-closing { animation: slideDown 0.2s ease-in forwards; }
+        .drawer-content-closing { animation: slideToBottom 0.25s ease-in forwards; }
+        @keyframes dropdownOpen {
+          from { opacity: 0; transform: translateY(-8px) scale(0.95); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .dropdown-menu { animation: dropdownOpen 0.15s ease-out; }
+        /* FAQ accordion */
+        @keyframes faqOpen {
+          from { opacity: 0; transform: translateY(-8px); max-height: 0; }
+          to { opacity: 1; transform: translateY(0); max-height: 500px; }
+        }
+        .faq-answer-open {
+          animation: faqOpen 0.25s ease-out forwards;
+          overflow: hidden;
+        }
+        .faq-chevron {
+          transition: transform 0.25s ease;
+        }
+        .faq-chevron-open {
+          transform: rotate(180deg);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #00b18d; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #009b7d; }
+        * { scrollbar-width: thin; scrollbar-color: #00b18d transparent; }
+
         /* Smooth scrolling */
         html {
           scroll-behavior: smooth;
+          scroll-padding-top: 80px;
         }
-        
+        * {
+          -webkit-overflow-scrolling: touch;
+        }
+
         @media (prefers-reduced-motion: reduce) {
           html {
             scroll-behavior: auto;
