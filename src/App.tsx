@@ -120,7 +120,9 @@ import {
   GraduationCap,
   Briefcase,
   Tag,
-  Smartphone
+  Smartphone,
+  Camera,
+  Upload
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import GlobeGL from 'globe.gl';
@@ -155,6 +157,14 @@ interface LeaderboardItem {
   flag: string;
   name: string;
   count: number;
+}
+
+interface CommunitySubmission {
+  id: string;
+  file_url: string;
+  file_type: 'image' | 'video';
+  display_name: string | null;
+  created_at: string;
 }
 
 
@@ -240,6 +250,28 @@ function Home() {
   const [leaderboardTab, setLeaderboardTab] = useState<'country' | 'city'>('country');
   const [countryLeaderboard, setCountryLeaderboard] = useState<LeaderboardItem[]>([]);
   const [cityLeaderboard, setCityLeaderboard] = useState<LeaderboardItem[]>([]);
+
+  // UGC state
+  const [ugcModalOpen, setUgcModalOpen] = useState(false);
+  const [ugcConsent, setUgcConsent] = useState(false);
+  const [ugcUploading, setUgcUploading] = useState(false);
+  const [communitySubmissions, setCommunitySubmissions] = useState<CommunitySubmission[]>([]);
+  const [recordingStep, setRecordingStep] = useState<'mode-select' | 'camera' | 'preview' | 'consent' | 'success'>('mode-select');
+  const [recordingMode, setRecordingMode] = useState<'auto' | 'manual' | null>(null);
+  const [countdownValue, setCountdownValue] = useState(0);
+  const [isRecording, setIsRecording] = useState(false);
+  const [recordingSeconds, setRecordingSeconds] = useState(0);
+  const [recordedBlob, setRecordedBlob] = useState<Blob | null>(null);
+  const [recordedPreviewUrl, setRecordedPreviewUrl] = useState<string | null>(null);
+  const [cameraError, setCameraError] = useState(false);
+  const cameraStreamRef = useRef<MediaStream | null>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const chunksRef = useRef<Blob[]>([]);
+  const timerRef = useRef<number | null>(null);
+  const countdownRef = useRef<number | null>(null);
+  const liveVideoRef = useRef<HTMLVideoElement>(null);
+  const ugcInputRef = useRef<HTMLInputElement>(null);
+  const leaderboardTrackedRef = useRef(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
   const [selectedCountry, setSelectedCountry] = useState('US');
@@ -292,6 +324,7 @@ function Home() {
 
     // Load leaderboard + realtime
     loadLeaderboard();
+    loadCommunitySubmissions();
     const channel = supabase
       .channel('hand_raises_changes')
       .on('postgres_changes',
@@ -299,16 +332,39 @@ function Home() {
         () => loadLeaderboard()
       )
       .subscribe();
+    const ugcChannel = supabase
+      .channel('ugc_submissions_changes')
+      .on('postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'challenge_submissions' },
+        () => loadCommunitySubmissions()
+      )
+      .subscribe();
 
     return () => {
       subscription.unsubscribe();
       channel.unsubscribe();
+      ugcChannel.unsubscribe();
     };
   }, []);
 
   // Track modal opens
   useEffect(() => { if (isCrisisModalOpen) track('crisis_modal_opened'); }, [isCrisisModalOpen]);
   useEffect(() => { if (isShareDrawerOpen) track('share_modal_opened'); }, [isShareDrawerOpen]);
+
+  // Track leaderboard viewed (once)
+  useEffect(() => {
+    const el = document.getElementById('leaderboard');
+    if (!el) return;
+    const obs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !leaderboardTrackedRef.current) {
+        leaderboardTrackedRef.current = true;
+        track('leaderboard_viewed');
+        obs.disconnect();
+      }
+    }, { threshold: 0.5 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   // Scroll listener
   useEffect(() => {
@@ -567,6 +623,7 @@ function Home() {
   }
 
   const openAuthModal = (mode: 'login' | 'register') => {
+    track('auth_modal_opened', { mode });
     setAuthMode(mode);
     setAuthError('');
     setAuthErrorColor('');
@@ -643,6 +700,191 @@ function Home() {
     return () => document.removeEventListener('click', handler);
   }, []);
 
+  // ===================== UGC FUNCTIONS =====================
+  async function loadCommunitySubmissions() {
+    try {
+      const { data } = await supabase
+        .from('challenge_submissions')
+        .select('id, file_url, file_type, display_name, created_at')
+        .order('created_at', { ascending: false })
+        .limit(6);
+      if (data) setCommunitySubmissions(data as CommunitySubmission[]);
+    } catch { /* silent */ }
+  }
+
+  // Camera functions
+  const startCamera = async () => {
+    setCameraError(false);
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'user', width: { ideal: 720 }, height: { ideal: 720 } },
+        audio: true
+      });
+      cameraStreamRef.current = stream;
+      if (liveVideoRef.current) {
+        liveVideoRef.current.srcObject = stream;
+        liveVideoRef.current.play();
+      }
+    } catch {
+      setCameraError(true);
+    }
+  };
+
+  const startRecording = () => {
+    if (!cameraStreamRef.current) return;
+    chunksRef.current = [];
+    const mimeType = MediaRecorder.isTypeSupported('video/webm;codecs=vp9,opus')
+      ? 'video/webm;codecs=vp9,opus'
+      : MediaRecorder.isTypeSupported('video/webm')
+        ? 'video/webm'
+        : 'video/mp4';
+    const recorder = new MediaRecorder(cameraStreamRef.current, { mimeType });
+    recorder.ondataavailable = (e) => { if (e.data.size > 0) chunksRef.current.push(e.data); };
+    recorder.onstop = () => {
+      const blob = new Blob(chunksRef.current, { type: mimeType });
+      setRecordedBlob(blob);
+      setRecordedPreviewUrl(URL.createObjectURL(blob));
+      setRecordingStep('preview');
+      stopCamera();
+    };
+    mediaRecorderRef.current = recorder;
+    recorder.start(100);
+    setIsRecording(true);
+    setRecordingSeconds(0);
+    timerRef.current = window.setInterval(() => {
+      setRecordingSeconds(prev => {
+        if (prev >= 29) { stopRecording(); return 30; }
+        return prev + 1;
+      });
+    }, 1000);
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorderRef.current?.state === 'recording') {
+      mediaRecorderRef.current.stop();
+    }
+    setIsRecording(false);
+    if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
+  };
+
+  const stopCamera = () => {
+    cameraStreamRef.current?.getTracks().forEach(t => t.stop());
+    cameraStreamRef.current = null;
+  };
+
+  const startAutoCountdown = () => {
+    setCountdownValue(3);
+    let count = 3;
+    countdownRef.current = window.setInterval(() => {
+      count--;
+      if (count > 0) {
+        setCountdownValue(count);
+      } else {
+        if (countdownRef.current) { clearInterval(countdownRef.current); countdownRef.current = null; }
+        setCountdownValue(0);
+        startRecording();
+      }
+    }, 1000);
+  };
+
+  const selectMode = async (mode: 'auto' | 'manual') => {
+    setRecordingMode(mode);
+    setRecordingStep('camera');
+    await startCamera();
+    if (mode === 'auto') {
+      setTimeout(() => startAutoCountdown(), 500);
+    }
+  };
+
+  const handleRetake = () => {
+    if (recordedPreviewUrl) URL.revokeObjectURL(recordedPreviewUrl);
+    setRecordedBlob(null);
+    setRecordedPreviewUrl(null);
+    setRecordingSeconds(0);
+    setRecordingStep('camera');
+    startCamera().then(() => {
+      if (recordingMode === 'auto') setTimeout(() => startAutoCountdown(), 500);
+    });
+  };
+
+  const handleUseVideo = () => setRecordingStep('consent');
+
+  // Fallback file input
+  const handleUgcFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 10 * 1024 * 1024) { alert('File must be under 10MB'); return; }
+    const blob = file as Blob;
+    setRecordedBlob(blob);
+    setRecordedPreviewUrl(URL.createObjectURL(blob));
+    setRecordingStep('consent');
+  };
+
+  const handleUgcUpload = async () => {
+    if (!recordedBlob || !ugcConsent) return;
+    setUgcUploading(true);
+    try {
+      const userId = currentUser?.id || 'anon';
+      const ext = recordedBlob.type.includes('mp4') ? 'mp4' : 'webm';
+      const path = `${userId}/${Date.now()}.${ext}`;
+      const { error: uploadError } = await supabase.storage
+        .from('challenge-submissions')
+        .upload(path, recordedBlob);
+      if (uploadError) throw uploadError;
+
+      const { data: urlData } = supabase.storage
+        .from('challenge-submissions')
+        .getPublicUrl(path);
+
+      const fileType = recordedBlob.type.startsWith('image/') ? 'image' : 'video';
+      await supabase.from('challenge_submissions').insert({
+        user_id: currentUser?.id || null,
+        file_url: urlData.publicUrl,
+        file_type: fileType,
+        consent: true,
+        display_name: currentUser?.user_metadata?.display_name || null
+      });
+
+      track('ugc_submitted', { file_type: fileType });
+      setRecordingStep('success');
+      loadCommunitySubmissions();
+      setTimeout(() => closeUgcModal(), 2000);
+    } catch {
+      alert('Upload failed. Please try again.');
+    } finally {
+      setUgcUploading(false);
+    }
+  };
+
+  const openUgcModal = () => {
+    setUgcModalOpen(true);
+    setRecordingStep('mode-select');
+    setRecordingMode(null);
+    setRecordedBlob(null);
+    setRecordedPreviewUrl(null);
+    setUgcConsent(false);
+    setRecordingSeconds(0);
+    setCountdownValue(0);
+    setCameraError(false);
+  };
+
+  const closeUgcModal = () => {
+    stopRecording();
+    stopCamera();
+    if (countdownRef.current) { clearInterval(countdownRef.current); countdownRef.current = null; }
+    if (recordedPreviewUrl) URL.revokeObjectURL(recordedPreviewUrl);
+    setUgcModalOpen(false);
+    setRecordedBlob(null);
+    setRecordedPreviewUrl(null);
+    setUgcConsent(false);
+    setIsRecording(false);
+    setRecordingSeconds(0);
+    setCountdownValue(0);
+    setCameraError(false);
+    setRecordingStep('mode-select');
+    setRecordingMode(null);
+  };
+
   const handleIDidIt = async () => {
     if (hasCelebrated) { setIsShareDrawerOpen(true); return; }
     setHasCelebrated(true);
@@ -667,6 +909,7 @@ function Home() {
   };
 
   const handleCopyLink = () => {
+    track('share_completed', { platform: 'copy' });
     navigator.clipboard?.writeText('https://butterflychallenge.org');
     setLinkCopied(true);
     setTimeout(() => setLinkCopied(false), 2000);
@@ -1116,6 +1359,22 @@ function Home() {
           </div>
         </section>
 
+        {/* ============ RECORD & SHARE CTA (MOBILE ONLY) ============ */}
+        <div className="md:hidden py-8 flex justify-center px-5" style={{ backgroundColor: COLORS.bg }}>
+          <button
+            onClick={() => {
+              if (!currentUser) { openAuthModal('register'); return; }
+              openUgcModal();
+              track('ugc_cta_clicked');
+            }}
+            className="flex items-center gap-3 px-6 py-4 rounded-full font-semibold text-base text-white transition-all hover:scale-105 active:scale-95 shadow-lg"
+            style={{ backgroundColor: COLORS.accent }}
+          >
+            <Camera className="w-5 h-5" />
+            📸 Record & Share Your Challenge
+          </button>
+        </div>
+
         {/* ============ SECTION 4: VIDEO WALL ============ */}
         <section
           id="video-wall"
@@ -1224,6 +1483,58 @@ function Home() {
             </div>
           </div>
         </section>
+
+        {/* ============ FROM THE COMMUNITY ============ */}
+        {communitySubmissions.length > 0 && (
+          <section className="py-16 overflow-hidden" style={{ backgroundColor: COLORS.bg }}>
+            <div className="max-w-7xl mx-auto px-5 text-center mb-10">
+              <p className="text-xs uppercase font-bold tracking-[0.18em] mb-3" style={{ color: COLORS.caption }}>
+                FROM THE COMMUNITY
+              </p>
+              <h2 className="text-3xl md:text-4xl xl:text-5xl font-bold" style={{ color: COLORS.text, letterSpacing: '-0.02em' }}>
+                Your butterflies, your stories.
+              </h2>
+            </div>
+
+            <style>{`
+              @keyframes community-scroll {
+                0% { transform: translateX(0); }
+                100% { transform: translateX(-50%); }
+              }
+              .animate-community-scroll {
+                animation: community-scroll 30s linear infinite;
+                display: flex;
+                width: max-content;
+              }
+              .animate-community-scroll:hover {
+                animation-play-state: paused;
+              }
+            `}</style>
+
+            <div className="w-full overflow-hidden">
+              <div className="animate-community-scroll gap-3 md:gap-4">
+                {/* Duplicate submissions for seamless loop */}
+                {[...communitySubmissions, ...communitySubmissions].map((sub, i) => (
+                  <div
+                    key={`${sub.id}-${i}`}
+                    className="relative flex-shrink-0 w-48 h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 xl:w-72 xl:h-72 rounded-2xl overflow-hidden bg-gray-100 shadow-sm"
+                  >
+                    {sub.file_type === 'video' ? (
+                      <video src={sub.file_url} className="w-full h-full object-cover" autoPlay muted loop playsInline onPlay={() => track('community_video_played')} />
+                    ) : (
+                      <img src={sub.file_url} alt="Community submission" className="w-full h-full object-cover" />
+                    )}
+                    {sub.display_name && (
+                      <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/60 to-transparent p-2.5">
+                        <p className="text-white text-xs font-medium">{sub.display_name}</p>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* ============ SECTION 5: I DID IT ============ */}
         <section
@@ -1723,7 +2034,7 @@ function Home() {
               </button>
 
               <button
-                onClick={() => setIsEmailReminderOpen(true)}
+                onClick={() => { track('email_reminder_opened'); setIsEmailReminderOpen(true); }}
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full border-2 border-white/50 text-white text-base font-semibold transition-all hover:bg-white/10"
               >
                 <Clock className="w-5 h-5" />
@@ -2220,7 +2531,7 @@ function Home() {
                       <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.34-6.34V8.63a8.28 8.28 0 004.76 1.5V6.69h-1z" />
                     </svg>
                   ),
-                  onClick: () => window.open('https://www.tiktok.com/upload', '_blank')
+                  onClick: () => { track('share_completed', { platform: 'tiktok' }); window.open('https://www.tiktok.com/upload', '_blank'); }
                 },
                 {
                   label: 'Instagram',
@@ -2230,7 +2541,7 @@ function Home() {
                       <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
                     </svg>
                   ),
-                  onClick: () => window.open('https://www.instagram.com/', '_blank')
+                  onClick: () => { track('share_completed', { platform: 'instagram' }); window.open('https://www.instagram.com/', '_blank'); }
                 },
                 {
                   label: 'WhatsApp',
@@ -2240,7 +2551,7 @@ function Home() {
                       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                     </svg>
                   ),
-                  onClick: () => window.open(`https://wa.me/?text=${encodeURIComponent('I raised my hand. 🦋 #ButterflyChallenge\nYour turn → butterflychallenge.org')}`, '_blank')
+                  onClick: () => { track('share_completed', { platform: 'whatsapp' }); window.open(`https://wa.me/?text=${encodeURIComponent('I raised my hand. 🦋 #ButterflyChallenge\nYour turn → butterflychallenge.org')}`, '_blank'); }
                 },
                 {
                   label: 'X',
@@ -2250,7 +2561,7 @@ function Home() {
                       <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                     </svg>
                   ),
-                  onClick: () => window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent('I raised my hand. 🦋 #ButterflyChallenge\nYour turn → butterflychallenge.org')}`, '_blank')
+                  onClick: () => { track('share_completed', { platform: 'twitter' }); window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent('I raised my hand. 🦋 #ButterflyChallenge\nYour turn → butterflychallenge.org')}`, '_blank'); }
                 },
                 {
                   label: linkCopied ? 'Copied!' : 'Copy Link',
@@ -2414,6 +2725,246 @@ function Home() {
       )}
 
 
+
+      {/* ============ UGC RECORD MODAL ============ */}
+      {ugcModalOpen && (
+        <div className="fixed inset-0 z-[9800] flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.9)' }}>
+          <div className="w-full h-full max-w-lg mx-auto flex flex-col relative" onClick={e => e.stopPropagation()}>
+
+            {/* Close button */}
+            <button
+              onClick={closeUgcModal}
+              className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-black/50 flex items-center justify-center text-white backdrop-blur-sm"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            {/* Hidden file input fallback */}
+            <input ref={ugcInputRef} type="file" accept="image/*,video/*" capture="user" className="hidden" onChange={handleUgcFileSelect} />
+
+            {/* STEP: Mode Select */}
+            {recordingStep === 'mode-select' && (
+              <div className="flex-1 flex flex-col items-center justify-center px-6">
+                <div className="w-full max-w-sm">
+                  <div className="text-center mb-8">
+                    <span className="text-4xl mb-3 block">🦋</span>
+                    <h2 className="text-xl font-bold text-white mb-1">How do you want to record?</h2>
+                    <p className="text-sm text-white/60">Pick your style. Max 30 seconds.</p>
+                  </div>
+                  <div className="flex flex-col gap-3">
+                    <button
+                      onClick={() => selectMode('auto')}
+                      className="w-full rounded-2xl border-2 p-5 text-left transition-all hover:scale-[1.02] active:scale-[0.98]"
+                      style={{ borderColor: 'rgba(255,255,255,0.15)', background: 'rgba(255,255,255,0.05)' }}
+                      onMouseEnter={e => (e.currentTarget.style.borderColor = COLORS.accent)}
+                      onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)')}
+                    >
+                      <div className="flex items-center gap-4">
+                        <span className="text-3xl">🤖</span>
+                        <div>
+                          <p className="text-base font-bold text-white">Auto</p>
+                          <p className="text-sm text-white/50">Hands-free · 3 sec countdown</p>
+                        </div>
+                      </div>
+                    </button>
+                    <button
+                      onClick={() => selectMode('manual')}
+                      className="w-full rounded-2xl border-2 p-5 text-left transition-all hover:scale-[1.02] active:scale-[0.98]"
+                      style={{ borderColor: 'rgba(255,255,255,0.15)', background: 'rgba(255,255,255,0.05)' }}
+                      onMouseEnter={e => (e.currentTarget.style.borderColor = COLORS.accent)}
+                      onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)')}
+                    >
+                      <div className="flex items-center gap-4">
+                        <span className="text-3xl">👆</span>
+                        <div>
+                          <p className="text-base font-bold text-white">Manual</p>
+                          <p className="text-sm text-white/50">I'll press record myself</p>
+                        </div>
+                      </div>
+                    </button>
+                  </div>
+                  <button
+                    onClick={() => ugcInputRef.current?.click()}
+                    className="w-full mt-4 py-3 text-sm text-white/40 hover:text-white/60 transition-colors text-center"
+                  >
+                    Or upload a file instead
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* STEP: Camera */}
+            {recordingStep === 'camera' && (
+              <div className="flex-1 flex flex-col">
+                {/* Header */}
+                <div className="text-center pt-6 pb-3 px-5">
+                  <h2 className="text-lg font-bold text-white">
+                    {recordingMode === 'auto' && !isRecording && countdownValue > 0 ? 'Get ready...' : 'Record your butterfly moment'}
+                  </h2>
+                  <p className="text-sm text-white/60 mt-1">Do the gesture. Say "I got you." Max 30 seconds.</p>
+                </div>
+
+                {/* Camera view */}
+                <div className="flex-1 flex items-center justify-center px-4 relative">
+                  {cameraError ? (
+                    <div className="text-center">
+                      <p className="text-white/70 text-sm mb-4">Camera not available</p>
+                      <button
+                        onClick={() => ugcInputRef.current?.click()}
+                        className="px-6 py-3 rounded-full text-sm font-semibold text-white border border-white/30 hover:bg-white/10 transition-colors"
+                      >
+                        <Upload className="w-4 h-4 inline mr-2" />
+                        Upload a file instead
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      <video
+                        ref={liveVideoRef}
+                        autoPlay
+                        playsInline
+                        muted
+                        className="w-full aspect-[3/4] rounded-3xl object-cover bg-black"
+                        style={{ transform: 'scaleX(-1)' }}
+                      />
+                      {/* Countdown overlay */}
+                      {countdownValue > 0 && (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span
+                            className="text-8xl font-bold text-white drop-shadow-2xl"
+                            style={{ animation: 'pulse 1s ease-in-out' }}
+                            key={countdownValue}
+                          >
+                            {countdownValue}
+                          </span>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+
+                {/* Controls */}
+                <div className="flex flex-col items-center gap-3 py-6">
+                  {isRecording && (
+                    <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-600/90 backdrop-blur-sm">
+                      <div className="w-2 h-2 rounded-full bg-white animate-pulse" />
+                      <span className="text-white text-sm font-mono font-bold">
+                        {String(Math.floor(recordingSeconds / 60)).padStart(1, '0')}:{String(recordingSeconds % 60).padStart(2, '0')}
+                      </span>
+                      <span className="text-white/60 text-xs">/ 0:30</span>
+                    </div>
+                  )}
+                  {!cameraError && (
+                    <>
+                      {recordingMode === 'manual' && !isRecording && (
+                        <button
+                          onClick={startRecording}
+                          className="relative w-20 h-20 rounded-full flex items-center justify-center transition-all active:scale-90"
+                          style={{ background: 'rgba(255,255,255,0.15)', border: '4px solid rgba(255,255,255,0.6)' }}
+                        >
+                          <div className="w-14 h-14 rounded-full bg-red-500" />
+                        </button>
+                      )}
+                      {isRecording && (
+                        <button
+                          onClick={stopRecording}
+                          className="relative w-20 h-20 rounded-full flex items-center justify-center transition-all active:scale-90"
+                          style={{ background: 'rgba(255,255,255,0.15)', border: '4px solid rgba(255,255,255,0.6)' }}
+                        >
+                          <div className="w-7 h-7 rounded-md bg-red-500" />
+                        </button>
+                      )}
+                      {recordingMode === 'auto' && !isRecording && countdownValue === 0 && (
+                        <p className="text-white/40 text-xs">Starting automatically...</p>
+                      )}
+                    </>
+                  )}
+                  <p className="text-white/40 text-xs">
+                    {isRecording ? 'Tap to stop' : recordingMode === 'manual' ? 'Tap to record' : ''}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* STEP: Preview */}
+            {recordingStep === 'preview' && recordedPreviewUrl && (
+              <div className="flex-1 flex flex-col">
+                <div className="text-center pt-6 pb-3 px-5">
+                  <h2 className="text-lg font-bold text-white">Looking good! 🦋</h2>
+                </div>
+                <div className="flex-1 flex items-center justify-center px-4">
+                  <video
+                    src={recordedPreviewUrl}
+                    controls
+                    autoPlay
+                    playsInline
+                    className="w-full aspect-[3/4] rounded-3xl object-cover bg-black"
+                  />
+                </div>
+                <div className="flex gap-3 px-5 py-6">
+                  <button
+                    onClick={handleRetake}
+                    className="flex-1 py-3.5 rounded-full text-base font-semibold text-white border border-white/30 transition-colors hover:bg-white/10"
+                  >
+                    Retake
+                  </button>
+                  <button
+                    onClick={handleUseVideo}
+                    className="flex-1 py-3.5 rounded-full text-base font-bold text-white transition-colors"
+                    style={{ backgroundColor: COLORS.accent }}
+                  >
+                    Use This Video
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* STEP: Consent */}
+            {recordingStep === 'consent' && (
+              <div className="flex-1 flex flex-col items-center justify-center px-6">
+                <div className="w-full max-w-sm rounded-3xl p-7" style={{ background: COLORS.bg }}>
+                  <div className="text-center mb-5">
+                    <h2 className="text-xl font-bold mb-1" style={{ color: COLORS.text }}>Almost there!</h2>
+                    <p className="text-sm" style={{ color: COLORS.caption }}>Your video is ready to share.</p>
+                  </div>
+                  <label className="flex items-start gap-3 mb-5 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={ugcConsent}
+                      onChange={e => setUgcConsent(e.target.checked)}
+                      className="mt-0.5 w-5 h-5 rounded accent-[#00b18d]"
+                    />
+                    <span className="text-sm leading-relaxed" style={{ color: COLORS.muted }}>
+                      I agree to share this publicly on thebutterflychallenge.com
+                    </span>
+                  </label>
+                  <button
+                    onClick={handleUgcUpload}
+                    disabled={!ugcConsent || ugcUploading}
+                    className="w-full py-3.5 rounded-full text-base font-bold text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={{ backgroundColor: COLORS.accent }}
+                  >
+                    {ugcUploading ? 'Uploading...' : 'Share It 🦋'}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* STEP: Success */}
+            {recordingStep === 'success' && (
+              <div className="flex-1 flex flex-col items-center justify-center px-6">
+                <div className="w-full max-w-sm rounded-3xl p-8 text-center" style={{ background: COLORS.bg }}>
+                  <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ background: '#e6f9f1' }}>
+                    <CheckCircle className="w-8 h-8 text-[#00b18d]" />
+                  </div>
+                  <h3 className="text-lg font-bold mb-2" style={{ color: COLORS.text }}>You're part of the wave! 🦋</h3>
+                  <p className="text-sm" style={{ color: COLORS.caption }}>Your submission is being reviewed.</p>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* ============ CUSTOM STYLES ============ */}
       <style>{`
