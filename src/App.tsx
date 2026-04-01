@@ -68,8 +68,14 @@ async function saveHandRaise(userId?: string, city?: string | null) {
 async function saveEmail(email: string) {
   try {
     const { error } = await supabase.from('email_reminders').insert({ email });
-    if (error && error.code === '23505') return { success: false, message: 'Already subscribed!' };
-    if (error) return { success: false };
+    if (error) {
+      const msg = error.message || error.details || '';
+      const code = error.code || '';
+      if (code === '23505' || msg.includes('duplicate') || msg.includes('unique') || msg.includes('already exists') || msg.includes('conflict')) {
+        return { success: false, message: 'You\'re already subscribed! 🦋' };
+      }
+      return { success: false, message: 'Something went wrong.' };
+    }
 
     // Send confirmation email via Edge Function
     try {
@@ -886,7 +892,7 @@ function Home() {
   };
 
   const handleIDidIt = async () => {
-    if (hasCelebrated) { setIsShareDrawerOpen(true); return; }
+    if (hasCelebrated) { setEmail(''); setEmailSubmitted(false); setIsShareDrawerOpen(true); return; }
     setHasCelebrated(true);
     localStorage.setItem('bc_did_it', '1');
     track('did_it_clicked');
@@ -904,6 +910,8 @@ function Home() {
 
     setTimeout(() => {
       setShowPlusOne(false);
+      setEmail('');
+      setEmailSubmitted(false);
       setIsShareDrawerOpen(true);
     }, 800);
   };
@@ -919,18 +927,14 @@ function Home() {
     e.preventDefault();
     if (!email.trim()) return;
     const result = await saveEmail(email.trim());
-    if (result.success) {
-      track('email_reminder_subscribed');
+    if (result.success || result.message?.includes('already')) {
+      if (result.success) track('email_reminder_subscribed');
       setEmailSubmitted(true);
       setTimeout(() => {
         setEmailSubmitted(false);
         setIsEmailReminderOpen(false);
         setEmail('');
       }, 2000);
-    } else {
-      setAuthError(result.message || 'Something went wrong. Please try again.');
-      setAuthErrorColor('var(--danger, #FF3B3B)');
-      setTimeout(() => setAuthError(''), 3000);
     }
   };
 
@@ -2635,6 +2639,7 @@ function Home() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email"
+                    autoComplete="off"
                     className="flex-1 px-4 py-3 rounded-xl border text-[15px] outline-none focus:ring-2 focus:ring-[#0066cc]/30 focus:border-[#0066cc] transition-all"
                     style={{ borderColor: '#e8e8ed' }}
                     required
@@ -2706,6 +2711,7 @@ function Home() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="your@email.com"
+                  autoComplete="off"
                   className="w-full px-4 py-3.5 rounded-xl border border-[#e8e8ed] text-base mb-4 outline-none focus:ring-2 focus:ring-[#0066cc]/30 focus:border-[#0066cc] transition-all"
                   required
                 />
