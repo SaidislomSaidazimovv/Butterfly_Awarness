@@ -265,6 +265,7 @@ function Home() {
   const [ugcConsent, setUgcConsent] = useState(false);
   const [ugcUploading, setUgcUploading] = useState(false);
   const [communitySubmissions, setCommunitySubmissions] = useState<CommunitySubmission[]>([]);
+  const [topParticipants, setTopParticipants] = useState<{name: string, avatar: string | null, count: number}[]>([]);
   const [recordingStep, setRecordingStep] = useState<'mode-select' | 'camera' | 'preview' | 'consent' | 'success'>('mode-select');
   const [recordingMode, setRecordingMode] = useState<'auto' | 'manual' | null>(null);
   const [countdownValue, setCountdownValue] = useState(0);
@@ -336,12 +337,14 @@ function Home() {
         if (session.user.email) setEmail(session.user.email);
       } else {
         setEmail('');
+        setTopParticipants([]);
       }
     });
 
     // Load leaderboard + realtime
     loadLeaderboard();
     loadCommunitySubmissions();
+    loadTopParticipants();
     const channel = supabase
       .channel('hand_raises_changes')
       .on('postgres_changes',
@@ -789,6 +792,38 @@ function Home() {
   }, []);
 
   // ===================== UGC FUNCTIONS =====================
+  async function loadTopParticipants() {
+    try {
+      const { data } = await supabase
+        .from('shares')
+        .select('user_id, display_name, avatar_url')
+        .not('user_id', 'is', null);
+      if (!data) return;
+
+      const counts: Record<string, { count: number; display_name: string; avatar_url: string | null }> = {};
+      data.forEach((row: any) => {
+        if (!counts[row.user_id]) {
+          counts[row.user_id] = {
+            count: 0,
+            display_name: row.display_name || 'User',
+            avatar_url: row.avatar_url || null
+          };
+        }
+        counts[row.user_id].count += 1;
+      });
+
+      const top5 = Object.values(counts)
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 5);
+
+      setTopParticipants(top5.map((u) => ({
+        name: u.display_name,
+        avatar: u.avatar_url,
+        count: u.count
+      })));
+    } catch { /* silent */ }
+  }
+
   async function loadCommunitySubmissions() {
     try {
       const { data } = await supabase
@@ -1016,8 +1051,38 @@ function Home() {
     }, 800);
   };
 
+  async function saveShare(platform: string) {
+    if (!currentUser) return;
+    try {
+      await supabase.from('shares').insert({
+        user_id: currentUser.id,
+        platform,
+        display_name: getDisplayName(),
+        avatar_url: getAvatarUrl() || null
+      });
+      loadTopParticipants();
+    } catch { /* silent */ }
+  }
+
+  const handleNativeShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Butterfly Challenge',
+          text: 'I raised my hand. 🦋 #ButterflyChallenge\nYour turn → thebutterflychallenge.com',
+          url: 'https://thebutterflychallenge.com'
+        });
+        track('share_completed', { platform: 'native_share' });
+        saveShare('native');
+      } catch {
+        // User cancelled — do nothing
+      }
+    }
+  };
+
   const handleCopyLink = () => {
     track('share_completed', { platform: 'copy' });
+    saveShare('copy');
     navigator.clipboard?.writeText('https://butterflychallenge.org');
     setLinkCopied(true);
     setTimeout(() => setLinkCopied(false), 2000);
@@ -1127,7 +1192,7 @@ function Home() {
             {!currentUser ? (
               <button
                 onClick={() => openAuthModal('login')}
-                className="hidden sm:inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all border"
+                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all border"
                 style={{ color: COLORS.text, borderColor: COLORS.hair, background: 'transparent' }}
               >
                 Sign in
@@ -1260,6 +1325,49 @@ function Home() {
                 <ExternalLink className="w-4 h-4" />
                 Safe Exit
               </button>
+
+              {!currentUser ? (
+                <button
+                  onClick={() => { setIsMobileMenuOpen(false); openAuthModal('login'); }}
+                  className="w-full mt-4 py-3 rounded-2xl text-white font-semibold text-center"
+                  style={{ backgroundColor: COLORS.accent }}
+                >
+                  Sign In
+                </button>
+              ) : (
+                <div className="mt-4 pt-4 border-t border-gray-100">
+                  <div className="flex items-center gap-3 px-2 mb-3">
+                    {getAvatarUrl() ? (
+                      <img src={getAvatarUrl()!} alt="" className="w-8 h-8 rounded-full object-cover" />
+                    ) : (
+                      <div
+                        className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold"
+                        style={{ backgroundColor: COLORS.accent }}
+                      >
+                        {getDisplayName().charAt(0).toUpperCase()}
+                      </div>
+                    )}
+                    <div>
+                      <div className="font-semibold text-sm" style={{ color: COLORS.text }}>{getDisplayName()}</div>
+                      <div className="text-xs" style={{ color: COLORS.caption }}>{currentUser.email}</div>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => { setIsMobileMenuOpen(false); setIsStatsModalOpen(true); }}
+                    className="w-full py-2 px-3 text-left text-sm hover:bg-gray-50 rounded-xl"
+                    style={{ color: COLORS.text }}
+                  >
+                    My Stats
+                  </button>
+                  <button
+                    onClick={() => { setIsMobileMenuOpen(false); handleSignOut(); }}
+                    className="w-full py-2 px-3 text-left text-sm hover:bg-gray-50 rounded-xl"
+                    style={{ color: COLORS.danger }}
+                  >
+                    Sign out
+                  </button>
+                </div>
+              )}
             </nav>
           </div>
         )}
@@ -1775,7 +1883,7 @@ function Home() {
             </div>
 
             {/* Leaderboards */}
-            <div className="md:grid md:grid-cols-2 gap-6">
+            <div className={`grid grid-cols-1 gap-4 ${currentUser ? 'md:grid-cols-3' : 'md:grid-cols-2 max-w-2xl mx-auto'}`}>
               {/* Country leaderboard */}
               <div
                 className={`rounded-[2rem] p-8 transition-all duration-700 ${(leaderboardTab === 'country' || true) ? 'block' : 'hidden'
@@ -1836,6 +1944,48 @@ function Home() {
                   See all <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
+
+              {/* Top Participants */}
+              {currentUser && (
+              <div
+                className={`rounded-[2rem] p-8 transition-all duration-700 ${visibleSections.has('leaderboard') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+                style={{ backgroundColor: '#f5f5f7', transitionDelay: '200ms' }}
+              >
+                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2" style={{ color: COLORS.text }}>
+                  <Award className="w-5 h-5" style={{ color: COLORS.accent }} />
+                  Top Participants
+                </h3>
+                <div className="space-y-3">
+                  {topParticipants.length > 0 ? topParticipants.map((p, i) => (
+                    <div key={i} className="flex items-center gap-3 py-2">
+                      <span className="w-6 text-sm font-bold" style={{ color: COLORS.caption }}>
+                        {i + 1}
+                      </span>
+                      {p.avatar ? (
+                        <img src={p.avatar} alt={p.name} className="w-8 h-8 rounded-full object-cover" />
+                      ) : (
+                        <div
+                          className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold"
+                          style={{ backgroundColor: COLORS.accent }}
+                        >
+                          {p.name.charAt(0).toUpperCase()}
+                        </div>
+                      )}
+                      <span className="flex-1 text-sm font-medium" style={{ color: COLORS.text }}>
+                        {p.name}
+                      </span>
+                      <span className="text-sm font-semibold" style={{ color: COLORS.accent }}>
+                        {p.count} share{p.count > 1 ? 's' : ''}
+                      </span>
+                    </div>
+                  )) : (
+                    <p className="text-sm py-4 text-center" style={{ color: COLORS.caption }}>
+                      Be the first to share! 🦋
+                    </p>
+                  )}
+                </div>
+              </div>
+              )}
             </div>
 
             {/* Screenshot prompt */}
@@ -2663,6 +2813,21 @@ function Home() {
               Thank you for showing up. Now share the wave — every hand counts.
             </p>
 
+            {/* Native share (mobile only) */}
+            {typeof navigator !== 'undefined' && 'share' in navigator && currentUser && (
+              <div className="md:hidden mb-4">
+                <button
+                  onClick={handleNativeShare}
+                  className="w-full py-3 rounded-2xl font-semibold text-white flex items-center justify-center gap-2"
+                  style={{ background: 'linear-gradient(135deg, #00b18d, #0072BC)' }}
+                >
+                  <Share2 className="w-5 h-5" />
+                  Share to Instagram, TikTok & more
+                </button>
+                <p className="text-center text-xs text-gray-400 mt-2">Opens your phone's share menu</p>
+              </div>
+            )}
+
             {/* Share buttons */}
             <div className="grid grid-cols-5 gap-3 mb-8">
               {[
@@ -2674,7 +2839,7 @@ function Home() {
                       <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.34-6.34V8.63a8.28 8.28 0 004.76 1.5V6.69h-1z" />
                     </svg>
                   ),
-                  onClick: () => { track('share_completed', { platform: 'tiktok' }); window.open('https://www.tiktok.com/upload', '_blank'); }
+                  onClick: () => { track('share_completed', { platform: 'tiktok' }); saveShare('tiktok'); window.open('https://www.tiktok.com/upload', '_blank'); }
                 },
                 {
                   label: 'Instagram',
@@ -2684,7 +2849,7 @@ function Home() {
                       <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
                     </svg>
                   ),
-                  onClick: () => { track('share_completed', { platform: 'instagram' }); window.open('https://www.instagram.com/', '_blank'); }
+                  onClick: () => { track('share_completed', { platform: 'instagram' }); saveShare('instagram'); window.open('https://www.instagram.com/', '_blank'); }
                 },
                 {
                   label: 'WhatsApp',
@@ -2694,7 +2859,7 @@ function Home() {
                       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                     </svg>
                   ),
-                  onClick: () => { track('share_completed', { platform: 'whatsapp' }); window.open(`https://wa.me/?text=${encodeURIComponent('I raised my hand. 🦋 #ButterflyChallenge\nYour turn → butterflychallenge.org')}`, '_blank'); }
+                  onClick: () => { track('share_completed', { platform: 'whatsapp' }); saveShare('whatsapp'); window.open(`https://wa.me/?text=${encodeURIComponent('I raised my hand. 🦋 #ButterflyChallenge\nYour turn → butterflychallenge.org')}`, '_blank'); }
                 },
                 {
                   label: 'X',
@@ -2704,7 +2869,7 @@ function Home() {
                       <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                     </svg>
                   ),
-                  onClick: () => { track('share_completed', { platform: 'twitter' }); window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent('I raised my hand. 🦋 #ButterflyChallenge\nYour turn → butterflychallenge.org')}`, '_blank'); }
+                  onClick: () => { track('share_completed', { platform: 'twitter' }); saveShare('twitter'); window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent('I raised my hand. 🦋 #ButterflyChallenge\nYour turn → butterflychallenge.org')}`, '_blank'); }
                 },
                 {
                   label: linkCopied ? 'Copied!' : 'Copy Link',
@@ -2793,6 +2958,7 @@ function Home() {
                 </form>
               )}
             </div>
+
           </div>
         </div>
       )}
