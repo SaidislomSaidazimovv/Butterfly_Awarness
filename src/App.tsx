@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { createClient } from '@supabase/supabase-js';
 import mixpanel from 'mixpanel-browser';
 
 // ===================== SUPABASE =====================
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVlZ3dkbHl3ZHhneGJnc2hyYXpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NTcxMzQsImV4cCI6MjA5MDQzMzEzNH0.vW8y3ZzBHfizGnymvgo-PL3So6ZZ428N7owKvzel98U';
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 const supabase = createClient(
-  'https://eegwdlywdxgxbgshrazl.supabase.co',
+  import.meta.env.VITE_SUPABASE_URL,
   SUPABASE_ANON_KEY
 );
 
 // ===================== MIXPANEL =====================
-mixpanel.init('5b892f00119d3bb2c7a37246b57daa08', {
+mixpanel.init(import.meta.env.VITE_MIXPANEL_TOKEN, {
   debug: false,
   track_pageview: true,
   persistence: 'localStorage',
@@ -34,10 +35,10 @@ function getCountryCode(): string | null {
 
 async function getLocationData(): Promise<{ country: string | null, city: string | null }> {
   try {
-    const res = await fetch('https://ipapi.co/json/');
+    const res = await fetch(`https://ipinfo.io/json?token=${import.meta.env.VITE_IPINFO_TOKEN}`);
     const data = await res.json();
     return {
-      country: data.country_code || null,
+      country: data.country || null,
       city: data.city || null
     };
   } catch {
@@ -60,7 +61,8 @@ async function saveHandRaise(userId?: string, city?: string | null) {
       session_id: sessionId,
       user_id: userId || null,
       country_code: getCountryCode(),
-      city: city || null
+      city: city || null,
+      referred_by: localStorage.getItem('bc_ref') || null
     });
   } catch { /* silent */ }
 }
@@ -79,13 +81,13 @@ async function saveEmail(email: string) {
 
     // Send confirmation email via Edge Function
     try {
-      await fetch('https://eegwdlywdxgxbgshrazl.supabase.co/functions/v1/send-email', {
+      await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-email`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
         },
-        body: JSON.stringify({ action: 'confirmation', email, secret: 'butterfly2026secret' })
+        body: JSON.stringify({ action: 'confirmation', email, secret: import.meta.env.VITE_FUNCTION_SECRET })
       });
     } catch { /* silent — email failure shouldn't block signup */ }
 
@@ -93,13 +95,7 @@ async function saveEmail(email: string) {
   } catch { return { success: false, message: 'Something went wrong.' }; }
 }
 
-async function loadRealCount(): Promise<number> {
-  try {
-    const { count, error } = await supabase.from('hand_raises').select('*', { count: 'exact', head: true });
-    if (!error && count !== null) return count;
-    return 0;
-  } catch { return 0; }
-}
+// loadRealCount, loadLeaderboard, loadCommunitySubmissions replaced by React Query hooks
 import {
   Heart,
   ChevronDown,
@@ -131,26 +127,15 @@ import {
   Upload
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import GlobeGL from 'globe.gl';
+// globe.gl loaded dynamically in useEffect to reduce initial bundle
 import logo from './Butterfly_Challenge_logo_main (1).svg';
 import handImg2 from './hand2.webp';
-import step1Img from './Step 01.webp';
-import step2Img from './Step 02.webp';
-import step3Img from './Step 03.webp';
-import step4Img from './Step 04.webp';
 import logo988 from './988Logo.jpg';
 import logoOneHumanity from './ONE_HUMANITY_Logo_Main.png';
 import logoVerified from './Certified-Nonprofit-Gold.webp';
-import compressedVideo from './compressed.mp4';
-import inf1 from './Influencer1.mp4';
-import inf2 from './Influencer2.webm';
-import inf3 from './Influencer3.mp4';
-import inf4 from './Influencer4.mp4';
-import inf5 from './Influencer5.mp4';
 import imgISeeYou from './I see you.png';
 import imgICare from './I care.png';
 import imgYouAreNotAlone from './You are not alone.png';
-import peopleDoingImg from './People_doing_butterfly_202603311123.jpeg';
 
 // Types
 interface FAQItem {
@@ -173,6 +158,39 @@ interface CommunitySubmission {
   created_at: string;
 }
 
+
+function getShareUrl(userId?: string | null, sessionId?: string | null): string {
+  const base = 'https://thebutterflychallenge.com';
+  const ref = userId || sessionId || localStorage.getItem('bc_session');
+  return ref ? `${base}?ref=${ref}` : base;
+}
+
+const crisisLines: Record<string, { name: string; phone: string; url: string }> = {
+  'United States': { name: '988 Suicide & Crisis Lifeline', phone: '988', url: 'https://988lifeline.org' },
+  'United Kingdom': { name: 'Samaritans', phone: '116 123', url: 'https://www.samaritans.org' },
+  'Canada': { name: 'Crisis Services Canada', phone: '1-833-456-4566', url: 'https://www.crisisservicescanada.ca' },
+  'Australia': { name: 'Lifeline Australia', phone: '13 11 14', url: 'https://www.lifeline.org.au' },
+  'Germany': { name: 'Telefonseelsorge', phone: '0800 111 0 111', url: 'https://www.telefonseelsorge.de' },
+  'France': { name: 'Numéro National Prévention Suicide', phone: '3114', url: 'https://www.3114.fr' },
+  'Brazil': { name: 'CVV', phone: '188', url: 'https://www.cvv.org.br' },
+  'India': { name: 'iCall', phone: '9152987821', url: 'https://icallhelpline.org' },
+  'Nigeria': { name: 'Mentally Aware Nigeria', phone: '08079069614', url: 'https://www.mani.ng' },
+  'South Africa': { name: 'SADAG', phone: '0800 456 789', url: 'https://www.sadag.org' },
+  'New Zealand': { name: 'Lifeline NZ', phone: '0800 543 354', url: 'https://www.lifeline.org.nz' },
+  'Ireland': { name: 'Samaritans Ireland', phone: '116 123', url: 'https://www.samaritans.org' },
+  'Netherlands': { name: '113 Zelfmoordpreventie', phone: '113', url: 'https://www.113.nl' },
+  'Sweden': { name: 'Mind Självmordslinjen', phone: '90101', url: 'https://mind.se' },
+  'Norway': { name: 'Mental Helse', phone: '116 123', url: 'https://mentalhelse.no' },
+  'Denmark': { name: 'Livslinien', phone: '70 201 201', url: 'https://www.livslinien.dk' },
+  'Spain': { name: 'Teléfono de la Esperanza', phone: '717 003 717', url: 'https://www.telefonodelaesperanza.org' },
+  'Italy': { name: 'Telefono Amico', phone: '02 2327 2327', url: 'https://www.telefonoamico.it' },
+  'Japan': { name: 'Inochi no Denwa', phone: '0120-783-556', url: 'https://www.ifd.or.jp' },
+  'South Korea': { name: 'Korea Suicide Prevention Hotline', phone: '1393', url: 'https://www.1393.go.kr' },
+  'Singapore': { name: 'Samaritans of Singapore', phone: '1800-221-4444', url: 'https://www.sos.org.sg' },
+  'Mexico': { name: 'SAPTEL', phone: '55 5259-8121', url: 'https://www.saptel.org.mx' },
+  'Argentina': { name: 'Centro de Asistencia al Suicida', phone: '135', url: 'https://www.asistenciaalsuicida.org.ar' },
+  'Other': { name: 'Find International Resources', phone: '', url: 'https://www.iasp.info/resources/Crisis_Centres/' },
+};
 
 const COLORS = {
   bg: '#FFFFFF',
@@ -238,6 +256,56 @@ function getCountryName(code: string): string {
 }
 
 
+function useFocusTrap(isOpen: boolean, containerRef: React.RefObject<HTMLDivElement | null>) {
+  useEffect(() => {
+    if (!isOpen || !containerRef.current) return;
+
+    const container = containerRef.current;
+    const focusableSelectors = [
+      'a[href]', 'button:not([disabled])', 'input:not([disabled])',
+      'select:not([disabled])', 'textarea:not([disabled])',
+      '[tabindex]:not([tabindex="-1"])'
+    ].join(', ');
+
+    const focusableElements = Array.from(container.querySelectorAll<HTMLElement>(focusableSelectors));
+    if (focusableElements.length === 0) return;
+
+    const firstEl = focusableElements[0];
+    const lastEl = focusableElements[focusableElements.length - 1];
+
+    firstEl.focus();
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab') return;
+      if (e.shiftKey) {
+        if (document.activeElement === firstEl) {
+          e.preventDefault();
+          lastEl.focus();
+        }
+      } else {
+        if (document.activeElement === lastEl) {
+          e.preventDefault();
+          firstEl.focus();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, containerRef]);
+}
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 30 * 1000,
+      gcTime: 5 * 60 * 1000,
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
+
 function Home() {
   // State
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
@@ -251,6 +319,7 @@ function Home() {
   const [isStatsModalOpen, setIsStatsModalOpen] = useState(false);
   const [closingModal, setClosingModal] = useState<string | null>(null);
   const [showPlusOne, setShowPlusOne] = useState(false);
+  const [showPlatformGuide, setShowPlatformGuide] = useState<'tiktok' | 'instagram' | null>(null);
   const [hasScrolled, setHasScrolled] = useState(false);
   const [isEmailReminderOpen, setIsEmailReminderOpen] = useState(false);
   const [email, setEmail] = useState('');
@@ -284,7 +353,8 @@ function Home() {
   const leaderboardTrackedRef = useRef(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
-  const [selectedCountry, setSelectedCountry] = useState('US');
+  const [selectedCountry, setSelectedCountry] = useState('United States');
+  const [crisisResult, setCrisisResult] = useState<{ name: string; phone: string; url: string } | null>(null);
 
   // Auth UI state
   const [authModalOpen, setAuthModalOpen] = useState(false);
@@ -296,7 +366,12 @@ function Home() {
   const [authEmail, setAuthEmail] = useState('');
   const [authPassword, setAuthPassword] = useState('');
   const [authName, setAuthName] = useState('');
+  const [showEmailVerification, setShowEmailVerification] = useState(false);
+  const [verificationEmail, setVerificationEmail] = useState('');
   const honeypotRef = useRef<HTMLInputElement>(null);
+  const authModalRef = useRef<HTMLDivElement>(null);
+  const crisisModalRef = useRef<HTMLDivElement>(null);
+  const shareModalRef = useRef<HTMLDivElement>(null);
 
   // Refs
   const heroRef = useRef<HTMLElement>(null);
@@ -305,20 +380,92 @@ function Home() {
   const globeContainerRef = useRef<HTMLDivElement>(null);
   const globeInstanceRef = useRef<any>(null);
 
-  // Load real count from DB + auth listener
+  // ===================== REACT QUERY HOOKS =====================
+  const { data: countData } = useQuery({
+    queryKey: ['handRaisesCount'],
+    queryFn: async () => {
+      const { count } = await supabase
+        .from('hand_raises')
+        .select('*', { count: 'exact', head: true });
+      return count || 0;
+    },
+    staleTime: 10 * 1000,
+  });
+
+  const { data: leaderboardData } = useQuery({
+    queryKey: ['leaderboard'],
+    queryFn: async () => {
+      const [countries, cities] = await Promise.all([
+        supabase.rpc('get_country_leaderboard'),
+        supabase.rpc('get_city_leaderboard'),
+      ]);
+      return { countries: countries.data || [], cities: cities.data || [] };
+    },
+    staleTime: 30 * 1000,
+  });
+
+  const { data: communityData } = useQuery({
+    queryKey: ['communitySubmissions'],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('challenge_submissions')
+        .select('id, file_url, file_type, display_name, created_at')
+        .eq('is_approved', true)
+        .order('created_at', { ascending: false })
+        .limit(6);
+      return data || [];
+    },
+    staleTime: 60 * 1000,
+  });
+
+  // Sync React Query data to state
   useEffect(() => {
-    loadRealCount().then(count => {
-      const duration = 1800;
-      const startTime = Date.now();
-      const animate = () => {
-        const elapsed = Date.now() - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        const easeOut = 1 - Math.pow(1 - progress, 3);
-        setCounter(Math.floor(count * easeOut));
-        if (progress < 1) requestAnimationFrame(animate);
-      };
-      animate();
-    });
+    if (countData !== undefined) {
+      setCounter(countData);
+    }
+  }, [countData]);
+
+  useEffect(() => {
+    if (leaderboardData) {
+      setCountryLeaderboard(
+        (leaderboardData.countries as any[]).map((row: any, i: number) => ({
+          rank: i + 1,
+          flag: getFlag(row.country_code),
+          name: getCountryName(row.country_code),
+          count: row.cnt
+        }))
+      );
+      setCityLeaderboard(
+        (leaderboardData.cities as any[]).map((row: any, i: number) => ({
+          rank: i + 1,
+          flag: '🏙️',
+          name: row.city,
+          count: row.cnt
+        }))
+      );
+    }
+  }, [leaderboardData]);
+
+  useEffect(() => {
+    if (communityData) {
+      const unique = communityData.filter((item: any, index: number, self: any[]) =>
+        index === self.findIndex((t) => t.id === item.id)
+      );
+      setCommunitySubmissions(unique as CommunitySubmission[]);
+    }
+  }, [communityData]);
+
+  // Auth listener + realtime
+  useEffect(() => {
+    // Referral tracking
+    const urlParams = new URLSearchParams(window.location.search);
+    const refCode = urlParams.get('ref');
+    if (refCode) {
+      localStorage.setItem('bc_ref', refCode);
+      track('referral_visit', { ref: refCode });
+    }
+
+    // Counter and leaderboard now managed by React Query hooks above
 
     // Auth listener
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -342,21 +489,20 @@ function Home() {
     });
 
     // Load leaderboard + realtime
-    loadLeaderboard();
-    loadCommunitySubmissions();
+    // Leaderboard and community data now managed by React Query
     loadTopParticipants();
     const channel = supabase
       .channel('hand_raises_changes')
       .on('postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'hand_raises' },
-        () => loadLeaderboard()
+        () => { queryClient.invalidateQueries({ queryKey: ['leaderboard'] }); queryClient.invalidateQueries({ queryKey: ['handRaisesCount'] }); }
       )
       .subscribe();
     const ugcChannel = supabase
       .channel('ugc_submissions_changes')
       .on('postgres_changes',
-        { event: 'INSERT', schema: 'public', table: 'challenge_submissions' },
-        () => loadCommunitySubmissions()
+        { event: '*', schema: 'public', table: 'challenge_submissions' },
+        () => queryClient.invalidateQueries({ queryKey: ['communitySubmissions'] })
       )
       .subscribe();
 
@@ -366,6 +512,11 @@ function Home() {
       ugcChannel.unsubscribe();
     };
   }, []);
+
+  // Focus traps for accessibility
+  useFocusTrap(authModalOpen, authModalRef);
+  useFocusTrap(isCrisisModalOpen, crisisModalRef);
+  useFocusTrap(isShareDrawerOpen, shareModalRef);
 
   // Track modal opens
   useEffect(() => { if (isCrisisModalOpen) track('crisis_modal_opened'); }, [isCrisisModalOpen]);
@@ -442,10 +593,12 @@ function Home() {
     return () => observer.disconnect();
   }, []);
 
-  // Globe.gl initialization
+  // Globe.gl initialization (dynamically loaded)
   useEffect(() => {
     const container = globeContainerRef.current;
     if (!container || globeInstanceRef.current) return;
+
+    (async () => {
 
     // Check for reduced motion preference
     const isReduced = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -459,6 +612,7 @@ function Home() {
     const map = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAAD5Ip3+AAAAC0lEQVQIHWP4DwQACfsD/Qy7W+cAAAAASUVORK5CYII=';
     const landCheckUrl = 'https://assets.ot.digital/img/map.png';
 
+    const GlobeGL = (await import('globe.gl')).default;
     const world = new GlobeGL(container)
       .globeImageUrl(map)
       .backgroundColor('rgba(0, 0, 0, 0)')
@@ -581,12 +735,13 @@ function Home() {
       world.width(w).height(w);
     };
     window.addEventListener('resize', handleResize);
+    (container as any)._resizeHandler = handleResize;
+    })();
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      if ((container as any)?._resizeHandler) window.removeEventListener('resize', (container as any)._resizeHandler);
       if ((container as any)?._arcInterval) clearInterval((container as any)._arcInterval);
-      // Clean up globe
-      world._destructor?.();
+      (globeInstanceRef.current as any)?._destructor?.();
       globeInstanceRef.current = null;
     };
   }, []);
@@ -622,58 +777,6 @@ function Home() {
         setUserHandRaiseDate(formatted);
         setHasCelebrated(true);
       }
-    } catch { /* silent */ }
-  }
-
-  async function loadLeaderboard() {
-    try {
-      const { data } = await supabase
-        .from('hand_raises')
-        .select('country_code')
-        .not('country_code', 'is', null);
-
-      if (!data) return;
-
-      const counts: Record<string, number> = {};
-      data.forEach((row: any) => {
-        const code = row.country_code.toUpperCase().slice(0, 2);
-        counts[code] = (counts[code] || 0) + 1;
-      });
-
-      const sorted = Object.entries(counts)
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 5)
-        .map(([code, count], i) => ({
-          rank: i + 1,
-          flag: getFlag(code),
-          name: getCountryName(code),
-          count
-        }));
-
-      setCountryLeaderboard(sorted);
-
-      // Load city data
-      const { data: cityData } = await supabase
-        .from('hand_raises')
-        .select('city')
-        .not('city', 'is', null);
-
-      const cityCounts: Record<string, number> = {};
-      cityData?.forEach((row: any) => {
-        if (row.city) cityCounts[row.city] = (cityCounts[row.city] || 0) + 1;
-      });
-
-      const sortedCities = Object.entries(cityCounts)
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 5)
-        .map(([name, count], i) => ({
-          rank: i + 1,
-          flag: '🏙️',
-          name,
-          count
-        }));
-
-      setCityLeaderboard(sortedCities);
     } catch { /* silent */ }
   }
 
@@ -757,8 +860,9 @@ function Home() {
         });
         if (error) throw error;
         track('user_registered', { method: 'email' });
-        setAuthErrorColor(COLORS.success);
-        setAuthError('Check your email to confirm your account!');
+        setVerificationEmail(authEmail);
+        setShowEmailVerification(true);
+        closeAuthModal();
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email: authEmail, password: authPassword });
         if (error) throw error;
@@ -794,44 +898,16 @@ function Home() {
   // ===================== UGC FUNCTIONS =====================
   async function loadTopParticipants() {
     try {
-      const { data } = await supabase
-        .from('shares')
-        .select('user_id, display_name, avatar_url')
-        .not('user_id', 'is', null);
+      const { data } = await supabase.rpc('get_top_participants');
       if (!data) return;
 
-      const counts: Record<string, { count: number; display_name: string; avatar_url: string | null }> = {};
-      data.forEach((row: any) => {
-        if (!counts[row.user_id]) {
-          counts[row.user_id] = {
-            count: 0,
-            display_name: row.display_name || 'User',
-            avatar_url: row.avatar_url || null
-          };
-        }
-        counts[row.user_id].count += 1;
-      });
-
-      const top5 = Object.values(counts)
-        .sort((a, b) => b.count - a.count)
-        .slice(0, 5);
-
-      setTopParticipants(top5.map((u) => ({
-        name: u.display_name,
-        avatar: u.avatar_url,
-        count: u.count
-      })));
-    } catch { /* silent */ }
-  }
-
-  async function loadCommunitySubmissions() {
-    try {
-      const { data } = await supabase
-        .from('challenge_submissions')
-        .select('id, file_url, file_type, display_name, created_at')
-        .order('created_at', { ascending: false })
-        .limit(6);
-      if (data) setCommunitySubmissions(data as CommunitySubmission[]);
+      setTopParticipants(
+        (data as any[]).map((row: { user_id: string; display_name: string; avatar_url: string | null; share_count: number }) => ({
+          name: row.display_name || 'User',
+          avatar: row.avatar_url,
+          count: row.share_count
+        }))
+      );
     } catch { /* silent */ }
   }
 
@@ -970,8 +1046,7 @@ function Home() {
 
       track('ugc_submitted', { file_type: fileType });
       setRecordingStep('success');
-      loadCommunitySubmissions();
-      setTimeout(() => closeUgcModal(), 2000);
+      setTimeout(() => closeUgcModal(), 3000);
     } catch {
       alert('Upload failed. Please try again.');
     } finally {
@@ -1031,6 +1106,8 @@ function Home() {
     setHasCelebrated(true);
     localStorage.setItem('bc_did_it', '1');
     track('did_it_clicked');
+    const refSource = localStorage.getItem('bc_ref');
+    if (refSource) track('referral_converted', { ref: refSource });
     setShowPlusOne(true);
     setCounter(prev => prev + 1);
     const { city } = await getLocationData();
@@ -1069,8 +1146,8 @@ function Home() {
       try {
         await navigator.share({
           title: 'Butterfly Challenge',
-          text: 'I raised my hand. 🦋 #ButterflyChallenge\nYour turn → thebutterflychallenge.com',
-          url: 'https://thebutterflychallenge.com'
+          text: `I raised my hand. 🦋 #ButterflyChallenge\nYour turn → ${getShareUrl(currentUser?.id)}`,
+          url: getShareUrl(currentUser?.id)
         });
         track('share_completed', { platform: 'native_share' });
         saveShare('native');
@@ -1083,7 +1160,7 @@ function Home() {
   const handleCopyLink = () => {
     track('share_completed', { platform: 'copy' });
     saveShare('copy');
-    navigator.clipboard?.writeText('https://butterflychallenge.org');
+    navigator.clipboard?.writeText(getShareUrl(currentUser?.id));
     setLinkCopied(true);
     setTimeout(() => setLinkCopied(false), 2000);
   };
@@ -1520,25 +1597,25 @@ function Home() {
               {[
                 {
                   step: '01',
-                  image: step1Img,
+                  image: '/images/Step 01.webp',
                   title: 'Open camera',
                   description: 'Phone facing you. No filter. No production. Just you.'
                 },
                 {
                   step: '02',
-                  image: step2Img,
+                  image: '/images/Step 02.webp',
                   title: 'The gesture',
                   description: 'Hands on heart, open outward like wings. Hold it.'
                 },
                 {
                   step: '03',
-                  image: step3Img,
+                  image: '/images/Step 03.webp',
                   title: 'Say it',
                   description: '"I got you, [name]." Or: "I see you." Whatever is real.'
                 },
                 {
                   step: '04',
-                  image: step4Img,
+                  image: '/images/Step 04.webp',
                   title: 'Tag 3',
                   description: 'Nominate 3 people. They have 24 hours. Pass it forward.'
                 }
@@ -1651,17 +1728,17 @@ function Home() {
             <div className={`animate-slide-infinite gap-4 transition-all duration-1000 ${visibleSections.has('video-wall') ? 'opacity-100' : 'opacity-0'}`}>
               {/* Combine array with a duplicate of itself for infinite scroll effect */}
               {[
-                { id: 1, src: inf1, handle: '@marcus', text: 'I see you.' },
-                { id: 2, src: inf2, handle: '@sarah_j', text: 'I got you.' },
-                { id: 3, src: inf3, handle: '@david_smith', text: 'Always here.' },
-                { id: 4, src: inf4, handle: '@emily_r', text: 'No filter needed.' },
-                { id: 5, src: inf5, handle: '@michael_t', text: 'Sending love.' },
+                { id: 1, src: '/videos/Influencer1.mp4', handle: '@marcus', text: 'I see you.' },
+                { id: 2, src: '/videos/Influencer2.webm', handle: '@sarah_j', text: 'I got you.' },
+                { id: 3, src: '/videos/Influencer3.mp4', handle: '@david_smith', text: 'Always here.' },
+                { id: 4, src: '/videos/Influencer4.mp4', handle: '@emily_r', text: 'No filter needed.' },
+                { id: 5, src: '/videos/Influencer5.mp4', handle: '@michael_t', text: 'Sending love.' },
                 // Duplicates for looping
-                { id: 6, src: inf1, handle: '@marcus', text: 'I see you.' },
-                { id: 7, src: inf2, handle: '@sarah_j', text: 'I got you.' },
-                { id: 8, src: inf3, handle: '@david_smith', text: 'Always here.' },
-                { id: 9, src: inf4, handle: '@emily_r', text: 'No filter needed.' },
-                { id: 10, src: inf5, handle: '@michael_t', text: 'Sending love.' }
+                { id: 6, src: '/videos/Influencer1.mp4', handle: '@marcus', text: 'I see you.' },
+                { id: 7, src: '/videos/Influencer2.webm', handle: '@sarah_j', text: 'I got you.' },
+                { id: 8, src: '/videos/Influencer3.mp4', handle: '@david_smith', text: 'Always here.' },
+                { id: 9, src: '/videos/Influencer4.mp4', handle: '@emily_r', text: 'No filter needed.' },
+                { id: 10, src: '/videos/Influencer5.mp4', handle: '@michael_t', text: 'Sending love.' }
               ].map((video, index) => (
                 <div
                   key={`${video.id}-${index}`}
@@ -1673,6 +1750,7 @@ function Home() {
                     loop
                     muted
                     playsInline
+                    preload="none"
                     className="w-full h-full object-cover opacity-90 transition-transform duration-700 hover:scale-[1.03]"
                   />
                   {/* Subtle vignette for text readability */}
@@ -1747,7 +1825,7 @@ function Home() {
               }
             `}</style>
 
-          {communitySubmissions.length > 0 ? (
+          {communitySubmissions.length >= 3 ? (
             <div className="w-full overflow-hidden">
               <div className="animate-community-scroll gap-3 md:gap-4">
                 {[...communitySubmissions, ...communitySubmissions].map((sub, i) => (
@@ -1756,7 +1834,7 @@ function Home() {
                     className="relative flex-shrink-0 w-48 h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 xl:w-72 xl:h-72 rounded-2xl overflow-hidden bg-gray-100 shadow-sm"
                   >
                     {sub.file_type === 'video' ? (
-                      <video src={sub.file_url} className="w-full h-full object-cover" autoPlay muted loop playsInline onPlay={() => track('community_video_played')} />
+                      <video src={sub.file_url} className="w-full h-full object-cover" autoPlay muted loop playsInline preload="none" onPlay={() => track('community_video_played')} />
                     ) : (
                       <img src={sub.file_url} alt="Community submission" className="w-full h-full object-cover" />
                     )}
@@ -1768,6 +1846,26 @@ function Home() {
                   </div>
                 ))}
               </div>
+            </div>
+          ) : communitySubmissions.length > 0 ? (
+            <div className="flex justify-center gap-4 flex-wrap px-5">
+              {communitySubmissions.map((sub) => (
+                <div
+                  key={sub.id}
+                  className="relative w-48 h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 xl:w-72 xl:h-72 rounded-2xl overflow-hidden bg-gray-100 shadow-sm"
+                >
+                  {sub.file_type === 'video' ? (
+                    <video src={sub.file_url} className="w-full h-full object-cover" autoPlay muted loop playsInline preload="none" onPlay={() => track('community_video_played')} />
+                  ) : (
+                    <img src={sub.file_url} alt="Community submission" className="w-full h-full object-cover" />
+                  )}
+                  {sub.display_name && (
+                    <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/60 to-transparent p-2.5">
+                      <p className="text-white text-xs font-medium">{sub.display_name}</p>
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
           ) : (
             <div className="text-center py-12 text-gray-400">
@@ -2297,7 +2395,7 @@ function Home() {
           {/* Background Image Setup */}
           <div className="absolute inset-0 z-0">
             <img
-              src={peopleDoingImg}
+              src="/images/People_doing_butterfly_202603311123.jpeg"
               alt="A billion hands rise"
               className="w-full h-full object-cover opacity-60 mix-blend-overlay"
             />
@@ -2507,7 +2605,7 @@ function Home() {
           </button>
           <div className={`w-full max-w-5xl aspect-video bg-black rounded-lg overflow-hidden shadow-2xl relative px-4 md:px-0 ${closingModal === 'video' ? 'modal-content-closing' : 'modal-content'}`}>
             <video
-              src={compressedVideo}
+              src="/videos/compressed.mp4"
               autoPlay
               controls
               playsInline
@@ -2525,6 +2623,9 @@ function Home() {
           onClick={closeAuthModal}
         >
           <div
+            ref={authModalRef}
+            role="dialog"
+            aria-modal="true"
             className={`w-full max-w-[420px] rounded-3xl p-8 relative ${closingModal === 'auth' ? 'modal-content-closing' : 'modal-content'}`}
             style={{ background: COLORS.bg }}
             onClick={e => e.stopPropagation()}
@@ -2642,6 +2743,7 @@ function Home() {
 
           {/* Modal */}
           <div
+            ref={crisisModalRef}
             className={`relative w-full max-w-lg bg-white rounded-t-3xl md:rounded-3xl p-6 shadow-2xl ${closingModal === 'crisis' ? 'modal-content-closing' : 'modal-content'}`}
             role="dialog"
             aria-modal="true"
@@ -2734,30 +2836,41 @@ function Home() {
                 </label>
                 <select
                   value={selectedCountry}
-                  onChange={(e) => setSelectedCountry(e.target.value)}
+                  onChange={(e) => { setSelectedCountry(e.target.value); setCrisisResult(null); }}
                   className="w-full p-3 rounded-lg border text-sm"
                   style={{ borderColor: COLORS.hair, backgroundColor: COLORS.bg }}
                 >
-                  <option value="US">United States</option>
-                  <option value="UK">United Kingdom</option>
-                  <option value="CA">Canada</option>
-                  <option value="AU">Australia</option>
-                  <option value="DE">Germany</option>
-                  <option value="FR">France</option>
-                  <option value="JP">Japan</option>
-                  <option value="BR">Brazil</option>
-                  <option value="IN">India</option>
-                  <option value="NG">Nigeria</option>
-                  <option value="OTHER">Other</option>
+                  {Object.keys(crisisLines).map(country => (
+                    <option key={country} value={country}>{country}</option>
+                  ))}
                 </select>
 
                 <button
+                  onClick={() => {
+                    const result = crisisLines[selectedCountry];
+                    if (result) setCrisisResult(result);
+                    track('crisis_country_selected', { country: selectedCountry });
+                  }}
                   className="w-full mt-3 py-2.5 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-colors hover:bg-gray-50"
                   style={{ backgroundColor: COLORS.surface, color: COLORS.text }}
                 >
                   <Globe className="w-4 h-4" />
                   Find local resources
                 </button>
+
+                {crisisResult && (
+                  <div className="mt-3 p-4 rounded-xl" style={{ backgroundColor: COLORS.accentLight, border: `1px solid ${COLORS.hair}` }}>
+                    <div className="font-semibold text-sm mb-1" style={{ color: COLORS.text }}>{crisisResult.name}</div>
+                    {crisisResult.phone && (
+                      <a href={`tel:${crisisResult.phone.replace(/\s/g, '')}`} className="flex items-center gap-2 font-bold text-lg mb-2" style={{ color: COLORS.accent }}>
+                        📞 {crisisResult.phone}
+                      </a>
+                    )}
+                    <a href={crisisResult.url} target="_blank" rel="noopener noreferrer" className="text-sm underline" style={{ color: COLORS.accent }}>
+                      Visit website →
+                    </a>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -2784,6 +2897,7 @@ function Home() {
 
           {/* Modal */}
           <div
+            ref={shareModalRef}
             className={`relative w-full max-w-lg bg-white rounded-[1.75rem] p-8 md:p-10 shadow-2xl ${closingModal === 'share' ? 'drawer-content-closing' : 'drawer-content'}`}
             role="dialog"
             aria-modal="true"
@@ -2839,7 +2953,7 @@ function Home() {
                       <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.34-6.34V8.63a8.28 8.28 0 004.76 1.5V6.69h-1z" />
                     </svg>
                   ),
-                  onClick: () => { track('share_completed', { platform: 'tiktok' }); saveShare('tiktok'); window.open('https://www.tiktok.com/upload', '_blank'); }
+                  onClick: () => { track('share_completed', { platform: 'tiktok' }); saveShare('tiktok'); setShowPlatformGuide('tiktok'); }
                 },
                 {
                   label: 'Instagram',
@@ -2849,7 +2963,7 @@ function Home() {
                       <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
                     </svg>
                   ),
-                  onClick: () => { track('share_completed', { platform: 'instagram' }); saveShare('instagram'); window.open('https://www.instagram.com/', '_blank'); }
+                  onClick: () => { track('share_completed', { platform: 'instagram' }); saveShare('instagram'); setShowPlatformGuide('instagram'); }
                 },
                 {
                   label: 'WhatsApp',
@@ -2859,7 +2973,7 @@ function Home() {
                       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                     </svg>
                   ),
-                  onClick: () => { track('share_completed', { platform: 'whatsapp' }); saveShare('whatsapp'); window.open(`https://wa.me/?text=${encodeURIComponent('I raised my hand. 🦋 #ButterflyChallenge\nYour turn → butterflychallenge.org')}`, '_blank'); }
+                  onClick: () => { track('share_completed', { platform: 'whatsapp' }); saveShare('whatsapp'); window.open(`https://wa.me/?text=${encodeURIComponent(`I raised my hand. 🦋 #ButterflyChallenge\nYour turn → ${getShareUrl(currentUser?.id)}`)}`, '_blank'); }
                 },
                 {
                   label: 'X',
@@ -2869,7 +2983,7 @@ function Home() {
                       <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                     </svg>
                   ),
-                  onClick: () => { track('share_completed', { platform: 'twitter' }); saveShare('twitter'); window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent('I raised my hand. 🦋 #ButterflyChallenge\nYour turn → butterflychallenge.org')}`, '_blank'); }
+                  onClick: () => { track('share_completed', { platform: 'twitter' }); saveShare('twitter'); window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(`I raised my hand. 🦋 #ButterflyChallenge\nYour turn → ${getShareUrl(currentUser?.id)}`)}`, '_blank'); }
                 },
                 {
                   label: linkCopied ? 'Copied!' : 'Copy Link',
@@ -2912,7 +3026,7 @@ function Home() {
               </p>
               <button
                 onClick={() => {
-                  navigator.clipboard?.writeText('I raised my hand. 🦋 #ButterflyChallenge\nYour turn → butterflychallenge.org');
+                  navigator.clipboard?.writeText(`I raised my hand. 🦋 #ButterflyChallenge\nYour turn → ${getShareUrl(currentUser?.id)}`);
                   setLinkCopied(true);
                   setTimeout(() => setLinkCopied(false), 2000);
                 }}
@@ -3336,11 +3450,137 @@ function Home() {
                   <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ background: '#e6f9f1' }}>
                     <CheckCircle className="w-8 h-8 text-[#00b18d]" />
                   </div>
-                  <h3 className="text-lg font-bold mb-2" style={{ color: COLORS.text }}>You're part of the wave! 🦋</h3>
-                  <p className="text-sm" style={{ color: COLORS.caption }}>Your submission is being reviewed.</p>
+                  <h3 className="text-lg font-bold mb-2" style={{ color: COLORS.text }}>Submitted for review! 🦋</h3>
+                  <p className="text-sm" style={{ color: COLORS.caption }}>Your video has been submitted for review. It will appear in the community feed once approved.</p>
                 </div>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* ============ EMAIL VERIFICATION MODAL ============ */}
+      {showEmailVerification && (
+        <div
+          className="fixed inset-0 z-[9999] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 modal-backdrop"
+          onClick={() => setShowEmailVerification(false)}
+        >
+          <div
+            className="bg-white rounded-3xl w-full max-w-md p-8 text-center relative modal-content"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setShowEmailVerification(false)}
+              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200"
+              aria-label="Close"
+            >×</button>
+
+            <div className="text-5xl mb-4">📧</div>
+            <h3 className="text-2xl font-bold mb-2" style={{ color: COLORS.text }}>Check your email</h3>
+            <p className="mb-2" style={{ color: COLORS.caption }}>We sent a confirmation link to:</p>
+            <p className="font-bold mb-6 break-all" style={{ color: COLORS.text }}>{verificationEmail}</p>
+
+            <div className="rounded-2xl p-4 mb-6 text-left space-y-2" style={{ backgroundColor: COLORS.surface }}>
+              <div className="flex gap-3 items-start">
+                <span className="font-bold" style={{ color: COLORS.accent }}>1.</span>
+                <span className="text-sm" style={{ color: COLORS.muted }}>Open your email inbox</span>
+              </div>
+              <div className="flex gap-3 items-start">
+                <span className="font-bold" style={{ color: COLORS.accent }}>2.</span>
+                <span className="text-sm" style={{ color: COLORS.muted }}>Click the confirmation link from Butterfly Challenge</span>
+              </div>
+              <div className="flex gap-3 items-start">
+                <span className="font-bold" style={{ color: COLORS.accent }}>3.</span>
+                <span className="text-sm" style={{ color: COLORS.muted }}>You will be signed in automatically</span>
+              </div>
+            </div>
+
+            <p className="text-xs mb-4" style={{ color: COLORS.caption }}>Didn't receive it? Check your spam folder.</p>
+
+            <button
+              onClick={() => setShowEmailVerification(false)}
+              className="w-full py-3 rounded-2xl text-white font-bold hover:opacity-90"
+              style={{ backgroundColor: COLORS.accent }}
+            >
+              Got it
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ============ PLATFORM GUIDE MODAL ============ */}
+      {showPlatformGuide && (
+        <div
+          className="fixed inset-0 z-[9999] bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-4 modal-backdrop"
+          onClick={() => setShowPlatformGuide(null)}
+        >
+          <div
+            className="bg-white rounded-3xl w-full max-w-md p-6 relative modal-content"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setShowPlatformGuide(null)}
+              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200"
+              aria-label="Close"
+            >×</button>
+
+            <div className="text-center mb-5">
+              <div className="text-3xl mb-2">{showPlatformGuide === 'tiktok' ? '🎵' : '📷'}</div>
+              <h3 className="text-xl font-bold" style={{ color: COLORS.text }}>
+                Share on {showPlatformGuide === 'tiktok' ? 'TikTok' : 'Instagram'}
+              </h3>
+              <p className="text-sm mt-1" style={{ color: COLORS.caption }}>Follow these steps to share your challenge</p>
+            </div>
+
+            <ol className="space-y-3 mb-5">
+              <li className="flex gap-3 items-start">
+                <span className="w-6 h-6 rounded-full text-white text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5" style={{ backgroundColor: COLORS.accent }}>1</span>
+                <span className="text-sm" style={{ color: COLORS.muted }}>Copy the caption below</span>
+              </li>
+              <li className="flex gap-3 items-start">
+                <span className="w-6 h-6 rounded-full text-white text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5" style={{ backgroundColor: COLORS.accent }}>2</span>
+                <span className="text-sm" style={{ color: COLORS.muted }}>
+                  {showPlatformGuide === 'tiktok'
+                    ? 'Open TikTok → tap + → record or upload your butterfly gesture video'
+                    : 'Open Instagram → tap + → Story or Reel → record or upload your butterfly gesture video'}
+                </span>
+              </li>
+              <li className="flex gap-3 items-start">
+                <span className="w-6 h-6 rounded-full text-white text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5" style={{ backgroundColor: COLORS.accent }}>3</span>
+                <span className="text-sm" style={{ color: COLORS.muted }}>Paste the caption in your post description</span>
+              </li>
+              <li className="flex gap-3 items-start">
+                <span className="w-6 h-6 rounded-full text-white text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5" style={{ backgroundColor: COLORS.accent }}>4</span>
+                <span className="text-sm" style={{ color: COLORS.muted }}>Tag 3 friends and post! 🦋</span>
+              </li>
+            </ol>
+
+            <div className="rounded-2xl p-3 mb-4 relative" style={{ backgroundColor: COLORS.surface }}>
+              <p className="text-sm pr-16 leading-relaxed" style={{ color: COLORS.muted }}>
+                I raised my hand. 🦋 #ButterflyChallenge — Your turn → {getShareUrl(currentUser?.id)}
+              </p>
+              <button
+                onClick={() => {
+                  navigator.clipboard?.writeText(`I raised my hand. 🦋 #ButterflyChallenge — Your turn → ${getShareUrl(currentUser?.id)}`);
+                  track('share_caption_copied', { platform: showPlatformGuide });
+                }}
+                className="absolute top-3 right-3 text-xs font-bold px-3 py-1.5 rounded-lg border"
+                style={{ color: COLORS.accent, backgroundColor: COLORS.bg, borderColor: COLORS.hair }}
+              >
+                Copy
+              </button>
+            </div>
+
+            <a
+              href={showPlatformGuide === 'tiktok' ? 'https://www.tiktok.com/upload' : 'https://www.instagram.com'}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full flex items-center justify-center gap-2 text-white font-bold py-4 rounded-2xl text-base hover:opacity-90 transition-opacity"
+              style={{ backgroundColor: COLORS.accent }}
+              onClick={() => track('platform_opened', { platform: showPlatformGuide })}
+            >
+              Open {showPlatformGuide === 'tiktok' ? 'TikTok' : 'Instagram'} →
+            </a>
           </div>
         </div>
       )}
@@ -3481,5 +3721,9 @@ function Home() {
 }
 
 export default function App() {
-  return <Home />;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Home />
+    </QueryClientProvider>
+  );
 }
