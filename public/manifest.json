@@ -1,0 +1,23 @@
+{
+  "name": "The Butterfly Challenge",
+  "short_name": "Butterfly",
+  "description": "Join 1 billion people raising their hands for humanity",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#7c3aed",
+  "background_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ]
+}
