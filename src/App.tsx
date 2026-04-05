@@ -1,5 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
+import { ErrorBoundary } from './components/ErrorBoundary';
+import { FooterSection } from './components/FooterSection';
+import { BottomSafetyBar } from './components/BottomSafetyBar';
+import { HeroSection } from './components/HeroSection';
+import { LeaderboardSection } from './components/LeaderboardSection';
 import { createClient } from '@supabase/supabase-js';
 import mixpanel from 'mixpanel-browser';
 
@@ -30,7 +35,10 @@ function getCountryCode(): string | null {
     const parts = lang.split('-');
     if (parts.length > 1) return parts[parts.length - 1].toUpperCase();
     return null;
-  } catch { return null; }
+  } catch (error) {
+    if (typeof mixpanel !== 'undefined') mixpanel.track('app_error', { source: 'getCountryCode', message: error instanceof Error ? error.message : String(error), timestamp: new Date().toISOString() });
+    return null;
+  }
 }
 
 async function getLocationData(): Promise<{ country: string | null, city: string | null }> {
@@ -41,7 +49,8 @@ async function getLocationData(): Promise<{ country: string | null, city: string
       country: data.country || null,
       city: data.city || null
     };
-  } catch {
+  } catch (error) {
+    if (typeof mixpanel !== 'undefined') mixpanel.track('app_error', { source: 'getLocationData', message: error instanceof Error ? error.message : String(error), timestamp: new Date().toISOString() });
     return { country: getCountryCode(), city: null };
   }
 }
@@ -64,7 +73,9 @@ async function saveHandRaise(userId?: string, city?: string | null) {
       city: city || null,
       referred_by: localStorage.getItem('bc_ref') || null
     });
-  } catch { /* silent */ }
+  } catch (error) {
+    if (typeof mixpanel !== 'undefined') mixpanel.track('app_error', { source: 'saveHandRaise', message: error instanceof Error ? error.message : String(error), timestamp: new Date().toISOString() });
+  }
 }
 
 async function saveEmail(email: string) {
@@ -89,7 +100,9 @@ async function saveEmail(email: string) {
         },
         body: JSON.stringify({ action: 'confirmation', email, secret: import.meta.env.VITE_FUNCTION_SECRET })
       });
-    } catch { /* silent — email failure shouldn't block signup */ }
+    } catch (error) {
+      if (typeof mixpanel !== 'undefined') mixpanel.track('app_error', { source: 'sendConfirmationEmail', message: error instanceof Error ? error.message : String(error), timestamp: new Date().toISOString() });
+    }
 
     return { success: true };
   } catch { return { success: false, message: 'Something went wrong.' }; }
@@ -110,11 +123,9 @@ import {
   Copy,
   Check,
   CheckCircle,
-  MapPin,
   Award,
   Users,
   Shield,
-  Play,
   ArrowRight,
   BarChart2,
   Menu,
@@ -129,7 +140,7 @@ import {
 import confetti from 'canvas-confetti';
 // globe.gl loaded dynamically in useEffect to reduce initial bundle
 import logo from './Butterfly_Challenge_logo_main (1).svg';
-import handImg2 from './hand2.webp';
+// handImg2 moved to HeroSection component
 import logo988 from './988Logo.jpg';
 import logoOneHumanity from './ONE_HUMANITY_Logo_Main.png';
 import logoVerified from './Certified-Nonprofit-Gold.webp';
@@ -156,6 +167,51 @@ interface CommunitySubmission {
   file_type: 'image' | 'video';
   display_name: string | null;
   created_at: string;
+}
+
+interface CountryLeaderboardRow {
+  country_code: string;
+  cnt: number;
+}
+
+interface CityLeaderboardRow {
+  city: string;
+  cnt: number;
+}
+
+interface TopParticipantRow {
+  user_id: string;
+  display_name: string;
+  avatar_url: string | null;
+  share_count: number;
+}
+
+interface SupabaseUser {
+  id: string;
+  email?: string;
+  user_metadata?: {
+    full_name?: string;
+    name?: string;
+    display_name?: string;
+    avatar_url?: string;
+    picture?: string;
+    country_code?: string;
+  };
+}
+
+// Globe.gl type helpers (replaces `as any` casts)
+interface GlobeInstance {
+  _destructor?: () => void;
+}
+
+interface GlobeMaterial {
+  opacity: number;
+  shininess: number;
+}
+
+interface GlobeContainerElement extends HTMLDivElement {
+  _arcInterval?: ReturnType<typeof setInterval>;
+  _resizeHandler?: () => void;
 }
 
 
@@ -313,7 +369,7 @@ function Home() {
   const [isShareDrawerOpen, setIsShareDrawerOpen] = useState(false);
   const [activeFAQ, setActiveFAQ] = useState<number | null>(null);
   const [counter, setCounter] = useState(0);
-  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [currentUser, setCurrentUser] = useState<SupabaseUser | null>(null);
   const [hasCelebrated, setHasCelebrated] = useState(() => !!localStorage.getItem('bc_did_it'));
   const [userHandRaiseDate, setUserHandRaiseDate] = useState<string | null>(null);
   const [isStatsModalOpen, setIsStatsModalOpen] = useState(false);
@@ -366,19 +422,25 @@ function Home() {
   const [authEmail, setAuthEmail] = useState('');
   const [authPassword, setAuthPassword] = useState('');
   const [authName, setAuthName] = useState('');
+  const [resetEmailSent, setResetEmailSent] = useState(false);
   const [showEmailVerification, setShowEmailVerification] = useState(false);
   const [verificationEmail, setVerificationEmail] = useState('');
   const honeypotRef = useRef<HTMLInputElement>(null);
   const authModalRef = useRef<HTMLDivElement>(null);
   const crisisModalRef = useRef<HTMLDivElement>(null);
   const shareModalRef = useRef<HTMLDivElement>(null);
+  const videoModalRef = useRef<HTMLDivElement>(null);
+  const statsModalRef = useRef<HTMLDivElement>(null);
+  const emailModalRef = useRef<HTMLDivElement>(null);
+  const ugcModalRef = useRef<HTMLDivElement>(null);
+  const platformGuideRef = useRef<HTMLDivElement>(null);
 
   // Refs
   const heroRef = useRef<HTMLElement>(null);
   const howItWorksRef = useRef<HTMLElement>(null);
   const sectionsRef = useRef<{ [key: string]: HTMLElement | null }>({});
   const globeContainerRef = useRef<HTMLDivElement>(null);
-  const globeInstanceRef = useRef<any>(null);
+  const globeInstanceRef = useRef<GlobeInstance | null>(null);
 
   // ===================== REACT QUERY HOOKS =====================
   const { data: countData } = useQuery({
@@ -428,7 +490,7 @@ function Home() {
   useEffect(() => {
     if (leaderboardData) {
       setCountryLeaderboard(
-        (leaderboardData.countries as any[]).map((row: any, i: number) => ({
+        (leaderboardData.countries as CountryLeaderboardRow[]).map((row: CountryLeaderboardRow, i: number) => ({
           rank: i + 1,
           flag: getFlag(row.country_code),
           name: getCountryName(row.country_code),
@@ -436,7 +498,7 @@ function Home() {
         }))
       );
       setCityLeaderboard(
-        (leaderboardData.cities as any[]).map((row: any, i: number) => ({
+        (leaderboardData.cities as CityLeaderboardRow[]).map((row: CityLeaderboardRow, i: number) => ({
           rank: i + 1,
           flag: '🏙️',
           name: row.city,
@@ -448,7 +510,7 @@ function Home() {
 
   useEffect(() => {
     if (communityData) {
-      const unique = communityData.filter((item: any, index: number, self: any[]) =>
+      const unique = (communityData as CommunitySubmission[]).filter((item: CommunitySubmission, index: number, self: CommunitySubmission[]) =>
         index === self.findIndex((t) => t.id === item.id)
       );
       setCommunitySubmissions(unique as CommunitySubmission[]);
@@ -517,6 +579,11 @@ function Home() {
   useFocusTrap(authModalOpen, authModalRef);
   useFocusTrap(isCrisisModalOpen, crisisModalRef);
   useFocusTrap(isShareDrawerOpen, shareModalRef);
+  useFocusTrap(isVideoModalOpen, videoModalRef);
+  useFocusTrap(isStatsModalOpen, statsModalRef);
+  useFocusTrap(isEmailReminderOpen, emailModalRef);
+  useFocusTrap(ugcModalOpen, ugcModalRef);
+  useFocusTrap(!!showPlatformGuide, platformGuideRef);
 
   // Track modal opens
   useEffect(() => { if (isCrisisModalOpen) track('crisis_modal_opened'); }, [isCrisisModalOpen]);
@@ -622,11 +689,11 @@ function Home() {
       .width(globeWidth)
       .height(globeWidth);
 
-    globeInstanceRef.current = world;
+    globeInstanceRef.current = world as unknown as GlobeInstance;
 
     const globeMat = world.globeMaterial();
-    (globeMat as any).opacity = 0.5;
-    (globeMat as any).shininess = 0.5;
+    (globeMat as unknown as GlobeMaterial).opacity = 0.5;
+    (globeMat as unknown as GlobeMaterial).shininess = 0.5;
 
     world.pointOfView({ altitude: 2 });
     world.controls().autoRotate = true;
@@ -725,7 +792,7 @@ function Home() {
       }, 6000);
 
       // Store interval for cleanup
-      (container as any)._arcInterval = arcInterval;
+      (container as unknown as GlobeContainerElement)._arcInterval = arcInterval;
     };
 
     // Resize handler
@@ -735,13 +802,14 @@ function Home() {
       world.width(w).height(w);
     };
     window.addEventListener('resize', handleResize);
-    (container as any)._resizeHandler = handleResize;
+    (container as unknown as GlobeContainerElement)._resizeHandler = handleResize;
     })();
 
     return () => {
-      if ((container as any)?._resizeHandler) window.removeEventListener('resize', (container as any)._resizeHandler);
-      if ((container as any)?._arcInterval) clearInterval((container as any)._arcInterval);
-      (globeInstanceRef.current as any)?._destructor?.();
+      const gc = container as unknown as GlobeContainerElement;
+      if (gc?._resizeHandler) window.removeEventListener('resize', gc._resizeHandler);
+      if (gc?._arcInterval) clearInterval(gc._arcInterval);
+      globeInstanceRef.current?._destructor?.();
       globeInstanceRef.current = null;
     };
   }, []);
@@ -755,9 +823,9 @@ function Home() {
   }, []);
 
   // Handlers
-  const handleSafeExit = () => {
+  const handleSafeExit = useCallback(() => {
     window.location.href = 'https://www.google.com';
-  };
+  }, []);
 
   // ===================== AUTH FUNCTIONS =====================
   async function loadUserHandRaiseDate(userId: string) {
@@ -777,10 +845,12 @@ function Home() {
         setUserHandRaiseDate(formatted);
         setHasCelebrated(true);
       }
-    } catch { /* silent */ }
+    } catch (error) {
+      if (typeof mixpanel !== 'undefined') mixpanel.track('app_error', { source: 'loadUserHandRaiseDate', message: error instanceof Error ? error.message : String(error), timestamp: new Date().toISOString() });
+    }
   }
 
-  async function backfillCountryCode(user: any) {
+  async function backfillCountryCode(user: SupabaseUser) {
     if (!user) return;
     try {
       const { data: profile } = await supabase.from('profiles').select('country_code').eq('id', user.id).single();
@@ -788,7 +858,9 @@ function Home() {
         const cc = getCountryCode();
         if (cc) await supabase.from('profiles').update({ country_code: cc }).eq('id', user.id);
       }
-    } catch { /* silent */ }
+    } catch (error) {
+      if (typeof mixpanel !== 'undefined') mixpanel.track('app_error', { source: 'backfillCountryCode', message: error instanceof Error ? error.message : String(error), timestamp: new Date().toISOString() });
+    }
   }
 
   const openAuthModal = (mode: 'login' | 'register') => {
@@ -799,6 +871,7 @@ function Home() {
     setAuthEmail('');
     setAuthPassword('');
     setAuthName('');
+    setResetEmailSent(false);
     setAuthModalOpen(true);
   };
 
@@ -831,6 +904,25 @@ function Home() {
       setAuthError('');
       setAuthErrorColor('');
     }, 200);
+  };
+
+  const handlePasswordReset = async () => {
+    if (!authEmail) return;
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(authEmail, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+      if (error) throw error;
+      setResetEmailSent(true);
+    } catch (error) {
+      if (typeof mixpanel !== 'undefined') {
+        mixpanel.track('app_error', {
+          source: 'handlePasswordReset',
+          message: error instanceof Error ? error.message : String(error),
+          timestamp: new Date().toISOString()
+        });
+      }
+    }
   };
 
   const handleGoogleSignIn = async () => {
@@ -869,9 +961,9 @@ function Home() {
         track('user_signed_in', { method: 'email' });
         closeAuthModal();
       }
-    } catch (e: any) {
+    } catch (e: unknown) {
       setAuthErrorColor(COLORS.danger);
-      setAuthError(e.message || 'Something went wrong.');
+      setAuthError(e instanceof Error ? e.message : 'Something went wrong.');
     } finally {
       setAuthLoading(false);
     }
@@ -902,13 +994,15 @@ function Home() {
       if (!data) return;
 
       setTopParticipants(
-        (data as any[]).map((row: { user_id: string; display_name: string; avatar_url: string | null; share_count: number }) => ({
+        (data as TopParticipantRow[]).map((row: TopParticipantRow) => ({
           name: row.display_name || 'User',
           avatar: row.avatar_url,
           count: row.share_count
         }))
       );
-    } catch { /* silent */ }
+    } catch (error) {
+      if (typeof mixpanel !== 'undefined') mixpanel.track('app_error', { source: 'loadTopParticipants', message: error instanceof Error ? error.message : String(error), timestamp: new Date().toISOString() });
+    }
   }
 
   // Camera functions
@@ -1036,13 +1130,17 @@ function Home() {
         .getPublicUrl(path);
 
       const fileType = recordedBlob.type.startsWith('image/') ? 'image' : 'video';
-      await supabase.from('challenge_submissions').insert({
-        user_id: currentUser?.id || null,
-        file_url: urlData.publicUrl,
-        file_type: fileType,
-        consent: true,
-        display_name: currentUser ? getDisplayName() : null
+      const { data: rpcResult } = await supabase.rpc('rate_limited_submission', {
+        p_user_id: currentUser?.id || null,
+        p_file_url: urlData.publicUrl,
+        p_file_type: fileType,
+        p_consent: true,
+        p_display_name: currentUser ? getDisplayName() : null
       });
+      if (rpcResult && !rpcResult.success) {
+        alert(rpcResult.error || 'Upload limit reached. Please wait before submitting again.');
+        return;
+      }
 
       track('ugc_submitted', { file_type: fileType });
       setRecordingStep('success');
@@ -1087,19 +1185,25 @@ function Home() {
     }, 200);
   };
 
-  function getAvatarUrl(): string | null {
+  const avatarUrl = useMemo((): string | null => {
     if (currentUser?.user_metadata?.avatar_url) return currentUser.user_metadata.avatar_url;
     if (currentUser?.user_metadata?.picture) return currentUser.user_metadata.picture;
     return null;
-  }
+  }, [currentUser]);
 
-  function getDisplayName(): string {
+  const displayName = useMemo((): string => {
     if (currentUser?.user_metadata?.full_name) return currentUser.user_metadata.full_name;
     if (currentUser?.user_metadata?.name) return currentUser.user_metadata.name;
     if (currentUser?.user_metadata?.display_name) return currentUser.user_metadata.display_name;
     if (currentUser?.email) return currentUser.email.split('@')[0];
     return 'User';
-  }
+  }, [currentUser]);
+
+  const shareUrl = useMemo(() => getShareUrl(currentUser?.id), [currentUser]);
+
+  // Keep function signatures for backward compat in JSX
+  function getAvatarUrl(): string | null { return avatarUrl; }
+  function getDisplayName(): string { return displayName; }
 
   const handleIDidIt = async () => {
     if (hasCelebrated) { setEmail(currentUser?.email || ''); setEmailSubmitted(false); setIsShareDrawerOpen(true); return; }
@@ -1131,14 +1235,20 @@ function Home() {
   async function saveShare(platform: string) {
     if (!currentUser) return;
     try {
-      await supabase.from('shares').insert({
-        user_id: currentUser.id,
-        platform,
-        display_name: getDisplayName(),
-        avatar_url: getAvatarUrl() || null
+      const { data } = await supabase.rpc('rate_limited_share', {
+        p_user_id: currentUser.id,
+        p_platform: platform,
+        p_display_name: getDisplayName(),
+        p_avatar_url: getAvatarUrl() || null
       });
+      if (data && !data.success) {
+        console.warn('Share rate limited:', data.error);
+        return;
+      }
       loadTopParticipants();
-    } catch { /* silent */ }
+    } catch (error) {
+      if (typeof mixpanel !== 'undefined') mixpanel.track('app_error', { source: 'saveShare', message: error instanceof Error ? error.message : String(error), timestamp: new Date().toISOString() });
+    }
   }
 
   const handleNativeShare = async () => {
@@ -1146,8 +1256,8 @@ function Home() {
       try {
         await navigator.share({
           title: 'Butterfly Challenge',
-          text: `I raised my hand. 🦋 #ButterflyChallenge\nYour turn → ${getShareUrl(currentUser?.id)}`,
-          url: getShareUrl(currentUser?.id)
+          text: `I raised my hand. 🦋 #ButterflyChallenge\nYour turn → ${shareUrl}`,
+          url: shareUrl
         });
         track('share_completed', { platform: 'native_share' });
         saveShare('native');
@@ -1160,7 +1270,7 @@ function Home() {
   const handleCopyLink = () => {
     track('share_completed', { platform: 'copy' });
     saveShare('copy');
-    navigator.clipboard?.writeText(getShareUrl(currentUser?.id));
+    navigator.clipboard?.writeText(shareUrl);
     setLinkCopied(true);
     setTimeout(() => setLinkCopied(false), 2000);
   };
@@ -1198,13 +1308,6 @@ function Home() {
 
   return (
     <div className="min-h-screen bg-white" style={{ fontFamily: 'Inter, system-ui, -apple-system, sans-serif' }}>
-      {/* Skip to content link (accessibility) */}
-      <a
-        href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-0 focus:left-0 focus:z-50 focus:bg-blue-600 focus:text-white focus:px-4 focus:py-2"
-      >
-        Skip to main content
-      </a>
 
       {/* ============ TOP NAVBAR ============ */}
       <header
@@ -1460,81 +1563,14 @@ function Home() {
           className="relative flex flex-col items-center justify-between overflow-hidden px-5 pt-[55px] pb-0"
           style={{ minHeight: '90vh', backgroundColor: '#fafafa' }}
         >
-          {/* Content */}
-          <div className={`relative z-10 w-full max-w-7xl mx-auto text-center flex flex-col items-center transition-all duration-700 ${visibleSections.has('hero') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-
-            {/* Pre-Head */}
-            <p
-              className="text-sm md:text-base font-semibold uppercase tracking-widest mb-4"
-              style={{ color: COLORS.muted }}
-            >
-              Butterfly Month · May 2026
-            </p>
-
-            {/* Headline */}
-            <h1
-              className="text-5xl md:text-7xl xl:text-8xl 2xl:text-9xl font-semibold mb-2 leading-tight"
-              style={{ color: COLORS.text, letterSpacing: '-0.02em' }}
-            >
-              Butterfly Challenge
-            </h1>
-
-            {/* Subhead */}
-            <p
-              className="text-lg md:text-[28px] font-normal mb-8"
-              style={{ color: COLORS.text, lineHeight: '1.2' }}
-            >
-              60 seconds. 3 names. 24 hours.
-            </p>
-
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button
-                onClick={() => scrollToSection('how-it-works')}
-                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full text-sm md:text-[17px] font-normal text-white transition-all hover:opacity-90"
-                style={{ backgroundColor: COLORS.accent }}
-              >
-                Learn more
-              </button>
-              <button
-                onClick={() => setIsVideoModalOpen(true)}
-                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full text-sm md:text-[17px] font-normal border border-[#00b18d] text-[#00b18d] transition-all hover:bg-[#00b18d] hover:text-white"
-              >
-                <Play className="w-4 h-4 fill-current" />
-                Watch the Tutorial
-              </button>
-            </div>
-          </div>
-
-          {/* Hero Image & Counter */}
-          <div
-            className={`relative w-[95%] sm:w-[60%] lg:w-[35%] mx-auto flex flex-col items-center transition-all duration-1000 delay-300 mt-12 ${visibleSections.has('hero') ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-8'
-              }`}
-          >
-            <img
-              src={handImg2}
-              alt="Hands raised in support"
-              className="w-full h-auto object-contain"
-            />
-
-            {/* Counter (Now INSIDE the image) */}
-            <div className="absolute top-[80%] left-1/2 -translate-x-1/2 z-10 flex flex-col items-center drop-shadow-lg">
-              <div className="flex items-center gap-3 mb-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-md border border-white/30 shadow-sm">
-                <span className="text-xs md:text-sm font-semibold text-gray-900">
-                  {formatNumber(counter)} hands raised
-                </span>
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ backgroundColor: COLORS.danger }}></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2" style={{ backgroundColor: COLORS.danger }}></span>
-                </span>
-              </div>
-              {showPlusOne && (
-                <span className="animate-float-up font-bold text-sm" style={{ color: COLORS.success }}>
-                  +1
-                </span>
-              )}
-            </div>
-          </div>
+          <HeroSection
+            visible={visibleSections.has('hero')}
+            counter={counter}
+            showPlusOne={showPlusOne}
+            formatNumber={formatNumber}
+            onLearnMore={() => scrollToSection('how-it-works')}
+            onWatchTutorial={() => setIsVideoModalOpen(true)}
+          />
         </section>
 
         {/* ============ SECTION 2: SOCIAL PROOF BAR ============ */}
@@ -1549,9 +1585,9 @@ function Home() {
               Supported by
             </p>
             <div className="flex flex-wrap items-center justify-center gap-10 opacity-70">
-              <img src={logo988} alt="988 Suicide & Crisis Lifeline" className="h-[28px] md:h-10 max-w-[140px] object-contain mix-blend-multiply" />
-              <img src={logoOneHumanity} alt="One Humanity Foundation" className="h-[34px] md:h-12 max-w-[200px] object-contain flex-shrink-0" />
-              <img src={logoVerified} alt="Certified Nonprofit Gold" className="h-[46px] md:h-16 max-w-[140px] object-contain flex-shrink-0" />
+              <img src={logo988} alt="988 Suicide & Crisis Lifeline" className="h-[28px] md:h-10 max-w-[140px] object-contain mix-blend-multiply" loading="lazy" />
+              <img src={logoOneHumanity} alt="One Humanity Foundation" className="h-[34px] md:h-12 max-w-[200px] object-contain flex-shrink-0" loading="lazy" />
+              <img src={logoVerified} alt="Certified Nonprofit Gold" className="h-[46px] md:h-16 max-w-[140px] object-contain flex-shrink-0" loading="lazy" />
             </div>
           </div>
         </section>
@@ -1635,6 +1671,7 @@ function Home() {
                       src={step.image}
                       alt={step.title}
                       className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                      loading="lazy"
                     />
                     {/* Soft gradient overlay at the bottom if needed for depth? Often Apple leaves it clean. */}
                   </div>
@@ -1836,7 +1873,7 @@ function Home() {
                     {sub.file_type === 'video' ? (
                       <video src={sub.file_url} className="w-full h-full object-cover" autoPlay muted loop playsInline preload="none" onPlay={() => track('community_video_played')} />
                     ) : (
-                      <img src={sub.file_url} alt="Community submission" className="w-full h-full object-cover" />
+                      <img src={sub.file_url} alt="Community submission" className="w-full h-full object-cover" loading="lazy" />
                     )}
                     {sub.display_name && (
                       <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/60 to-transparent p-2.5">
@@ -1857,7 +1894,7 @@ function Home() {
                   {sub.file_type === 'video' ? (
                     <video src={sub.file_url} className="w-full h-full object-cover" autoPlay muted loop playsInline preload="none" onPlay={() => track('community_video_played')} />
                   ) : (
-                    <img src={sub.file_url} alt="Community submission" className="w-full h-full object-cover" />
+                    <img src={sub.file_url} alt="Community submission" className="w-full h-full object-cover" loading="lazy" />
                   )}
                   {sub.display_name && (
                     <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/60 to-transparent p-2.5">
@@ -1940,16 +1977,18 @@ function Home() {
           style={{ backgroundColor: COLORS.bg }}
         >
           <div className="max-w-4xl mx-auto">
-            <div className={`text-center mb-12 flex flex-col items-center transition-all duration-700 ${visibleSections.has('leaderboard') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-              <h2 className="text-4xl md:text-[48px] xl:text-[56px] 2xl:text-[64px] font-bold mb-4" style={{ color: COLORS.text, letterSpacing: '-0.02em', lineHeight: 1.1 }}>
-                The wave, live.
-              </h2>
-              <p className="text-lg md:text-xl" style={{ color: COLORS.muted }}>
-                See where the Butterfly Challenge is spreading.
-              </p>
-            </div>
+            <LeaderboardSection
+              countryLeaderboard={countryLeaderboard}
+              cityLeaderboard={cityLeaderboard}
+              topParticipants={topParticipants}
+              showParticipants={!!currentUser}
+              visible={visibleSections.has('leaderboard')}
+              leaderboardTab={leaderboardTab}
+              onTabChange={setLeaderboardTab}
+              formatNumber={formatNumber}
+            />
 
-            {/* Interactive 3D Globe */}
+            {/* Interactive 3D Globe — kept in parent for ref access */}
             <div
               className={`relative w-full mb-8 pt-8 flex items-center justify-center rounded-[2rem] overflow-hidden transition-all duration-700 ${visibleSections.has('leaderboard') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
               style={{ backgroundColor: '#f5f5f7' }}
@@ -1959,137 +1998,6 @@ function Home() {
                 className="w-full max-w-[500px] xl:max-w-[650px] 2xl:max-w-[750px] aspect-square"
               />
             </div>
-
-            {/* Leaderboard tabs (mobile) */}
-            <div className="md:hidden flex rounded-xl p-1 mb-6" style={{ backgroundColor: COLORS.surface }}>
-              <button
-                onClick={() => setLeaderboardTab('country')}
-                className={`flex-1 py-2 px-4 rounded-lg text-sm font-semibold transition-all ${leaderboardTab === 'country' ? 'bg-white shadow-sm' : ''
-                  }`}
-                style={{ color: leaderboardTab === 'country' ? COLORS.text : COLORS.muted }}
-              >
-                Countries
-              </button>
-              <button
-                onClick={() => setLeaderboardTab('city')}
-                className={`flex-1 py-2 px-4 rounded-lg text-sm font-semibold transition-all ${leaderboardTab === 'city' ? 'bg-white shadow-sm' : ''
-                  }`}
-                style={{ color: leaderboardTab === 'city' ? COLORS.text : COLORS.muted }}
-              >
-                Cities
-              </button>
-            </div>
-
-            {/* Leaderboards */}
-            <div className={`grid grid-cols-1 gap-4 ${currentUser ? 'md:grid-cols-3' : 'md:grid-cols-2 max-w-2xl mx-auto'}`}>
-              {/* Country leaderboard */}
-              <div
-                className={`rounded-[2rem] p-8 transition-all duration-700 ${(leaderboardTab === 'country' || true) ? 'block' : 'hidden'
-                  } ${visibleSections.has('leaderboard') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
-                style={{ backgroundColor: '#f5f5f7' }}
-              >
-                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2" style={{ color: COLORS.text }}>
-                  <Globe className="w-5 h-5" style={{ color: COLORS.accent }} />
-                  Top Countries
-                </h3>
-                <div className="space-y-3">
-                  {countryLeaderboard.map((item) => (
-                    <div key={item.name} className="flex items-center gap-3 py-2">
-                      <span className="w-6 text-sm font-bold" style={{ color: COLORS.caption }}>
-                        {item.rank}
-                      </span>
-                      <span className="text-xl">{item.flag}</span>
-                      <span className="flex-1 text-sm font-medium" style={{ color: COLORS.text }}>
-                        {item.name}
-                      </span>
-                      <span className="text-sm font-semibold" style={{ color: COLORS.accent }}>
-                        {formatNumber(item.count)}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-                <button className="mt-4 text-sm font-semibold flex items-center gap-1" style={{ color: COLORS.accent }}>
-                  See all <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
-
-              {/* City leaderboard */}
-              <div
-                className={`rounded-[2rem] p-8 transition-all duration-700 ${(leaderboardTab === 'city' || true) ? 'block' : 'hidden'
-                  } ${visibleSections.has('leaderboard') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
-                style={{ backgroundColor: '#f5f5f7', transitionDelay: '100ms' }}
-              >
-                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2" style={{ color: COLORS.text }}>
-                  <MapPin className="w-5 h-5" style={{ color: COLORS.warm }} />
-                  Top Cities
-                </h3>
-                <div className="space-y-3">
-                  {cityLeaderboard.map((item) => (
-                    <div key={item.name} className="flex items-center gap-3 py-2">
-                      <span className="w-6 text-sm font-bold" style={{ color: COLORS.caption }}>
-                        {item.rank}
-                      </span>
-                      <span className="flex-1 text-sm font-medium" style={{ color: COLORS.text }}>
-                        {item.name}
-                      </span>
-                      <span className="text-sm font-semibold" style={{ color: COLORS.warm }}>
-                        {formatNumber(item.count)}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-                <button className="mt-4 text-sm font-semibold flex items-center gap-1" style={{ color: COLORS.accent }}>
-                  See all <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
-
-              {/* Top Participants */}
-              {currentUser && (
-              <div
-                className={`rounded-[2rem] p-8 transition-all duration-700 ${visibleSections.has('leaderboard') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
-                style={{ backgroundColor: '#f5f5f7', transitionDelay: '200ms' }}
-              >
-                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2" style={{ color: COLORS.text }}>
-                  <Award className="w-5 h-5" style={{ color: COLORS.accent }} />
-                  Top Participants
-                </h3>
-                <div className="space-y-3">
-                  {topParticipants.length > 0 ? topParticipants.map((p, i) => (
-                    <div key={i} className="flex items-center gap-3 py-2">
-                      <span className="w-6 text-sm font-bold" style={{ color: COLORS.caption }}>
-                        {i + 1}
-                      </span>
-                      {p.avatar ? (
-                        <img src={p.avatar} alt={p.name} className="w-8 h-8 rounded-full object-cover" />
-                      ) : (
-                        <div
-                          className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold"
-                          style={{ backgroundColor: COLORS.accent }}
-                        >
-                          {p.name.charAt(0).toUpperCase()}
-                        </div>
-                      )}
-                      <span className="flex-1 text-sm font-medium" style={{ color: COLORS.text }}>
-                        {p.name}
-                      </span>
-                      <span className="text-sm font-semibold" style={{ color: COLORS.accent }}>
-                        {p.count} share{p.count > 1 ? 's' : ''}
-                      </span>
-                    </div>
-                  )) : (
-                    <p className="text-sm py-4 text-center" style={{ color: COLORS.caption }}>
-                      Be the first to share! 🦋
-                    </p>
-                  )}
-                </div>
-              </div>
-              )}
-            </div>
-
-            {/* Screenshot prompt */}
-            <p className="text-center text-sm mt-6" style={{ color: COLORS.caption }}>
-              📸 Screenshot & share your city's rank!
-            </p>
           </div>
         </section>
 
@@ -2147,7 +2055,7 @@ function Home() {
                   key={index}
                   className={`flex flex-col items-center transition-all duration-500`}
                 >
-                  <img src={pillar.img} alt={pillar.heading} className={`${pillar.size} object-contain mb-4`} />
+                  <img src={pillar.img} alt={pillar.heading} className={`${pillar.size} object-contain mb-4`} loading="lazy" />
                   <p className="text-[19px] font-bold text-[#1d1d1f] mb-2 tracking-tight">
                     {pillar.heading}
                   </p>
@@ -2398,6 +2306,7 @@ function Home() {
               src="/images/People_doing_butterfly_202603311123.jpeg"
               alt="A billion hands rise"
               className="w-full h-full object-cover opacity-60 mix-blend-overlay"
+              loading="lazy"
             />
             {/* Gradient overlay to ensure text readability */}
 
@@ -2436,167 +2345,15 @@ function Home() {
         </section>
 
         {/* ============ SECTION 12: FOOTER ============ */}
-        <footer
-          id="footer"
-          className="py-12 px-5"
-          style={{ backgroundColor: COLORS.surface }}
-        >
-          <div className="max-w-7xl mx-auto">
-            {/* Top section */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
-              {/* Brand */}
-              <div className="md:col-span-1">
-                <div className="mb-5 inline-block">
-                  <img src={logo} alt="Butterfly Challenge" className="h-7 w-auto opacity-90" />
-                </div>
-                <p className="text-sm mb-4" style={{ color: COLORS.muted, lineHeight: '24px' }}>
-                  An initiative of One Humanity Foundation.
-                </p>
-                {/* Social links */}
-                <div className="flex items-center gap-4">
-                  {[
-                    { icon: <MessageCircle className="w-5 h-5" />, label: 'Instagram' },
-                    { icon: <Share2 className="w-5 h-5" />, label: 'TikTok' },
-                    { icon: <X className="w-5 h-5" />, label: 'X' },
-                    { icon: <Play className="w-5 h-5" />, label: 'YouTube' }
-                  ].map((social, i) => (
-                    <button
-                      key={i}
-                      className="w-10 h-10 rounded-full flex items-center justify-center transition-colors hover:bg-white"
-                      style={{ color: COLORS.muted }}
-                      aria-label={social.label}
-                    >
-                      {social.icon}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Links */}
-              <div>
-                <h4 className="text-sm font-semibold mb-4" style={{ color: COLORS.text }}>
-                  Resources
-                </h4>
-                <ul className="space-y-3">
-                  {['How It Works', 'Learn the Gesture', 'Share Toolkit', 'FAQ'].map((link, i) => (
-                    <li key={i}>
-                      <button className="text-sm transition-colors hover:text-blue-600" style={{ color: COLORS.muted }}>
-                        {link}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="text-sm font-semibold mb-4" style={{ color: COLORS.text }}>
-                  For Organizations
-                </h4>
-                <ul className="space-y-3">
-                  {['For Schools', 'For Teams', 'For Brands', 'Ambassador Program'].map((link, i) => (
-                    <li key={i}>
-                      <button className="text-sm transition-colors hover:text-blue-600" style={{ color: COLORS.muted }}>
-                        {link}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Crisis info */}
-              <div>
-                <h4 className="text-sm font-semibold mb-4" style={{ color: COLORS.text }}>
-                  Need Help?
-                </h4>
-                <div className="p-4 rounded-xl bg-white border" style={{ borderColor: COLORS.hair }}>
-                  <p className="text-sm font-semibold mb-2" style={{ color: COLORS.text }}>
-                    US: Call or Text 988
-                  </p>
-                  <p className="text-xs mb-3" style={{ color: COLORS.muted }}>
-                    24/7 free and confidential support.
-                  </p>
-                  <button
-                    onClick={() => setIsCrisisModalOpen(true)}
-                    className="w-full py-2 rounded-lg text-sm font-semibold text-white transition-all hover:opacity-90"
-                    style={{ backgroundColor: COLORS.accent }}
-                  >
-                    Get Support Now
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Divider */}
-            <div className="w-full h-px mb-8" style={{ backgroundColor: COLORS.hair }} />
-
-            {/* Bottom footer */}
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-              {/* Legal links */}
-              <div className="flex flex-wrap items-center gap-4">
-                {['Privacy', 'Terms', 'Accessibility', 'About'].map((link, i) => (
-                  <button
-                    key={i}
-                    className="text-xs transition-colors hover:text-blue-600"
-                    style={{ color: COLORS.caption }}
-                  >
-                    {link}
-                  </button>
-                ))}
-              </div>
-
-              {/* Disclaimer */}
-              <p className="text-xs text-center md:text-right max-w-md" style={{ color: COLORS.caption }}>
-                The Butterfly Challenge is a social gesture, not a replacement for professional care.
-                If someone you know is in danger, call 911 or your local emergency number.
-              </p>
-            </div>
-
-            {/* Copyright */}
-            <p className="text-xs text-center mt-8" style={{ color: COLORS.caption }}>
-              © 2026 One Humanity Foundation. All rights reserved.
-            </p>
-          </div>
-        </footer>
+        <FooterSection onCrisisOpen={() => setIsCrisisModalOpen(true)} />
       </main>
 
       {/* ============ BOTTOM SAFETY BAR ============ */}
-      <div
-        className="fixed bottom-0 left-0 right-0 z-40 flex items-center justify-between px-4 py-3 border-t bg-white"
-        style={{ borderColor: COLORS.hair, height: '48px' }}
-      >
-        <div className="flex items-center gap-2">
-          <Heart className="w-4 h-4" style={{ color: COLORS.accent }} />
-          <span className="text-xs font-medium" style={{ color: COLORS.muted }}>
-            Need help? You're not alone.
-          </span>
-        </div>
-
-        <div className="flex items-center gap-3">
-          {/* Mobile Safe Exit */}
-          <button
-            onClick={handleSafeExit}
-            className="sm:hidden p-1.5 rounded-full"
-            style={{ backgroundColor: COLORS.surface }}
-            aria-label="Safe exit"
-          >
-            <ExternalLink className="w-4 h-4" style={{ color: COLORS.caption }} />
-          </button>
-
-          {/* Crisis link */}
-          <button
-            onClick={() => setIsCrisisModalOpen(true)}
-            className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold text-white transition-all hover:opacity-90"
-            style={{ backgroundColor: COLORS.accent }}
-          >
-            <Phone className="w-3 h-3" />
-            <span>988</span>
-          </button>
-        </div>
-      </div>
+      <BottomSafetyBar onSafeExit={handleSafeExit} onCrisisOpen={() => setIsCrisisModalOpen(true)} />
 
       {/* Video Modal */}
       {isVideoModalOpen && (
-        <div className={`fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md ${closingModal === 'video' ? 'modal-backdrop-closing' : 'modal-backdrop'}`}>
+        <div ref={videoModalRef} role="dialog" aria-modal="true" className={`fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md ${closingModal === 'video' ? 'modal-backdrop-closing' : 'modal-backdrop'}`}>
           <button
             onClick={closeVideoModal}
             className="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors z-[110]"
@@ -2699,6 +2456,30 @@ function Home() {
                 onKeyDown={e => e.key === 'Enter' && handleAuthSubmit()}
               />
             </div>
+
+            {/* Forgot password (login only) */}
+            {authMode === 'login' && (
+              <div style={{ textAlign: 'right', marginTop: '-8px', marginBottom: '8px' }}>
+                {resetEmailSent ? (
+                  <span style={{ fontSize: '13px', color: '#22c55e' }}>Reset email sent!</span>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handlePasswordReset}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      color: COLORS.accent,
+                      fontSize: '13px',
+                      cursor: 'pointer',
+                      padding: 0,
+                    }}
+                  >
+                    Forgot password?
+                  </button>
+                )}
+              </div>
+            )}
 
             {/* Honeypot */}
             <div style={{ position: 'absolute', left: -9999, opacity: 0, pointerEvents: 'none' }} aria-hidden="true">
@@ -2973,7 +2754,7 @@ function Home() {
                       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                     </svg>
                   ),
-                  onClick: () => { track('share_completed', { platform: 'whatsapp' }); saveShare('whatsapp'); window.open(`https://wa.me/?text=${encodeURIComponent(`I raised my hand. 🦋 #ButterflyChallenge\nYour turn → ${getShareUrl(currentUser?.id)}`)}`, '_blank'); }
+                  onClick: () => { track('share_completed', { platform: 'whatsapp' }); saveShare('whatsapp'); window.open(`https://wa.me/?text=${encodeURIComponent(`I raised my hand. 🦋 #ButterflyChallenge\nYour turn → ${shareUrl}`)}`, '_blank'); }
                 },
                 {
                   label: 'X',
@@ -2983,7 +2764,7 @@ function Home() {
                       <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                     </svg>
                   ),
-                  onClick: () => { track('share_completed', { platform: 'twitter' }); saveShare('twitter'); window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(`I raised my hand. 🦋 #ButterflyChallenge\nYour turn → ${getShareUrl(currentUser?.id)}`)}`, '_blank'); }
+                  onClick: () => { track('share_completed', { platform: 'twitter' }); saveShare('twitter'); window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(`I raised my hand. 🦋 #ButterflyChallenge\nYour turn → ${shareUrl}`)}`, '_blank'); }
                 },
                 {
                   label: linkCopied ? 'Copied!' : 'Copy Link',
@@ -3026,7 +2807,7 @@ function Home() {
               </p>
               <button
                 onClick={() => {
-                  navigator.clipboard?.writeText(`I raised my hand. 🦋 #ButterflyChallenge\nYour turn → ${getShareUrl(currentUser?.id)}`);
+                  navigator.clipboard?.writeText(`I raised my hand. 🦋 #ButterflyChallenge\nYour turn → ${shareUrl}`);
                   setLinkCopied(true);
                   setTimeout(() => setLinkCopied(false), 2000);
                 }}
@@ -3079,7 +2860,7 @@ function Home() {
 
       {/* ============ EMAIL REMINDER MODAL ============ */}
       {isEmailReminderOpen && (
-        <div className={`fixed inset-0 z-50 flex items-end md:items-center justify-center ${closingModal === 'email' ? 'modal-backdrop-closing' : 'modal-backdrop'}`}>
+        <div ref={emailModalRef} role="dialog" aria-modal="true" className={`fixed inset-0 z-50 flex items-end md:items-center justify-center ${closingModal === 'email' ? 'modal-backdrop-closing' : 'modal-backdrop'}`}>
           {/* Backdrop */}
           <div
             className="absolute inset-0 bg-black/50 backdrop-blur-sm"
@@ -3154,6 +2935,9 @@ function Home() {
       {/* ============ MY STATS MODAL ============ */}
       {isStatsModalOpen && (
         <div
+          ref={statsModalRef}
+          role="dialog"
+          aria-modal="true"
           className={`fixed inset-0 z-[9800] flex items-center justify-center p-5 ${closingModal === 'stats' ? 'modal-backdrop-closing' : 'modal-backdrop'}`}
           style={{ background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' }}
           onClick={closeStatsModal}
@@ -3221,7 +3005,7 @@ function Home() {
 
       {/* ============ UGC RECORD MODAL ============ */}
       {ugcModalOpen && (
-        <div className={`fixed inset-0 z-[9800] flex items-center justify-center ${closingModal === 'ugc' ? 'modal-backdrop-closing' : 'modal-backdrop'}`} style={{ background: 'rgba(0,0,0,0.9)' }}>
+        <div ref={ugcModalRef} role="dialog" aria-modal="true" className={`fixed inset-0 z-[9800] flex items-center justify-center ${closingModal === 'ugc' ? 'modal-backdrop-closing' : 'modal-backdrop'}`} style={{ background: 'rgba(0,0,0,0.9)' }}>
           <div className={`w-full h-full max-w-lg mx-auto flex flex-col relative ${closingModal === 'ugc' ? 'modal-content-closing' : 'modal-content'}`} onClick={e => e.stopPropagation()}>
 
             {/* Close button */}
@@ -3511,6 +3295,9 @@ function Home() {
       {/* ============ PLATFORM GUIDE MODAL ============ */}
       {showPlatformGuide && (
         <div
+          ref={platformGuideRef}
+          role="dialog"
+          aria-modal="true"
           className="fixed inset-0 z-[9999] bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-4 modal-backdrop"
           onClick={() => setShowPlatformGuide(null)}
         >
@@ -3557,11 +3344,11 @@ function Home() {
 
             <div className="rounded-2xl p-3 mb-4 relative" style={{ backgroundColor: COLORS.surface }}>
               <p className="text-sm pr-16 leading-relaxed" style={{ color: COLORS.muted }}>
-                I raised my hand. 🦋 #ButterflyChallenge — Your turn → {getShareUrl(currentUser?.id)}
+                I raised my hand. 🦋 #ButterflyChallenge — Your turn → {shareUrl}
               </p>
               <button
                 onClick={() => {
-                  navigator.clipboard?.writeText(`I raised my hand. 🦋 #ButterflyChallenge — Your turn → ${getShareUrl(currentUser?.id)}`);
+                  navigator.clipboard?.writeText(`I raised my hand. 🦋 #ButterflyChallenge — Your turn → ${shareUrl}`);
                   track('share_caption_copied', { platform: showPlatformGuide });
                 }}
                 className="absolute top-3 right-3 text-xs font-bold px-3 py-1.5 rounded-lg border"
@@ -3723,7 +3510,9 @@ function Home() {
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Home />
+      <ErrorBoundary>
+        <Home />
+      </ErrorBoundary>
     </QueryClientProvider>
   );
 }

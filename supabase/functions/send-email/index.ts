@@ -85,10 +85,19 @@ async function sendEmail(to: string, subject: string, html: string): Promise<{ s
 }
 
 Deno.serve(async (req) => {
+  const allowedOrigins = [
+    "https://thebutterflychallenge.com",
+    "https://www.thebutterflychallenge.com",
+    "http://localhost:5173",
+  ];
+  const origin = req.headers.get("Origin") || "";
+  const allowOrigin = allowedOrigins.includes(origin) ? origin : allowedOrigins[0];
+
   const corsHeaders = {
-    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Origin": allowOrigin,
     "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Vary": "Origin",
   };
 
   if (req.method === "OPTIONS") {
@@ -106,6 +115,28 @@ Deno.serve(async (req) => {
     if (!action || !email) {
       return Response.json({ success: false, error: "Missing action or email" }, { status: 400, headers: corsHeaders });
     }
+
+    // Rate limiting: max 3 emails per IP per 10 minutes
+    const clientIp = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim()
+      || req.headers.get("x-real-ip")
+      || "unknown";
+
+    const { count: recentCount } = await supabase
+      .from("rate_limits")
+      .select("*", { count: "exact", head: true })
+      .eq("ip", clientIp)
+      .eq("action", "send_email")
+      .gte("created_at", new Date(Date.now() - 10 * 60 * 1000).toISOString());
+
+    if ((recentCount ?? 0) >= 3) {
+      return Response.json(
+        { success: false, error: "Too many requests. Please try again later." },
+        { status: 429, headers: corsHeaders }
+      );
+    }
+
+    // Log this request for rate limiting
+    await supabase.from("rate_limits").insert({ ip: clientIp, action: "send_email" });
 
     if (action === "confirmation") {
       const result = await sendEmail(
