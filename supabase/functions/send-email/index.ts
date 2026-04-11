@@ -14,25 +14,52 @@ function confirmationHTML(email: string): string {
   return `
 <!DOCTYPE html>
 <html>
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background:#f5f5f7;font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;">
-  <div style="max-width:520px;margin:40px auto;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
-    <div style="background:#00b18d;padding:32px 32px 24px;text-align:center;">
-      <span style="font-size:40px;">🦋</span>
-    </div>
-    <div style="padding:32px;">
-      <h1 style="font-size:22px;font-weight:700;color:#111;margin:0 0 12px;">We'll remind you on May 1st</h1>
-      <p style="font-size:15px;color:#4d4d4d;line-height:1.65;margin:0 0 24px;">
-        You signed up to be reminded about Butterfly Month. On May 1, 2026, we'll send you a link to take the challenge and share the gesture that saves lives.
-      </p>
-      <a href="${SITE_URL}" style="display:inline-block;background:#00b18d;color:#fff;font-size:15px;font-weight:700;padding:14px 28px;border-radius:100px;text-decoration:none;">
-        Visit the site
-      </a>
-    </div>
-    <div style="padding:20px 32px;border-top:1px solid #e5e5ea;text-align:center;">
-      <a href="${SITE_URL}/unsubscribe?email=${encodeURIComponent(email)}" style="font-size:12px;color:#6e6e73;text-decoration:underline;">Unsubscribe</a>
-    </div>
-  </div>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Butterfly Challenge</title></head>
+<body style="margin:0;padding:0;background:#f4f4f4;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f4;padding:40px 0;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+          <tr>
+            <td style="background:linear-gradient(135deg,#0a2a2a 0%,#0d3d3d 100%);padding:40px 40px 32px;text-align:center;">
+              <div style="font-size:48px;margin-bottom:12px;">🦋</div>
+              <h1 style="margin:0;color:#ffffff;font-size:22px;font-weight:700;letter-spacing:-0.3px;">The Butterfly Challenge</h1>
+              <p style="margin:8px 0 0;color:#32C189;font-size:13px;font-weight:500;letter-spacing:1px;text-transform:uppercase;">1 Billion Hands Campaign</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:40px 40px 32px;">
+              <h2 style="margin:0 0 16px;color:#0a0a0a;font-size:26px;font-weight:700;line-height:1.2;">You're in 🎉</h2>
+              <p style="margin:0 0 16px;color:#444;font-size:16px;line-height:1.6;">We'll remind you on <strong style="color:#0a0a0a;">May 1st</strong> — the start of Butterfly Month.</p>
+              <p style="margin:0 0 28px;color:#666;font-size:15px;line-height:1.6;">You signed up to be reminded about Butterfly Month. On May 1, 2026, we'll send you a link to take the challenge and share the gesture that saves lives.</p>
+              <table width="100%" cellpadding="0" cellspacing="0" style="background:#f0fdf8;border:1.5px solid #32C189;border-radius:12px;margin-bottom:28px;">
+                <tr>
+                  <td style="padding:20px 24px;">
+                    <p style="margin:0 0 8px;color:#0a0a0a;font-size:14px;font-weight:600;">The Butterfly Gesture 🦋</p>
+                    <p style="margin:0;color:#555;font-size:14px;line-height:1.5;">Cross your thumbs, spread your fingers wide — a 60-second act of solidarity that connects 1 billion people worldwide.</p>
+                  </td>
+                </tr>
+              </table>
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td align="center">
+                    <a href="${SITE_URL}" style="display:inline-block;background:#32C189;color:#ffffff;text-decoration:none;font-size:16px;font-weight:600;padding:16px 40px;border-radius:50px;letter-spacing:0.2px;">Visit the Site →</a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr><td style="padding:0 40px;"><hr style="border:none;border-top:1px solid #f0f0f0;margin:0;"></td></tr>
+          <tr>
+            <td style="padding:24px 40px 32px;text-align:center;">
+              <p style="margin:0 0 8px;color:#999;font-size:12px;line-height:1.5;">You're receiving this because you signed up at thebutterflychallenge.com</p>
+              <p style="margin:0;color:#bbb;font-size:12px;"><a href="${SITE_URL}/unsubscribe?email=${encodeURIComponent(email)}" style="color:#bbb;text-decoration:underline;">Unsubscribe</a></p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
 </body>
 </html>`;
 }
@@ -41,28 +68,52 @@ function reminderHTML(): string {
   return `
 <!DOCTYPE html>
 <html>
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background:#f5f5f7;font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;">
-  <div style="max-width:520px;margin:40px auto;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
-    <div style="background:#00b18d;padding:32px 32px 24px;text-align:center;">
-      <span style="font-size:40px;">🦋</span>
-    </div>
-    <div style="padding:32px;">
-      <h1 style="font-size:22px;font-weight:700;color:#111;margin:0 0 12px;">It's time.</h1>
-      <p style="font-size:15px;color:#4d4d4d;line-height:1.65;margin:0 0 24px;">
-        Butterfly Month starts today. Take 60 seconds to learn the gesture, record yourself doing it, and tag 3 people. You could save a life.
-      </p>
-      <a href="${SITE_URL}" style="display:inline-block;background:#00b18d;color:#fff;font-size:15px;font-weight:700;padding:14px 28px;border-radius:100px;text-decoration:none;">
-        Take the Challenge
-      </a>
-    </div>
-    <div style="padding:20px 32px;border-top:1px solid #e5e5ea;text-align:center;">
-      <p style="font-size:11px;color:#6e6e73;margin:0;">
-        You received this because you signed up at thebutterflychallenge.com.
-        <br>One Humanity Foundation · 501(c)(3)
-      </p>
-    </div>
-  </div>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Butterfly Challenge</title></head>
+<body style="margin:0;padding:0;background:#f4f4f4;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f4;padding:40px 0;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+          <tr>
+            <td style="background:linear-gradient(135deg,#0a2a2a 0%,#0d3d3d 100%);padding:40px 40px 32px;text-align:center;">
+              <div style="font-size:48px;margin-bottom:12px;">🦋</div>
+              <h1 style="margin:0;color:#ffffff;font-size:22px;font-weight:700;letter-spacing:-0.3px;">The Butterfly Challenge</h1>
+              <p style="margin:8px 0 0;color:#32C189;font-size:13px;font-weight:500;letter-spacing:1px;text-transform:uppercase;">Butterfly Month Starts Now</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:40px 40px 32px;">
+              <h2 style="margin:0 0 16px;color:#0a0a0a;font-size:26px;font-weight:700;line-height:1.2;">It's time. 🦋</h2>
+              <p style="margin:0 0 16px;color:#444;font-size:16px;line-height:1.6;">Butterfly Month starts <strong style="color:#0a0a0a;">today</strong>. This is the moment you signed up for.</p>
+              <p style="margin:0 0 28px;color:#666;font-size:15px;line-height:1.6;">Take 60 seconds to learn the gesture, record yourself doing it, and tag 3 people. You could save a life.</p>
+              <table width="100%" cellpadding="0" cellspacing="0" style="background:#f0fdf8;border:1.5px solid #32C189;border-radius:12px;margin-bottom:28px;">
+                <tr>
+                  <td style="padding:20px 24px;">
+                    <p style="margin:0 0 8px;color:#0a0a0a;font-size:14px;font-weight:600;">60 seconds. 3 names. 24 hours.</p>
+                    <p style="margin:0;color:#555;font-size:14px;line-height:1.5;">Make the sign. Say their name. Pass it forward. One gesture, one billion hands.</p>
+                  </td>
+                </tr>
+              </table>
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td align="center">
+                    <a href="${SITE_URL}" style="display:inline-block;background:#32C189;color:#ffffff;text-decoration:none;font-size:16px;font-weight:600;padding:16px 40px;border-radius:50px;letter-spacing:0.2px;">Take the Challenge →</a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr><td style="padding:0 40px;"><hr style="border:none;border-top:1px solid #f0f0f0;margin:0;"></td></tr>
+          <tr>
+            <td style="padding:24px 40px 32px;text-align:center;">
+              <p style="margin:0 0 4px;color:#999;font-size:12px;line-height:1.5;">You received this because you signed up at thebutterflychallenge.com</p>
+              <p style="margin:0;color:#bbb;font-size:11px;">One Humanity Foundation · 501(c)(3)</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
 </body>
 </html>`;
 }
