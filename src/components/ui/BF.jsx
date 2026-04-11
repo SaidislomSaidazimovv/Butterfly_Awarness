@@ -1,0 +1,3 @@
+import { TEAL } from '../../constants/index.js';
+
+export function BF({ size = 140 }) { return <svg width={size} height={size * .78} viewBox="0 0 300 236" fill="none"><path d="M150 128C124 112 68 82 26 57 9 46 5 28 17 15 29 2 52 5 79 21 111 41 138 84 150 128Z" fill={TEAL} opacity=".82" /><path d="M150 128C176 112 232 82 274 57 291 46 295 28 283 15 271 2 248 5 221 21 189 41 162 84 150 128Z" fill={TEAL} opacity=".82" /><path d="M150 128C128 143 84 174 70 200 60 217 69 230 85 230 103 230 129 212 145 188 152 176 154 152 150 128Z" fill={TEAL} opacity=".38" /><path d="M150 128C172 143 216 174 230 200 240 217 231 230 215 230 197 230 171 212 155 188 148 176 146 152 150 128Z" fill={TEAL} opacity=".38" /><ellipse cx="150" cy="130" rx="3.5" ry="24" fill="#07706C" /></svg>; }
