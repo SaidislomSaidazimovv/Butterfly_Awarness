@@ -8,7 +8,7 @@ import { supabase, saveHandRaise, saveEmail, getCountryCode, getLocationData } f
 import { useToast } from './hooks/useToast.js';
 import { usePathRouter } from './hooks/usePathRouter.js';
 import { useLiveHands } from './hooks/useLiveHands.js';
-import { Toast, Popup } from './components/ui/index.js';
+import { Toast, Popup, Btn } from './components/ui/index.js';
 import { JoinC, ShareC, ReminderC, SupportPanel, Nav, Footer, AuthPopup, UgcPopup } from './components/index.js';
 import { HomePage } from './pages/index.js';
 
