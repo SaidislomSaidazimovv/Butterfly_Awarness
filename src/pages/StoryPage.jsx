@@ -13,7 +13,7 @@ export default function StoryPage({ navigate }) {
 
       {/* ORIGIN */}
       <section style={sec("#fff")}><div style={wrap}>
-        <Reveal><img src={STORY_IMG_ORIGIN} alt="Lucina Artigas guiding survivors through the butterfly hug after Hurricane Pauline" style={{ width: "100%", maxWidth: 520, display: "block", margin: "0 auto 40px", borderRadius: 24 }} /></Reveal>
+        <Reveal><img src={STORY_IMG_ORIGIN} alt="Lucina Artigas guiding survivors through the butterfly hug after Hurricane Pauline" width="1376" height="768" loading="lazy" decoding="async" style={{ width: "100%", maxWidth: 520, height: "auto", display: "block", margin: "0 auto 40px", borderRadius: 24 }} /></Reveal>
         <Reveal delay={0.05}><p style={label}>The Origin</p>
         <h2 style={{ ...h2s, marginBottom: 18 }}>1998 · Hurricane Pauline</h2></Reveal>
         <div style={{ textAlign: "left" }}>
@@ -24,7 +24,7 @@ export default function StoryPage({ navigate }) {
 
       {/* SPREAD */}
       <section style={sec(g.bg)}><div style={wrap}>
-        <Reveal><img src={CTA_IMG} alt="The butterfly hug spreading globally" style={{ width: "100%", maxWidth: 520, display: "block", margin: "0 auto 40px", borderRadius: 24 }} /></Reveal>
+        <Reveal><img src={CTA_IMG} alt="The butterfly hug spreading globally" width="2000" height="852" loading="lazy" decoding="async" style={{ width: "100%", maxWidth: 520, height: "auto", display: "block", margin: "0 auto 40px", borderRadius: 24 }} /></Reveal>
         <Reveal delay={0.05}><p style={label}>Global Adoption</p>
         <h2 style={{ ...h2s, marginBottom: 18 }}>2000–2024 · The Spread</h2></Reveal>
         <div style={{ textAlign: "left" }}>
@@ -34,7 +34,7 @@ export default function StoryPage({ navigate }) {
 
       {/* PRINCE HARRY */}
       <section style={sec("#fff")}><div style={wrap}>
-        <Reveal><img src={STORY_IMG_STAGE} alt="The butterfly hug demonstrated on a global stage" style={{ width: "100%", maxWidth: 520, display: "block", margin: "0 auto 40px", borderRadius: 24 }} /></Reveal>
+        <Reveal><img src={STORY_IMG_STAGE} alt="The butterfly hug demonstrated on a global stage" width="1376" height="768" loading="lazy" decoding="async" style={{ width: "100%", maxWidth: 520, height: "auto", display: "block", margin: "0 auto 40px", borderRadius: 24 }} /></Reveal>
         <Reveal delay={0.05}><p style={label}>The Tipping Point</p>
         <h2 style={{ ...h2s, marginBottom: 18 }}>May 2024 · The Moment</h2></Reveal>
         <div style={{ textAlign: "left" }}>

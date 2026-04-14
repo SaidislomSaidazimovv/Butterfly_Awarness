@@ -7,7 +7,7 @@ export function Footer({ navigate, onSupport }) {
       <div style={{ maxWidth: 1100, margin: "0 auto" }}>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 40, marginBottom: 48 }}>
           <div>
-            <img src={LOGO_DARK} alt="Butterfly Challenge" style={{ height: 36, marginBottom: 14 }} />
+            <img src={LOGO_DARK} alt="Butterfly Challenge" width="135" height="36" loading="lazy" decoding="async" style={{ height: 36, width: "auto", marginBottom: 14 }} />
             <p style={{ fontSize: 13, color: g.t3, lineHeight: 1.5, marginBottom: 16 }}>An initiative of One Humanity Foundation.</p>
             <div style={{ display: "flex", gap: 14 }}>
               {[{ic:"💬",l:"TikTok"},{ic:"🔗",l:"Share"},{ic:"𝕏",l:"Twitter"},{ic:"▶",l:"YouTube"}].map((s, i) => (

@@ -5,6 +5,8 @@ import { Btn } from './ui/index.js';
 
 export function Nav({ page, navigate, onJoin, onSupport, currentUser, onSignIn, onSignOut, userDropdownOpen, setUserDropdownOpen, displayName, avatarUrl }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [avatarFailed, setAvatarFailed] = useState(false);
+  const showAvatarImg = !!avatarUrl && !avatarFailed;
   const ease = "cubic-bezier(.16,1,.3,1)";
   const links = [{l:"Story",p:"story"},{l:"Science",p:"science"},{l:"Alliance",p:"alliance"},{l:"Live",p:"live"}];
 
@@ -21,7 +23,7 @@ export function Nav({ page, navigate, onJoin, onSupport, currentUser, onSignIn, 
         <div style={{ maxWidth: 1200, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 24px" }}>
           {/* Logo — always visible */}
           <button onClick={() => go('')} style={{ background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex", alignItems: "center" }}>
-            <img src={LOGO_DARK} alt="Butterfly Challenge" style={{ height: 32 }} />
+            <img src={LOGO_DARK} alt="Butterfly Challenge" width="120" height="32" decoding="async" style={{ height: 32, width: "auto" }} />
           </button>
 
           {/* Desktop center links */}
@@ -49,8 +51,8 @@ export function Nav({ page, navigate, onJoin, onSupport, currentUser, onSignIn, 
             ) : (
               <div style={{ position: "relative" }}>
                 <button aria-label="User menu" onClick={() => setUserDropdownOpen(v => !v)} style={{ display: "flex", alignItems: "center", gap: 6, background: "none", border: "1px solid " + g.bdr, borderRadius: 980, padding: "4px 12px 4px 4px", cursor: "pointer", fontFamily: ff }}>
-                  {avatarUrl ? (
-                    <img src={avatarUrl} alt="" style={{ width: 26, height: 26, borderRadius: 13, objectFit: "cover" }} />
+                  {showAvatarImg ? (
+                    <img src={avatarUrl} alt="" width="26" height="26" referrerPolicy="no-referrer" decoding="async" onError={() => setAvatarFailed(true)} style={{ width: 26, height: 26, borderRadius: 13, objectFit: "cover" }} />
                   ) : (
                     <div style={{ width: 26, height: 26, borderRadius: 13, background: TEAL, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700 }}>{displayName?.charAt(0)?.toUpperCase()}</div>
                   )}
@@ -72,8 +74,8 @@ export function Nav({ page, navigate, onJoin, onSupport, currentUser, onSignIn, 
             {currentUser && (
               <div style={{ position: "relative" }}>
                 <button aria-label="User menu" onClick={() => setUserDropdownOpen(v => !v)} style={{ background: "none", border: "none", padding: 0, cursor: "pointer", display: "flex", alignItems: "center" }}>
-                  {avatarUrl ? (
-                    <img src={avatarUrl} alt="" style={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'cover' }} />
+                  {showAvatarImg ? (
+                    <img src={avatarUrl} alt="" width="32" height="32" referrerPolicy="no-referrer" decoding="async" onError={() => setAvatarFailed(true)} style={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'cover' }} />
                   ) : (
                     <div style={{ width: 32, height: 32, borderRadius: '50%', background: TEAL, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700 }}>
                       {(displayName || 'U')[0].toUpperCase()}

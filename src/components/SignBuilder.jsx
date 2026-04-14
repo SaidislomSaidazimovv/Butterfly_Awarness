@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { g, ff, TEAL, SIGN_WOMAN1, SIGN_WOMAN2, SIGN_WOMAN3, SIGN_HANDS } from '../constants/index.js';
 import { Btn } from './ui/index.js';
 
@@ -6,22 +6,27 @@ export function SignBuilder() {
   const [step, setStep] = useState(-1);
   const ease = "cubic-bezier(.16,1,.3,1)";
 
-  const imgStyle = { width: "100%", maxWidth: 240, borderRadius: 16, display: "block", margin: "0 auto" };
+  useEffect(() => {
+    [SIGN_WOMAN1, SIGN_WOMAN2, SIGN_WOMAN3, SIGN_HANDS].forEach(src => { const img = new Image(); img.src = src; });
+  }, []);
+
+  const imgWrap = { width: "100%", maxWidth: 240, aspectRatio: "1", margin: "0 auto", borderRadius: 16, overflow: "hidden" };
+  const imgStyle = { width: "100%", height: "100%", objectFit: "cover", display: "block" };
   const steps = [
     {
       instruction: "Place both hands on your heart.",
       detail: "Palms flat against your chest.",
-      hands: <img src={SIGN_WOMAN1} alt="Hands on heart" style={imgStyle} />,
+      hands: <div style={imgWrap}><img src={SIGN_WOMAN1} alt="Hands on heart" width="240" height="240" decoding="async" style={imgStyle} /></div>,
     },
     {
       instruction: "Cross your wrists.",
       detail: "Right over left, thumbs hooked together.",
-      hands: <img src={SIGN_WOMAN2} alt="Wrists crossed" style={imgStyle} />,
+      hands: <div style={imgWrap}><img src={SIGN_WOMAN2} alt="Wrists crossed" width="240" height="240" decoding="async" style={imgStyle} /></div>,
     },
     {
       instruction: "Open like wings.",
       detail: "Spread your fingers wide. That's the Butterfly Sign.",
-      hands: <img src={SIGN_WOMAN3} alt="Hands open like wings" style={imgStyle} />,
+      hands: <div style={imgWrap}><img src={SIGN_WOMAN3} alt="Hands open like wings" width="240" height="240" decoding="async" style={imgStyle} /></div>,
     },
   ];
 
@@ -30,7 +35,9 @@ export function SignBuilder() {
     return (
       <div style={{ textAlign: "center" }}>
         <div style={{ background: g.bg, borderRadius: 24, padding: "48px 32px", marginBottom: 20 }}>
-          <img src={SIGN_HANDS} alt="The Butterfly Sign" style={{ width: "100%", maxWidth: 200, borderRadius: 16, marginBottom: 16, display: "block", margin: "0 auto 16px" }} />
+          <div style={{ width: "100%", maxWidth: 200, aspectRatio: "1", margin: "0 auto 16px", borderRadius: 16, overflow: "hidden" }}>
+            <img src={SIGN_HANDS} alt="The Butterfly Sign" width="200" height="200" decoding="async" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+          </div>
           <p style={{ fontSize: 18, fontWeight: 600, color: g.t1, marginBottom: 6 }}>Learn the Butterfly Sign</p>
           <p style={{ fontSize: 15, color: g.t3 }}>3 steps. 10 seconds. No words needed.</p>
         </div>

@@ -18,7 +18,7 @@ export default function AlliancePage({ setRP, setAP, onTrust, navigate }) {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(120px,1fr))", gap: 10 }}>
           {ROLES.map((r, i) => (
             <Reveal key={r.name} delay={i * 0.03}><button onClick={() => setRP(r)} className="card-btn" style={{ background: g.bg, border: "none", borderRadius: 16, padding: "20px 10px", textAlign: "center", cursor: "pointer", fontFamily: ff, width: "100%" }}>
-              <img src={r.icon} alt={r.name} style={{ width: 28, height: 28, marginBottom: 6, display: "block", marginLeft: "auto", marginRight: "auto" }} />
+              <img src={r.icon} alt={r.name} width="28" height="28" loading="lazy" decoding="async" style={{ width: 28, height: 28, marginBottom: 6, display: "block", marginLeft: "auto", marginRight: "auto" }} />
               <p style={{ fontSize: 13, fontWeight: 600, color: g.t1, marginBottom: 1 }}>{r.name}</p>
               <p style={{ fontSize: 11, color: g.t4 }}>{r.word}</p>
             </button></Reveal>
@@ -32,7 +32,7 @@ export default function AlliancePage({ setRP, setAP, onTrust, navigate }) {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(200px,1fr))", gap: 12 }}>
           {ALLIANCES.map((a, i) => (
             <Reveal key={a.name} delay={i * 0.05}><button onClick={() => setAP(a)} className="card-btn" style={{ background: "#fff", border: "none", borderRadius: 18, padding: "24px 18px", textAlign: "left", cursor: "pointer", fontFamily: ff, width: "100%" }}>
-              <img src={a.icon} alt={a.name} style={{ width: 28, height: 28, filter: a.tint }} />
+              <img src={a.icon} alt={a.name} width="28" height="28" loading="lazy" decoding="async" style={{ width: 28, height: 28, filter: a.tint }} />
               <p style={{ fontSize: 16, fontWeight: 600, color: g.t1, margin: "8px 0 3px" }}>{a.name}</p>
               <p style={{ fontSize: 13, color: g.t3 }}>{a.line}</p>
             </button></Reveal>
@@ -42,7 +42,7 @@ export default function AlliancePage({ setRP, setAP, onTrust, navigate }) {
 
       {/* TRUST */}
       <section style={sec("#fff")}><Reveal>
-        <img src={TRUST_IMG} alt="Trust & governance" style={{ width: "100%", maxWidth: 480, display: "block", margin: "0 auto 24px", objectFit: "contain" }} />
+        <img src={TRUST_IMG} alt="Trust & governance" width="1000" height="558" loading="lazy" decoding="async" style={{ width: "100%", maxWidth: 480, height: "auto", display: "block", margin: "0 auto 24px", objectFit: "contain" }} />
         <p style={label}>Why Trust This</p>
         <h2 style={{ ...h2s, fontSize: "clamp(1.6rem,4vw,2.4rem)", marginBottom: 10 }}>Built to be trusted.</h2>
         <p style={{ fontSize: 17, color: g.t2, marginBottom: 16 }}>501(c)(3) nonprofit · 100% to mental health · Free forever</p>
@@ -62,7 +62,7 @@ export default function AlliancePage({ setRP, setAP, onTrust, navigate }) {
               { icon: STAT_RAISED, num: "$220M", label: "Raised by this same mechanic", sub: "Ice Bucket Challenge 2014" },
             ].map((s, i) => (
               <div key={i} style={{ background: "rgba(255,255,255,0.08)", backdropFilter: "blur(12px)", borderRadius: 18, padding: "28px 20px", border: "1px solid rgba(255,255,255,0.1)" }}>
-                <img src={s.icon} alt="" style={{ width: 28, height: 28, display: "block", margin: "0 auto 8px", filter: "invert(70%) sepia(50%) saturate(500%) hue-rotate(120deg) brightness(110%)" }} />
+                <img src={s.icon} alt="" width="28" height="28" loading="lazy" decoding="async" style={{ width: 28, height: 28, display: "block", margin: "0 auto 8px", filter: "invert(70%) sepia(50%) saturate(500%) hue-rotate(120deg) brightness(110%)" }} />
                 <p style={{ fontSize: 32, fontWeight: 700, color: "#fff", letterSpacing: "-.03em", marginBottom: 2 }}>{s.num}</p>
                 <p style={{ fontSize: 14, fontWeight: 600, color: "rgba(255,255,255,.8)", marginBottom: 2 }}>{s.label}</p>
                 <p style={{ fontSize: 12, color: "rgba(255,255,255,.4)" }}>{s.sub}</p>
@@ -89,7 +89,7 @@ export default function AlliancePage({ setRP, setAP, onTrust, navigate }) {
               { icon: ORG_BRANDS, title: "For Brands", desc: "Participation guidelines, asset kits, and partnership opportunities." },
             ].map((c, i) => (
               <div key={i} className="card-btn" style={{ background: "#f5f5f5", border: "none", borderRadius: 18, padding: "28px 24px", textAlign: "left", cursor: "pointer" }}>
-                <img src={c.icon} alt="" style={{ width: 32, height: 32, marginBottom: 14, filter: "invert(45%) sepia(80%) saturate(1200%) hue-rotate(140deg) brightness(95%)" }} />
+                <img src={c.icon} alt="" width="32" height="32" loading="lazy" decoding="async" style={{ width: 32, height: 32, marginBottom: 14, filter: "invert(45%) sepia(80%) saturate(1200%) hue-rotate(140deg) brightness(95%)" }} />
                 <h3 style={{ fontSize: 18, fontWeight: 700, color: g.t1, marginBottom: 8 }}>{c.title}</h3>
                 <p style={{ fontSize: 14, color: g.t2, lineHeight: 1.55, marginBottom: 14 }}>{c.desc}</p>
                 <span style={{ fontSize: 14, fontWeight: 500, color: TEAL, display: "flex", alignItems: "center", gap: 4 }}>Learn more <ArrowRight size={13} /></span>

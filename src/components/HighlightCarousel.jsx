@@ -90,7 +90,7 @@ export function HighlightCarousel() {
           }}>
             <p style={{ fontSize: 18, fontWeight: 600, color: g.t1, lineHeight: 1.35, letterSpacing: "-.01em" }}>{c.title}</p>
             <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "8px 0" }}>
-              <img src={c.img} alt="" style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }} />
+              <img src={c.img} alt="" loading={i === 0 ? "eager" : "lazy"} decoding="async" style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }} />
             </div>
             <p style={{ fontSize: 14, color: g.t1, opacity: .5, fontWeight: 500 }}>{c.sub}</p>
           </div>

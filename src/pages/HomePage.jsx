@@ -9,7 +9,7 @@ export default function HomePage({ onJoin, onShare, onRemind, onDidIt, showPlusO
     <main id="main-content">
       {/* HERO */}
       <section style={{ minHeight: "90dvh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", background: "linear-gradient(180deg, #C3FFEF 0%, #ffffff 30%)" }}>
-        <Reveal style={{ width: "100%" }}><img src={HERO_IMG} alt="Two people making the Butterfly Sign" style={{ width: "100%", maxWidth: 920, display: "block", margin: "0 auto", marginBottom: -70 }} /></Reveal>
+        <Reveal style={{ width: "100%" }}><img src={HERO_IMG} alt="Two people making the Butterfly Sign" width="1900" height="1060" loading="eager" fetchpriority="high" decoding="async" style={{ width: "100%", maxWidth: 920, height: "auto", display: "block", margin: "0 auto", marginBottom: -70 }} /></Reveal>
         <div style={{ padding: "0 24px 24px", display: "flex", flexDirection: "column", alignItems: "center" }}>
           <Reveal delay={0.1}><p style={{ ...label, marginTop: 0 }}>Butterfly Challenge</p></Reveal>
           <Reveal delay={0.15}><h1 style={{ ...gradH, fontSize: "clamp(2.6rem,8vw,4.8rem)", marginBottom: 14 }}>Lift a billion hands.</h1></Reveal>
@@ -44,9 +44,9 @@ export default function HomePage({ onJoin, onShare, onRemind, onDidIt, showPlusO
               {communityData.map((sub, i) => (
                 <div key={sub.id || i} style={{ borderRadius: 16, overflow: "hidden", background: g.bg, aspectRatio: "1" }}>
                   {sub.file_type === 'video' ? (
-                    <video src={sub.file_url} autoPlay muted loop playsInline style={{ width: "100%", height: "100%", objectFit: "cover" }} onPlay={() => track('community_video_played')} />
+                    <video src={sub.file_url} autoPlay muted loop playsInline preload="metadata" style={{ width: "100%", height: "100%", objectFit: "cover" }} onPlay={() => track('community_video_played')} />
                   ) : (
-                    <img src={sub.file_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    <img src={sub.file_url} alt="" loading="lazy" decoding="async" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                   )}
                 </div>
               ))}
@@ -123,7 +123,7 @@ export default function HomePage({ onJoin, onShare, onRemind, onDidIt, showPlusO
 
       {/* CTA */}
       <section style={{ ...sec("#f5f5f7"), paddingBottom: 80 }}>
-        <Reveal><img src={CTA_IMG} alt="Hundreds of people doing the Butterfly Sign" style={{ width: "100%", display: "block", marginBottom: 8 }} /></Reveal>
+        <Reveal><img src={CTA_IMG} alt="Hundreds of people doing the Butterfly Sign" width="2000" height="852" loading="lazy" decoding="async" style={{ width: "100%", height: "auto", display: "block", marginBottom: 8 }} /></Reveal>
         <Reveal delay={0.1}><h2 style={{ ...gradH, fontSize: "clamp(2rem,6vw,3.4rem)", marginTop: 12, marginBottom: 6 }}>60 seconds.</h2></Reveal>
         <Reveal delay={0.15}><p style={{ fontSize: 19, color: g.t2, marginBottom: 28 }}>Be the person who showed up.</p></Reveal>
         <Reveal delay={0.2}><div style={{ display: "flex", justifyContent: "center", gap: 12 }}>

@@ -30,7 +30,7 @@ export default function SciencePage({ navigate }) {
 
       {/* BILATERAL STIMULATION */}
       <section style={sec("#fff")}><div style={{ maxWidth: 680, margin: "0 auto" }}>
-        <Reveal><img src={SCI_IMG_BRAIN} alt="Brain hemispheres showing bilateral stimulation" style={{ width: "100%", maxWidth: 420, display: "block", margin: "0 auto 40px", borderRadius: 24 }} /></Reveal>
+        <Reveal><img src={SCI_IMG_BRAIN} alt="Brain hemispheres showing bilateral stimulation" width="1024" height="1024" loading="lazy" decoding="async" style={{ width: "100%", maxWidth: 420, height: "auto", display: "block", margin: "0 auto 40px", borderRadius: 24 }} /></Reveal>
         <div style={{ textAlign: "left" }}>
         <Reveal delay={0.1}><p style={label}>How Your Brain Works</p>
         <h2 style={{ ...h2s, marginBottom: 18 }}>Crossing the midline.</h2>
@@ -41,7 +41,7 @@ export default function SciencePage({ navigate }) {
 
       {/* EMDR CONNECTION */}
       <section style={sec(g.bg)}><div style={{ maxWidth: 680, margin: "0 auto" }}>
-        <Reveal><img src={SCI_IMG_HANDS} alt="Butterfly hug gesture with calming ripples" style={{ width: "100%", maxWidth: 420, display: "block", margin: "0 auto 40px", borderRadius: 24 }} /></Reveal>
+        <Reveal><img src={SCI_IMG_HANDS} alt="Butterfly hug gesture with calming ripples" width="1024" height="1024" loading="lazy" decoding="async" style={{ width: "100%", maxWidth: 420, height: "auto", display: "block", margin: "0 auto 40px", borderRadius: 24 }} /></Reveal>
         <div style={{ textAlign: "left" }}>
         <Reveal delay={0.1}><p style={label}>Clinical Foundation</p>
         <h2 style={{ ...h2s, marginBottom: 18 }}>Built on EMDR science.</h2>
@@ -52,7 +52,7 @@ export default function SciencePage({ navigate }) {
 
       {/* NEUROIMAGING */}
       <section style={sec("#fff")}><div style={{ maxWidth: 680, margin: "0 auto" }}>
-        <Reveal><img src={SCI_IMG_SCAN} alt="Brain scan showing prefrontal cortex activation" style={{ width: "100%", maxWidth: 420, display: "block", margin: "0 auto 40px", borderRadius: 24 }} /></Reveal>
+        <Reveal><img src={SCI_IMG_SCAN} alt="Brain scan showing prefrontal cortex activation" width="1024" height="1024" loading="lazy" decoding="async" style={{ width: "100%", maxWidth: 420, height: "auto", display: "block", margin: "0 auto 40px", borderRadius: 24 }} /></Reveal>
         <div style={{ textAlign: "left" }}>
         <Reveal delay={0.1}><p style={label}>The Evidence</p>
         <h2 style={{ ...h2s, marginBottom: 18 }}>What brain scans show.</h2>
@@ -63,7 +63,7 @@ export default function SciencePage({ navigate }) {
 
       {/* PULL QUOTE */}
       <section style={sec(g.bg)}><Reveal><div style={{ maxWidth: 640, margin: "0 auto", textAlign: "center" }}>
-        <img src={ICON_BUTTERFLY} alt="" style={{ width: 40, height: 40, display: "block", margin: "0 auto 20px", opacity: 0.3 }} />
+        <img src={ICON_BUTTERFLY} alt="" width="40" height="40" loading="lazy" decoding="async" style={{ width: 40, height: 40, display: "block", margin: "0 auto 20px", opacity: 0.3 }} />
         <p style={{ fontSize: "clamp(1.6rem,4vw,2.2rem)", fontWeight: 600, lineHeight: 1.3, color: g.t1, marginBottom: 12 }}>"The butterfly hug is not therapy. It's what humans do instinctively when someone is hurting. Now we know why it works."</p>
         <p style={{ fontSize: 14, color: g.t3 }}>— Clinical neuroscience literature on bilateral stimulation</p>
       </div></Reveal></section>
