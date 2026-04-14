@@ -88,11 +88,20 @@ export default function App() {
   const { data: leaderboardData } = useQuery({
     queryKey: ['leaderboard'],
     queryFn: async () => {
-      const [countries, cities] = await Promise.all([
+      const [countries, cities, participants] = await Promise.all([
         supabase.rpc('get_country_leaderboard'),
         supabase.rpc('get_city_leaderboard'),
+        supabase.rpc('get_top_participants'),
       ]);
-      return { countries: countries.data || [], cities: cities.data || [] };
+      return {
+        countries: countries.data || [],
+        cities: cities.data || [],
+        participants: (participants.data || []).map(row => ({
+          name: row.display_name || 'User',
+          avatar: row.avatar_url,
+          count: row.share_count,
+        })),
+      };
     },
     staleTime: 30 * 1000,
   });
@@ -538,7 +547,8 @@ export default function App() {
     <div style={{ minHeight: "100vh", background: "#fff", color: g.t1, fontFamily: ff, WebkitFontSmoothing: "antialiased", paddingBottom: 40 }}>
       <style>{`
         *{box-sizing:border-box;margin:0}body{margin:0}::selection{background:#d1fae5}
-        .hs::-webkit-scrollbar{display:none}
+        .hs{scrollbar-width:none;-ms-overflow-style:none}
+        .hs::-webkit-scrollbar{display:none;width:0;height:0}
         @keyframes toastIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
         @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
         @keyframes popIn{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1)}}
@@ -604,7 +614,7 @@ export default function App() {
       />
       
       {/* Page Routing */}
-      {page === '' && <HomePage onJoin={() => sJO(true)} onShare={() => sSO(true)} onRemind={() => setRemindO(true)} onDidIt={handleIDidIt} showPlusOne={showPlusOne} onUgcOpen={openUgcModal} communityData={communityData} setRP={setRP} setAP={setAP} setTlPopup={setTlPopup} entries={entries} handCount={countData} />}
+      {page === '' && <HomePage onJoin={() => sJO(true)} onShare={() => sSO(true)} onRemind={() => setRemindO(true)} onDidIt={handleIDidIt} showPlusOne={showPlusOne} onUgcOpen={openUgcModal} communityData={communityData} setRP={setRP} setAP={setAP} setTlPopup={setTlPopup} entries={entries} handCount={countData} leaderboardData={leaderboardData} />}
       <Suspense fallback={<div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "60vh", color: TEAL, fontSize: "2rem" }}>🦋</div>}>
         {page === 'story' && <StoryPage navigate={navigate} />}
         {page === 'science' && <SciencePage navigate={navigate} />}

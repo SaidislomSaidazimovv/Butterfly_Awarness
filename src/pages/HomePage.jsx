@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import { g, ff, TEAL, sec, wrap, label, h2s, gradH, HERO_IMG, EVENT_BG, CTA_IMG } from '../constants/index.js';
 import { Reveal, Btn } from '../components/ui/index.js';
-import { HighlightCarousel, SignBuilder, StepTabs, Chain, FAQ, CountdownTimer } from '../components/index.js';
+import { HighlightCarousel, SignBuilder, StepTabs, Chain, FAQ, CountdownTimer, LiveFeed } from '../components/index.js';
 import { track } from '../utils/track.js';
 
-export default function HomePage({ onJoin, onShare, onRemind, onDidIt, showPlusOne, onUgcOpen, communityData, setRP, setAP, setTlPopup, entries, handCount }) {
+export default function HomePage({ onJoin, onShare, onRemind, onDidIt, showPlusOne, onUgcOpen, communityData, setRP, setAP, setTlPopup, entries, handCount, leaderboardData }) {
   return (
     <main id="main-content">
       {/* HERO */}
@@ -114,6 +114,9 @@ export default function HomePage({ onJoin, onShare, onRemind, onDidIt, showPlusO
         </div></Reveal>
         <Reveal delay={0.2}><Btn primary onClick={() => { window.history.pushState({}, '', '/live'); window.scrollTo({ top: 0, behavior: 'smooth' }); window.dispatchEvent(new PopStateEvent('popstate')); }} style={{ fontSize: 15 }}>View Full Schedule</Btn></Reveal>
       </div></section>
+
+      {/* LIVE FEED */}
+      <LiveFeed entries={entries} handCount={handCount} leaderboardData={leaderboardData} onShare={onShare} />
 
       {/* FAQ */}
       <section id="faq" style={sec("#fff")}><Reveal><div style={{ maxWidth: 560, margin: "0 auto" }}>

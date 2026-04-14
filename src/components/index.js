@@ -15,3 +15,4 @@ export { Nav } from './Nav.jsx';
 export { AuthPopup } from './AuthPopup.jsx';
 export { UgcPopup } from './UgcPopup.jsx';
 export { Globe } from './Globe.jsx';
+export { LiveFeed } from './LiveFeed.jsx';

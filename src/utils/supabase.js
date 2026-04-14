@@ -54,14 +54,25 @@ export async function saveHandRaise(userId, city) {
   }
 }
 
+export const EMAIL_REMINDER_LIMIT = 3;
+
 export async function saveEmail(email) {
   try {
+    const { count, error: countError } = await supabase
+      .from('email_reminders')
+      .select('id', { count: 'exact', head: true })
+      .eq('email', email);
+    if (countError) return { success: false, message: 'Something went wrong.' };
+    if ((count || 0) >= EMAIL_REMINDER_LIMIT) {
+      return { success: false, message: `You've already signed up ${EMAIL_REMINDER_LIMIT} times with this email.` };
+    }
+    const attempt = (count || 0) + 1;
     const { error } = await supabase.from('email_reminders').insert({ email });
     if (error) {
       const msg = error.message || error.details || '';
       const code = error.code || '';
       if (code === '23505' || msg.includes('duplicate') || msg.includes('unique') || msg.includes('already exists') || msg.includes('conflict')) {
-        return { success: false, message: "You're already subscribed!" };
+        return { success: false, message: 'This email has a unique constraint in the database. Drop the UNIQUE index on email_reminders.email to allow up to 3 sign-ups per email.' };
       }
       return { success: false, message: 'Something went wrong.' };
     }
@@ -69,7 +80,7 @@ export async function saveEmail(email) {
       await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-email`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` },
-        body: JSON.stringify({ action: 'confirmation', email, secret: import.meta.env.VITE_FUNCTION_SECRET })
+        body: JSON.stringify({ action: 'confirmation', email, attempt, secret: import.meta.env.VITE_FUNCTION_SECRET })
       });
     } catch (error) {
       if (typeof mixpanel !== 'undefined') mixpanel.track('app_error', { source: 'sendConfirmationEmail', message: error instanceof Error ? error.message : String(error), timestamp: new Date().toISOString() });

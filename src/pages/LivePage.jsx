@@ -1,8 +1,7 @@
 import { useEffect } from 'react';
-import { g, ff, TEAL, sec, label, h2s, gradH, EVENT_BG, ICON_BUTTERFLY } from '../constants/index.js';
+import { g, ff, TEAL, sec, label, h2s, gradH, EVENT_BG } from '../constants/index.js';
 import { Reveal, Btn } from '../components/ui/index.js';
-import { Globe, CountdownTimer, TimelineViz } from '../components/index.js';
-import { relT } from '../utils/helpers.js';
+import { CountdownTimer, TimelineViz, LiveFeed } from '../components/index.js';
 import { track } from '../utils/track.js';
 
 export default function LivePage({ entries, setTlPopup, onShare, handCount, leaderboardData }) {
@@ -46,49 +45,7 @@ export default function LivePage({ entries, setTlPopup, onShare, handCount, lead
       </div></section>
 
       {/* LIVE ENTRIES */}
-      <section style={sec("#fff")}>
-        <Reveal><p style={label}>Live</p><h2 style={{ ...h2s, fontSize: "clamp(1.6rem,4vw,2.4rem)", marginBottom: 4 }}>Hands raised worldwide.</h2><p style={{ fontSize: 14, color: g.t4, marginBottom: 28 }}>{(handCount || entries.length).toLocaleString()} participants</p></Reveal>
-        <Reveal delay={0.1}><div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 28, maxWidth: 640, margin: "0 auto", alignItems: "start" }}>
-          <Globe entries={entries} />
-          <div style={{ flex: "1 1 180px", maxWidth: 240, textAlign: "left" }}>
-            {entries.slice(0, 8).map(e => (
-              <div key={e.id} style={{ display: "flex", alignItems: "center", gap: 8, padding: "5px 0" }}>
-                <img src={ICON_BUTTERFLY} alt="" style={{ width: 11, height: 11 }} />
-                <span style={{ fontSize: 13, fontWeight: 500, flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{e.city ? e.city + ", " : ""}{e.country}</span>
-                <span style={{ fontSize: 11, color: g.t4 }}>{relT(e.createdAt)}</span>
-              </div>
-            ))}
-          </div>
-        </div></Reveal>
-        {/* Leaderboard */}
-        {leaderboardData && (leaderboardData.countries?.length > 0 || leaderboardData.cities?.length > 0) && (
-          <Reveal delay={0.15}><div style={{ display: "flex", gap: 20, flexWrap: "wrap", justifyContent: "center", maxWidth: 640, margin: "28px auto 0" }}>
-            {leaderboardData.countries?.length > 0 && (
-              <div style={{ flex: "1 1 200px", maxWidth: 280, textAlign: "left" }}>
-                <p style={{ fontSize: 12, fontWeight: 600, color: g.t4, letterSpacing: ".06em", textTransform: "uppercase", marginBottom: 10 }}>Top Countries</p>
-                {leaderboardData.countries.slice(0, 5).map((c, i) => (
-                  <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", borderBottom: i < 4 ? "1px solid #f0f0f0" : "none" }}>
-                    <span style={{ fontSize: 14, fontWeight: 500 }}>{c.country_code}</span>
-                    <span style={{ fontSize: 13, color: TEAL, fontWeight: 600 }}>{c.count?.toLocaleString()}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-            {leaderboardData.cities?.length > 0 && (
-              <div style={{ flex: "1 1 200px", maxWidth: 280, textAlign: "left" }}>
-                <p style={{ fontSize: 12, fontWeight: 600, color: g.t4, letterSpacing: ".06em", textTransform: "uppercase", marginBottom: 10 }}>Top Cities</p>
-                {leaderboardData.cities.slice(0, 5).map((c, i) => (
-                  <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", borderBottom: i < 4 ? "1px solid #f0f0f0" : "none" }}>
-                    <span style={{ fontSize: 14, fontWeight: 500 }}>{c.city}</span>
-                    <span style={{ fontSize: 13, color: TEAL, fontWeight: 600 }}>{c.count?.toLocaleString()}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div></Reveal>
-        )}
-        <Reveal delay={0.2}><div style={{ marginTop: 24 }}><Btn primary onClick={onShare} style={{ fontSize: 15 }}>Share Your Moment</Btn></div></Reveal>
-      </section>
+      <LiveFeed entries={entries} handCount={handCount} leaderboardData={leaderboardData} onShare={onShare} />
 
       {/* CTA */}
       <section style={sec("#f5f5f7")}><Reveal><div style={{ maxWidth: 520, margin: "0 auto" }}>

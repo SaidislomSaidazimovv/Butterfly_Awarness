@@ -157,7 +157,7 @@ Deno.serve(async (req) => {
 
   try {
     const body = await req.json();
-    const { secret, action, email } = body;
+    const { secret, action, email, attempt } = body;
 
     if (secret !== FUNCTION_SECRET) {
       return Response.json({ success: false, error: "Unauthorized" }, { status: 401, headers: corsHeaders });
@@ -190,11 +190,11 @@ Deno.serve(async (req) => {
     await supabase.from("rate_limits").insert({ ip: clientIp, action: "send_email" });
 
     if (action === "confirmation") {
-      const result = await sendEmail(
-        email,
-        "You're in — Butterfly Challenge reminder set 🦋",
-        confirmationHTML(email)
-      );
+      const n = Number(attempt) || 1;
+      const subject = n > 1
+        ? `Reminder #${n} — Butterfly Challenge 🦋`
+        : "You're in — Butterfly Challenge reminder set 🦋";
+      const result = await sendEmail(email, subject, confirmationHTML(email));
       if (result.success) {
         await supabase
           .from("email_reminders")
