@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback, useRef, lazy, Suspense } from "react";
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import confetti from 'canvas-confetti';
-import { TEAL, ff, g } from './constants/index.js';
+import { TEAL, ff, g, HAND_RAISE_BOOST } from './constants/index.js';
+import { SYNTHETIC_COUNTRIES, SYNTHETIC_CITIES, SYNTHETIC_PARTICIPANTS } from './data/syntheticHands.js';
 import { TRUST } from './data/index.js';
 import { track } from './utils/track.js';
 import { supabase, saveHandRaise, saveEmail, getCountryCode, getLocationData } from './utils/supabase.js';
@@ -20,7 +21,7 @@ const LivePage = lazy(() => import('./pages/LivePage.jsx'));
 
 export default function App() {
   const queryClient = useQueryClient();
-  const { entries, addEntry } = useLiveHands();
+  const { entries } = useLiveHands();
   const { toast, show } = useToast();
   const cp = useCallback(t => { navigator.clipboard.writeText(t).then(() => show("Copied")); }, [show]);
   const { page, navigate } = usePathRouter();
@@ -93,14 +94,25 @@ export default function App() {
         supabase.rpc('get_city_leaderboard'),
         supabase.rpc('get_top_participants'),
       ]);
+      const mergeByKey = (real, syn, key) => {
+        const map = new Map();
+        for (const row of syn) map.set(row[key], { ...row });
+        for (const row of real || []) {
+          const existing = map.get(row[key]);
+          if (existing) existing.count = (existing.count || 0) + (row.count || 0);
+          else map.set(row[key], { ...row });
+        }
+        return [...map.values()].sort((a, b) => (b.count || 0) - (a.count || 0));
+      };
+      const realParticipants = (participants.data || []).map(row => ({
+        name: row.display_name || 'User',
+        avatar: row.avatar_url,
+        count: row.share_count,
+      }));
       return {
-        countries: countries.data || [],
-        cities: cities.data || [],
-        participants: (participants.data || []).map(row => ({
-          name: row.display_name || 'User',
-          avatar: row.avatar_url,
-          count: row.share_count,
-        })),
+        countries: mergeByKey(countries.data, SYNTHETIC_COUNTRIES, 'country_code'),
+        cities: mergeByKey(cities.data, SYNTHETIC_CITIES, 'city'),
+        participants: [...realParticipants, ...SYNTHETIC_PARTICIPANTS].sort((a, b) => (b.count || 0) - (a.count || 0)),
       };
     },
     staleTime: 30 * 1000,
@@ -575,7 +587,7 @@ export default function App() {
 
       {/* Popups */}
       <Popup open={joinO} onClose={() => sJO(false)}><h2 style={{ fontSize: 20, fontWeight: 600, marginBottom: 14 }}>Join the Challenge</h2><JoinC onDone={() => { sJO(false); setTimeout(() => sSO(true), 250); }} /></Popup>
-      <Popup open={shareO} onClose={() => sSO(false)}><h2 style={{ fontSize: 20, fontWeight: 600, marginBottom: 14 }}>Share your Butterfly</h2><ShareC addEntry={addEntry} cp={cp} onShare={saveShareAction} onEmailSubmit={handleEmailSubmit} /></Popup>
+      <Popup open={shareO} onClose={() => sSO(false)}><h2 style={{ fontSize: 20, fontWeight: 600, marginBottom: 14 }}>Share your Butterfly</h2><ShareC cp={cp} onShare={saveShareAction} onEmailSubmit={handleEmailSubmit} /></Popup>
       <Popup open={remindO} onClose={() => setRemindO(false)}><ReminderC onDone={() => setRemindO(false)} onEmailSubmit={handleEmailSubmit} /></Popup>
       <Popup open={!!roleP} onClose={() => setRP(null)}>{roleP && <div style={{ animation: "fadeUp .35s cubic-bezier(.16,1,.3,1)" }}><img src={roleP.icon} alt={roleP.name} style={{ width: 44, height: 44, marginBottom: 10 }} /><p style={{ color: TEAL, fontWeight: 600, fontSize: 12, letterSpacing: ".1em", textTransform: "uppercase", marginBottom: 6 }}>{roleP.word}</p><h2 style={{ fontSize: 24, fontWeight: 600, marginBottom: 8 }}>{roleP.name}</h2><p style={{ fontSize: 16, color: g.t2, lineHeight: 1.65, marginBottom: 20 }}>{roleP.detail}</p><Btn primary onClick={() => { setRP(null); sJO(true); }} style={{ fontSize: 15 }}>Join the Challenge</Btn></div>}</Popup>
       <Popup open={!!alP} onClose={() => setAP(null)}>{alP && <div style={{ animation: "fadeUp .35s cubic-bezier(.16,1,.3,1)" }}><img src={alP.icon} alt={alP.name} style={{ width: 44, height: 44, marginBottom: 10, filter: alP.tint }} /><h2 style={{ fontSize: 22, fontWeight: 600, marginBottom: 4 }}>{alP.name}</h2><p style={{ fontSize: 15, color: TEAL, fontWeight: 500, marginBottom: 14 }}>{alP.line}</p><p style={{ fontSize: 15, color: g.t2, lineHeight: 1.65, marginBottom: 18 }}>{alP.brief}</p><div style={{ padding: "12px 14px", background: g.bg, borderRadius: 10, marginBottom: 18 }}><p style={{ fontSize: 13, color: g.t2 }}><strong>Non-negotiable:</strong> Safety before scale.</p></div><Btn primary onClick={() => window.open("mailto:partners@onehumanity.org?subject=Founding Partner Inquiry — " + alP.name)} style={{ fontSize: 15 }}>Become a founding partner</Btn></div>}</Popup>
@@ -614,12 +626,12 @@ export default function App() {
       />
       
       {/* Page Routing */}
-      {page === '' && <HomePage onJoin={() => sJO(true)} onShare={() => sSO(true)} onRemind={() => setRemindO(true)} onDidIt={handleIDidIt} showPlusOne={showPlusOne} onUgcOpen={openUgcModal} communityData={communityData} setRP={setRP} setAP={setAP} setTlPopup={setTlPopup} entries={entries} handCount={countData} leaderboardData={leaderboardData} />}
+      {page === '' && <HomePage onJoin={() => sJO(true)} onShare={() => sSO(true)} onRemind={() => setRemindO(true)} onDidIt={handleIDidIt} showPlusOne={showPlusOne} onUgcOpen={openUgcModal} communityData={communityData} setRP={setRP} setAP={setAP} setTlPopup={setTlPopup} entries={entries} handCount={countData + HAND_RAISE_BOOST} leaderboardData={leaderboardData} />}
       <Suspense fallback={<div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "60vh", color: TEAL, fontSize: "2rem" }}>🦋</div>}>
         {page === 'story' && <StoryPage navigate={navigate} />}
         {page === 'science' && <SciencePage navigate={navigate} />}
         {page === 'alliance' && <AlliancePage setRP={setRP} setAP={setAP} onTrust={() => setTO(true)} navigate={navigate} />}
-        {page === 'live' && <LivePage entries={entries} setTlPopup={setTlPopup} onShare={() => sSO(true)} handCount={countData} leaderboardData={leaderboardData} />}
+        {page === 'live' && <LivePage entries={entries} setTlPopup={setTlPopup} onShare={() => sSO(true)} handCount={countData + HAND_RAISE_BOOST} leaderboardData={leaderboardData} />}
       </Suspense>
       
       {/* Footer */}
