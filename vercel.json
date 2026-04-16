@@ -37,7 +37,13 @@
       ]
     },
     {
-      "source": "/(.*\\.(svg|webp|jpg|jpeg|png|ico|woff2))",
+      "source": "/:file.svg",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/:file.webp",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
       ]
