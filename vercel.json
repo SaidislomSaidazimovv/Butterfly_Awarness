@@ -1,4 +1,11 @@
 {
+  "redirects": [
+    {
+      "source": "/:path*",
+      "destination": "https://butterflychallenge.net/:path*",
+      "permanent": false
+    }
+  ],
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ],
