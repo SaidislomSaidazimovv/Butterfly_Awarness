@@ -10,7 +10,7 @@ import { useToast } from './hooks/useToast.js';
 import { usePathRouter } from './hooks/usePathRouter.js';
 import { useLiveHands } from './hooks/useLiveHands.js';
 import { Toast, Popup, Btn } from './components/ui/index.js';
-import { JoinC, ShareC, ReminderC, SupportPanel, Nav, Footer, AuthPopup, UgcPopup } from './components/index.js';
+import { JoinC, ShareC, ReminderC, SupportPanel, Nav, Footer, AuthPopup, UgcPopup, WorkingProgress } from './components/index.js';
 import { HomePage } from './pages/index.js';
 
 const StoryPage = lazy(() => import('./pages/StoryPage.jsx'));
@@ -626,7 +626,8 @@ export default function App() {
       />
       
       {/* Page Routing */}
-      {page === '' && <HomePage onJoin={() => sJO(true)} onShare={() => sSO(true)} onRemind={() => setRemindO(true)} onDidIt={handleIDidIt} showPlusOne={showPlusOne} onUgcOpen={openUgcModal} communityData={communityData} setRP={setRP} setAP={setAP} setTlPopup={setTlPopup} entries={entries} handCount={countData + HAND_RAISE_BOOST} leaderboardData={leaderboardData} />}
+      {page === '' && <WorkingProgress />}
+      {/* {page === '' && <HomePage onJoin={() => sJO(true)} onShare={() => sSO(true)} onRemind={() => setRemindO(true)} onDidIt={handleIDidIt} showPlusOne={showPlusOne} onUgcOpen={openUgcModal} communityData={communityData} setRP={setRP} setAP={setAP} setTlPopup={setTlPopup} entries={entries} handCount={countData + HAND_RAISE_BOOST} leaderboardData={leaderboardData} />} */}
       <Suspense fallback={<div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "60vh", color: TEAL, fontSize: "2rem" }}>🦋</div>}>
         {page === 'story' && <StoryPage navigate={navigate} />}
         {page === 'science' && <SciencePage navigate={navigate} />}
