@@ -626,8 +626,8 @@ export default function App() {
       />
       
       {/* Page Routing */}
-      {page === '' && <WorkingProgress />}
-      {/* {page === '' && <HomePage onJoin={() => sJO(true)} onShare={() => sSO(true)} onRemind={() => setRemindO(true)} onDidIt={handleIDidIt} showPlusOne={showPlusOne} onUgcOpen={openUgcModal} communityData={communityData} setRP={setRP} setAP={setAP} setTlPopup={setTlPopup} entries={entries} handCount={countData + HAND_RAISE_BOOST} leaderboardData={leaderboardData} />} */}
+      {/* {page === '' && <WorkingProgress />} */}
+      {page === '' && <HomePage onJoin={() => sJO(true)} onShare={() => sSO(true)} onRemind={() => setRemindO(true)} onDidIt={handleIDidIt} showPlusOne={showPlusOne} onUgcOpen={openUgcModal} communityData={communityData} setRP={setRP} setAP={setAP} setTlPopup={setTlPopup} entries={entries} handCount={countData + HAND_RAISE_BOOST} leaderboardData={leaderboardData} />}
       <Suspense fallback={<div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "60vh", color: TEAL, fontSize: "2rem" }}>🦋</div>}>
         {page === 'story' && <StoryPage navigate={navigate} />}
         {page === 'science' && <SciencePage navigate={navigate} />}
