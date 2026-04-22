@@ -1,0 +1,459 @@
+{
+  "nav": {
+    "story": "Histoire",
+    "science": "Science",
+    "alliance": "Alliance",
+    "live": "Direct",
+    "safeExit": "Sortie rapide",
+    "getSupport": "Obtenir de l'aide",
+    "takeTheChallenge": "Relevez le défi",
+    "join": "Rejoindre",
+    "signIn": "Se connecter",
+    "signOut": "Se déconnecter",
+    "userMenu": "Menu utilisateur",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu"
+  },
+  "home": {
+    "heroAlt": "Deux personnes faisant le Signe du Papillon",
+    "label": "Défi Papillon",
+    "headline": "Levez un milliard de mains.",
+    "subheadPart1": "Un geste de 60 secondes pour la santé mentale.",
+    "subheadPart2": "Ressentez-le. Faites-le. Partagez-le.",
+    "joinCTA": "Relevez le défi",
+    "iDidIt": "Je l'ai fait",
+    "handsRaised": "{{count}} mains levées",
+    "handsRaisedAria": "{{count}} mains levées dans le monde",
+    "highlightsTitle": "Les points forts.",
+    "communityLabel": "De la communauté",
+    "communityTitle": "Ensemble.",
+    "communitySub": "Vraies personnes. Vraies histoires.",
+    "communityEmpty": "Soyez le premier à partager votre moment papillon.",
+    "shareStory": "Partagez votre histoire",
+    "signLabel": "Le Signe",
+    "signTitle": "Deux mains. Un signal.",
+    "signSub": "Le premier geste universel pour la santé mentale. Essayez-le.",
+    "howLabel": "Comment ça marche",
+    "howTitle": "Trois étapes. Une minute.",
+    "effectLabel": "L'effet papillon",
+    "effectTitle": "Voyez comment 1 devient 1 milliard.",
+    "eventLabel": "Déjà en mouvement",
+    "eventTitle": "30 avril. Miami.",
+    "eventSub": "Là où tout commence.",
+    "eventFounding": "Événement fondateur",
+    "eventName": "Une Nuit Pour Une Humanité",
+    "eventVenue": "Queen Miami Beach · Week-end du Grand Prix de Miami",
+    "eventReveal": "Le Hero Act — révélé en direct.",
+    "eventDate": "30 avril 2026",
+    "eventCity": "Miami, FL",
+    "viewSchedule": "Voir le programme complet",
+    "faqTitle": "Questions.",
+    "ctaAlt": "Des centaines de personnes faisant le Signe du Papillon",
+    "ctaHeadline": "60 secondes.",
+    "ctaSub": "Soyez la personne qui s'est présentée.",
+    "remindMe": "Rappelez-moi le 1er mai"
+  },
+  "live": {
+    "label": "Direct",
+    "title": "Mains levées dans le monde.",
+    "participants": "{{count}} participants",
+    "topCountries": "Meilleurs pays",
+    "topCities": "Meilleures villes",
+    "topParticipants": "Meilleurs participants",
+    "shareMoment": "Partagez votre moment"
+  },
+  "footer": {
+    "tagline": "Une initiative de One Humanity Foundation · 501(c)(3).",
+    "manyFlagsTitle": "Une humanité. Plusieurs drapeaux. Un papillon.",
+    "manyFlagsSub": "Un symbole partagé par les nations, cultures et communautés.",
+    "resources": "Ressources",
+    "forOrgs": "Pour les organisations",
+    "forSchools": "Pour les écoles",
+    "forTeams": "Pour les équipes",
+    "forBrands": "Pour les marques",
+    "butterflyProtocol": "Protocole Papillon",
+    "needHelp": "Besoin d'aide ?",
+    "us988": "USA : Appelez ou envoyez un SMS au 988",
+    "us988Sub": "Soutien gratuit et confidentiel 24h/24.",
+    "getSupportNow": "Obtenir de l'aide maintenant",
+    "privacy": "Confidentialité",
+    "terms": "Conditions",
+    "accessibility": "Accessibilité",
+    "about": "À propos",
+    "disclaimer": "Le Défi Papillon est un geste social, pas un substitut aux soins professionnels. Si quelqu'un que vous connaissez est en danger, appelez le 911 ou votre numéro d'urgence local.",
+    "copyright": "© 2026 One Humanity Foundation. Tous droits réservés."
+  },
+  "language": {
+    "label": "Langue"
+  },
+  "faq": {
+    "what": {
+      "q": "Qu'est-ce que le Défi Papillon ?",
+      "a": "Un acte de connexion de 60 secondes. Faites le signe, dites le message, défiez 3 autres personnes. Gratuit pour toujours."
+    },
+    "why": {
+      "q": "Pourquoi un papillon ?",
+      "a": "Le symbole le plus universel de la transformation. Déjà reconnu en ASL. Aucune traduction nécessaire."
+    },
+    "donate": {
+      "q": "Dois-je faire un don ?",
+      "a": "Non. Le défi est gratuit pour tout le monde, partout, pour toujours."
+    },
+    "therapy": {
+      "q": "Est-ce une thérapie ?",
+      "a": "Non. C'est un signal. Les ressources de crise sont sur cette page."
+    },
+    "month": {
+      "q": "Qu'est-ce que le Mois du Papillon ?",
+      "a": "Mai, chaque année. Le mois reconnu mondialement pour la santé mentale."
+    },
+    "who": {
+      "q": "Qui est derrière cela ?",
+      "a": "ONE HUMANITY Foundation — 501(c)(3) américain. 100 % pour la santé mentale."
+    }
+  },
+  "highlights": {
+    "card1": { "title": "Près d'un milliard de personnes vivent avec un trouble de santé mentale.", "sub": "OMS, 2025" },
+    "card2": { "title": "Il n'a jamais existé de geste universel qui dise : Je te vois et je me soucie.", "sub": "Jusqu'à maintenant." },
+    "card3": { "title": "Mai est le Mois du Papillon. Le mois mondialement reconnu pour la santé mentale.", "sub": "À partir de 2026." },
+    "card4": { "title": "Un devient trois, devient neuf, devient un milliard.", "sub": "Levez 3 de plus." }
+  },
+  "stepTabs": {
+    "step1": {
+      "num": "01", "title": "Relevez le défi",
+      "heading": "Faites le signe. Filmez-le.",
+      "body": "Ouvrez votre caméra. Tournez-la vers vous. Faites le Signe du Papillon — mains sur le cœur, ouvertes comme des ailes. Pas de filtre. Pas de production. Juste vous, présent pour quelqu'un.",
+      "tip": "Pensez à un nom. Vous n'avez pas besoin de le dire à voix haute."
+    },
+    "step2": {
+      "num": "02", "title": "Montrez l'amour",
+      "heading": "Dites son nom.",
+      "body": "Regardez la caméra et dites : « Je te vois. Je me soucie. Tu n'es pas seul. » Ou : « Je suis là pour toi, [nom]. » Dites son nom à voix haute. C'est ce qui le rend réel.",
+      "tip": "Ce n'est pas un script. Dites ce qui est vrai."
+    },
+    "step3": {
+      "num": "03", "title": "Levez 3 de plus",
+      "heading": "Identifiez 3 personnes. Transmettez.",
+      "body": "Nominez 3 personnes qui comptent pour vous. Donnez-leur 24 heures. Un devient trois, devient neuf, devient un milliard. C'est l'effet papillon.",
+      "tip": "Ils n'ont pas besoin d'abonnés. Ils ont besoin de penser à une personne."
+    },
+    "nextStep": "Étape suivante ›",
+    "ready": "Je suis prêt — rejoindre"
+  },
+  "signBuilder": {
+    "intro": {
+      "title": "Apprenez le Signe du Papillon",
+      "sub": "3 étapes. 10 secondes. Sans mots.",
+      "start": "Essayez-le"
+    },
+    "step1": { "instruction": "Placez vos deux mains sur votre cœur.", "detail": "Paumes à plat contre votre poitrine.", "alt": "Mains sur le cœur" },
+    "step2": { "instruction": "Croisez vos poignets.", "detail": "Droit sur gauche, pouces accrochés.", "alt": "Poignets croisés" },
+    "step3": { "instruction": "Ouvrez comme des ailes.", "detail": "Écartez bien les doigts. C'est le Signe du Papillon.", "alt": "Mains ouvertes comme des ailes" },
+    "progress": "Étape {{n}} sur 3",
+    "next": "Suivant",
+    "complete": "Terminer",
+    "done": {
+      "label": "Le Signe du Papillon",
+      "line1": "Je te vois.",
+      "line2": "Je me soucie.",
+      "line3": "Tu n'es pas seul.",
+      "caption": "Pas de langue. Pas de diagnostic. Pas de barrière. Juste deux mains.",
+      "got": "Compris",
+      "again": "Réessayer"
+    }
+  },
+  "chain": {
+    "level1": { "label": "Vous", "msg": "Une personne. Un geste." },
+    "level2": { "label": "3", "msg": "Vous levez 3 personnes." },
+    "level3": { "label": "9", "msg": "Chacun en lève 3 de plus." },
+    "level4": { "label": "27", "msg": "Ça se propage déjà." },
+    "level5": { "label": "81", "msg": "Quatre générations." },
+    "level6": { "label": "243", "msg": "Cinq générations. Maintenant, regardez." },
+    "first": "Levez 3",
+    "next": "Génération suivante",
+    "keepGoing": "Continuer →",
+    "growing": "Ça grandit...",
+    "stillGoing": "Ça continue...",
+    "almostThere": "On y est presque...",
+    "done": {
+      "number": "1 000 000 000",
+      "title": "Un milliard de mains.",
+      "subLine1": "20 générations. À partir d'une personne.",
+      "subLine2": "À partir de vous.",
+      "cta": "Soyez cette personne",
+      "again": "Revoir"
+    }
+  },
+  "popups": {
+    "role": {
+      "creators": { "name": "Créateurs", "word": "Ignition", "line": "Vous avez la portée.", "detail": "Quand un créateur fait le signe, son audience ne voit pas une campagne. Elle voit quelqu'un en qui elle a confiance se montrer présent. Nous invitons un groupe fondateur à allumer la culture. Une vidéo. Trois nominations. Pour toujours." },
+      "celebrities": { "name": "Célébrités", "word": "Conséquence", "line": "Une voix en laquelle le monde a confiance.", "detail": "Quand une célébrité fait le signe, le monde ne voit pas une promotion. Il voit une personne disant quelque chose de vrai. Pas des ambassadeurs — des personnes qui ont choisi d'être présentes quand c'était important." },
+      "athletes": { "name": "Athlètes", "word": "Force", "line": "Être présent, c'est la force.", "detail": "Quand un athlète fait le signe, les gens voient le courage. Le sport est là où l'humanité traite ses émotions les plus difficiles. Le stade est là où les gens ressentent ensemble." },
+      "music": { "name": "Musique", "word": "Son", "line": "Avant le langage, il y a le son.", "detail": "La musique atteint là où les mots s'arrêtent. Un milliard de personnes portent quelque chose en silence. Ce silence n'a jamais eu de son. Jusqu'à maintenant." },
+      "dance": { "name": "Danse", "word": "Mouvement", "line": "Un corps avant un mot.", "detail": "La danse transforme l'émotion en mouvement. Chaque mouvement qui a vécu dans le corps a duré plus longtemps que chaque mouvement qui n'a vécu que dans l'esprit." },
+      "film": { "name": "Cinéma", "word": "Histoire", "line": "Une histoire avant la mémoire.", "detail": "Le cinéma façonne la façon dont le monde voit la culture. 30 avril. Miami. L'histoire commence là. Une histoire racontée honnêtement." },
+      "fashion": { "name": "Mode", "word": "Déclaration", "line": "Une déclaration avant un discours.", "detail": "Ce que les gens portent est ce qu'ils signifient. Quand la mode porte le papillon, le mouvement se porte dans le monde." },
+      "art": { "name": "Art", "word": "Image", "line": "Une image avant l'explication.", "detail": "L'art rend l'invisible impossible à ignorer. Les premières œuvres ne décorent pas le mouvement — elles définissent la façon dont le monde s'en souviendra." },
+      "faith": { "name": "Foi", "word": "Confiance", "line": "La confiance avant la portée.", "detail": "La foi et la communauté vont là où aucune campagne ne peut aller — dans les foyers, les familles, le deuil, la vie ordinaire. Un signal que chacun peut faire." },
+      "gaming": { "name": "Jeu vidéo", "word": "Monde", "line": "3,6 milliards de joueurs.", "detail": "Le jeu vidéo, c'est l'appartenance. Équipes, escouades, missions partagées. Le papillon est un signal qui attend de devenir une mission." },
+      "podcast": { "name": "Podcast", "word": "Voix", "line": "Trop personnel pour le fil.", "detail": "La chose la plus puissante qu'un animateur puisse faire n'est pas d'expliquer le mouvement — c'est de dire : j'ai fait le signe. J'ai pensé à quelqu'un que j'aime." },
+      "everyone": { "name": "Tout le monde", "word": "Humanité", "line": "Il vous faut une personne.", "detail": "Vous n'avez pas besoin d'abonnés ni d'une caméra. Vous avez besoin d'un nom dans votre esprit et de soixante secondes de courage." },
+      "join": "Relevez le défi"
+    },
+    "alliance": {
+      "platforms": { "name": "Plateformes", "line": "Comment un mouvement voyage.", "brief": "TikTok, YouTube, Meta, Instagram, X. Mettez en avant le défi, activez les filtres du signe, les mécaniques de nomination. Bouton d'aide BOS avant le lancement." },
+      "care": { "name": "Soins", "line": "Rejoindre ceux qui se présentent déjà.", "brief": "Organisations de santé mentale, ONG, fondations. Vérifiées sur la Carte de Routage Humain. Le mouvement pointe vers les soins — jamais ne les remplace." },
+      "media": { "name": "Médias", "line": "Comment un mouvement est témoin.", "brief": "Diffuseurs, éditeurs, presse. Messages sûrs IASP dans chaque couverture. Accès le 30 avril." },
+      "business": { "name": "Entreprises", "line": "Comment cela devient la culture.", "brief": "Marques, employeurs, équipes RSE. Mois du Papillon dans votre calendrier. Pas de blanchiment émotionnel." },
+      "education": { "name": "Éducation", "line": "La prochaine génération.", "brief": "Écoles, universités, organisations de jeunesse. Aucun élève ne rencontre le défi sans un chemin vers un vrai soutien." },
+      "connectivity": { "name": "Connectivité", "line": "Chaque main.", "brief": "Opérateurs télécoms, SMS, écosystèmes d'appareils. La personne sans données peut trouver de l'aide. Toujours." },
+      "nonNegotiable": "Non négociable :",
+      "nonNegotiableText": "La sécurité avant l'échelle.",
+      "becomePartner": "Devenir partenaire fondateur"
+    },
+    "trust": {
+      "title": "Construit pour être digne de confiance.",
+      "items": {
+        "nonprofit": { "t": "Organisme à but non lucratif 501(c)(3)", "d": "Gouvernance indépendante. Vérifiable dès le Jour 1." },
+        "safety": { "t": "Responsable de la sécurité", "d": "Veto unilatéral. Ne peut être annulé." },
+        "transparency": { "t": "Transparence radicale", "d": "Chaque semaine : Entrées → Sorties → Programmes → Résultats." },
+        "editorial": { "t": "Indépendance éditoriale", "d": "Aucun sponsor n'a de contrôle éditorial. Jamais." },
+        "dignity": { "t": "La dignité d'abord", "d": "Non diagnostique. Messages sûrs IASP." },
+        "free": { "t": "Gratuit pour toujours", "d": "Ouvert à tous, partout." }
+      }
+    },
+    "timeline": {
+      "upNext": "Prochain",
+      "apr30": { "t": "Une Nuit Pour Une Humanité", "s": "Queen Miami Beach · Événement fondateur", "detail": "La nuit qui lance tout. Le Hero Act est révélé en direct. Les partenaires fondateurs sont reconnus. Le Défi Papillon est lancé le lendemain matin. Week-end du Grand Prix de Miami — le monde regarde déjà." },
+      "may1": { "t": "Le Mois du Papillon commence", "s": "Le défi devient mondial", "detail": "Le 1er mai est le Jour Un. Le défi est activé dans le monde entier. Les créateurs se mobilisent. Chaque plateforme, chaque langue, chaque pays. Le papillon commence à voler." },
+      "mayJun": { "t": "Les surfaces culturelles s'activent", "s": "Sport · Musique · Cinéma · Mode", "detail": "Le Signe du Papillon entre dans les stades, les scènes, les défilés, les plateaux de cinéma. Chaque surface culturelle qui a accepté de porter le signal s'active pendant cette fenêtre." },
+      "jul19": { "t": "Finale de la Coupe du Monde FIFA", "s": "MetLife Stadium · 5 milliards de spectateurs", "detail": "Le plus grand moment d'audience unique de l'histoire humaine. Si le Signe du Papillon est visible ici, 5 milliards de personnes le voient en même temps. C'est l'objectif." },
+      "sep2026": { "t": "Assemblée générale de l'ONU", "s": "Semaine du Papillon · Mandat institutionnel", "detail": "Le mouvement devient institutionnel. Semaine du Papillon aux Nations Unies. La demande : reconnaître formellement mai comme Mois Mondial de la Santé Mentale avec le papillon comme symbole international." }
+    },
+    "join": {
+      "title": "Relevez le défi"
+    },
+    "share": {
+      "title": "Partagez votre Papillon"
+    }
+  },
+  "countdown": {
+    "days": "Jours",
+    "hours": "Heures",
+    "minutes": "Min",
+    "seconds": "Sec",
+    "happening": "C'est en cours maintenant."
+  },
+  "joinC": {
+    "step": "Étape {{n}}",
+    "step1": { "t": "Faites le signe", "d": "Mains sur le cœur. Ouvertes comme des ailes." },
+    "step2": { "t": "Dites le message" },
+    "step3": { "t": "Levez 3 de plus", "d": "Identifiez 3 personnes. 24 heures." },
+    "back": "Retour",
+    "next": "Suivant",
+    "doneShare": "Terminé — partager"
+  },
+  "reminderC": {
+    "heading": "Recevez un rappel pour le 1er mai",
+    "placeholder": "votre@email.com",
+    "button": "Rappelez-moi le 1er mai",
+    "disclaimer": "Pas de spam. Juste un rappel. Désabonnement à tout moment.",
+    "success": "Vous êtes sur la liste.",
+    "done": "Terminé"
+  },
+  "support": {
+    "title": "Obtenir de l'aide",
+    "sub": "Vous n'êtes pas seul. De l'aide est disponible 24h/24.",
+    "unitedStates": "États-Unis",
+    "lifeline": {
+      "name": "988 Ligne de suicide et crise",
+      "detail": "Appelez ou envoyez un SMS au 988 · Gratuit · 24h/24"
+    },
+    "textLine": {
+      "name": "Ligne de texte de crise",
+      "detail": "Envoyez HOME au 741741 · Gratuit · 24h/24"
+    },
+    "international": "Hors des États-Unis",
+    "selectCountry": "Sélectionnez votre pays",
+    "choose": "Choisir...",
+    "visitWebsite": "Visiter le site web →",
+    "findLocal": "Trouver des ressources locales",
+    "confidentialTitle": "Ce que vous partagez est votre choix.",
+    "confidentialBody": "Toutes les conversations avec les lignes de crise sont confidentielles."
+  },
+  "visualTimeline": {
+    "apr30": { "t": "Une Nuit Pour Une Humanité", "s": "L'événement fondateur. Hero Act révélé en direct. Queen Miami Beach." },
+    "may1": { "t": "Le Mois du Papillon commence", "s": "Le défi devient mondial. Les créateurs se mobilisent." },
+    "mayJun": { "t": "Les surfaces culturelles s'activent", "s": "Formule 1 · Festivals · Cinéma · Semaines de mode · Sports." },
+    "jul19": { "t": "Finale de la Coupe du Monde FIFA", "s": "MetLife Stadium. 5 milliards de spectateurs. Le signe va partout." },
+    "sep": { "t": "Assemblée générale de l'ONU", "s": "Semaine du Papillon. Mandat institutionnel. Le mouvement devient permanent." }
+  },
+  "shareC": {
+    "sub": "Partagez en 10 secondes.",
+    "copyLink": "Copier le lien",
+    "whatsapp": "WhatsApp",
+    "telegram": "Telegram",
+    "facebook": "Facebook",
+    "email": "E-mail",
+    "captionHint": "Copiez une légende pour Instagram & TikTok.",
+    "captions": {
+      "a": "Je fais le #DéfiPapillon. [Nom], je te vois. Je me soucie. Tu n'es pas seul. Je lève 3 de plus : @__ @__ @__",
+      "b": "Un check-in de 60 secondes. [Nom], je suis là. #DéfiPapillon Je lève 3 : @__ @__ @__",
+      "c": "Si tu portes quelque chose en silence : Je te vois. Je me soucie. Tu n'es pas seul. #DéfiPapillon"
+    },
+    "copy": "Copier",
+    "copied": "Copié",
+    "remindHeading": "Recevez un rappel pour le 1er mai",
+    "remindBtn": "Rappelez-moi",
+    "remindSuccess": "Vous êtes sur la liste !"
+  },
+  "livePage": {
+    "heroTitle": "30 avril. Queen Miami Beach.",
+    "heroSub": "L'événement fondateur. Le moment où tout commence.",
+    "scheduleLabel": "Ce qui se passe",
+    "scheduleTitle": "Le programme complet.",
+    "foundingEvent": "Événement fondateur",
+    "eventName": "Une Nuit Pour Une Humanité",
+    "eventVenue": "Queen Miami Beach · Week-end du Grand Prix de Miami",
+    "eventReveal": "Le Hero Act — révélé en direct.",
+    "eventDate": "30 avril 2026",
+    "eventCity": "Miami, FL",
+    "ctaTitle": "Faites partie de ce moment.",
+    "ctaSub": "Rejoignez l'événement fondateur. Partagez votre papillon.",
+    "ctaBtn": "Partagez votre moment"
+  },
+  "story": {
+    "heroTitle": "D'où cela vient.",
+    "heroSub": "D'un moment de crise en 1998 à un mouvement mondial en 2026.",
+    "origin": {
+      "label": "L'origine",
+      "title": "1998 · Ouragan Pauline",
+      "imgAlt": "Lucina Artigas guidant les survivants à travers le câlin papillon après l'ouragan Pauline",
+      "p1": "Lucina Artigas était thérapeute au Mexique lorsque l'ouragan Pauline a dévasté la côte. Après la tempête, des milliers de personnes — dont beaucoup d'enfants — vivaient un traumatisme psychologique sévère sans nulle part où aller.",
+      "p2": "Elle a créé un geste simple de stimulation bilatérale que quiconque pouvait faire sans thérapeute. Deux mains croisées sur la poitrine, tapotements alternés. Elle l'a appelé le câlin papillon."
+    },
+    "spread": {
+      "label": "Adoption mondiale",
+      "title": "2000–2024 · La diffusion",
+      "imgAlt": "Le câlin papillon se répandant mondialement",
+      "p": "Le câlin papillon a traversé les zones sinistrées, les camps de réfugiés et les centres de crise dans le monde entier. Il s'est intégré à la thérapie EMDR, aux protocoles des ONG, à la formation des premiers intervenants. Cela fonctionnait. C'était simple. C'était gratuit. Et cela ne nécessitait pas de permission."
+    },
+    "tipping": {
+      "label": "Le point de bascule",
+      "title": "Mai 2024 · Le moment",
+      "imgAlt": "Le câlin papillon démontré sur une scène mondiale",
+      "p": "Le Prince Harry a démontré le câlin papillon sur scène. Cela a été vu par des millions. Soudain, le geste n'était plus caché dans des articles cliniques. Il était visible. Il était réel. Et il appartenait à tout le monde."
+    },
+    "challenge": {
+      "label": "Ce moment",
+      "title": "Avril 2026 · Le défi",
+      "p": "Nous organisons le premier moment mondial coordonné. Une nuit. Un geste. La preuve visible que les soins de santé mentale sont un droit humain, pas un luxe. Que vous pouvez mener le changement sans permission."
+    },
+    "timeline": {
+      "label": "La chronologie",
+      "title": "Étapes clés."
+    },
+    "cta": {
+      "title": "Vous faites partie de cette histoire.",
+      "sub": "Cela a commencé avec une personne aidant une autre. Rejoignez le prochain chapitre.",
+      "join": "Relevez le défi",
+      "science": "Voir la science"
+    }
+  },
+  "science": {
+    "heroTitle": "Pourquoi ça marche.",
+    "heroSub": "La neuroscience derrière le câlin papillon — étayée par la recherche, utilisée par les thérapeutes du monde entier.",
+    "stats": {
+      "who": { "num": "OMS", "sub": "Traitement recommandé" },
+      "years": { "num": "30+", "sub": "Années de recherche" },
+      "countries": { "num": "100+", "sub": "Pays utilisant l'EMDR" }
+    },
+    "brain": {
+      "label": "Comment votre cerveau fonctionne",
+      "title": "Traverser la ligne médiane.",
+      "imgAlt": "Hémisphères cérébraux montrant la stimulation bilatérale",
+      "p1": "Lorsque vous faites le câlin papillon — stimulation alternée à travers la ligne médiane de votre corps — vous activez simultanément les deux hémisphères de votre cerveau. Votre côté gauche remarque le mouvement à droite. Votre côté droit remarque le mouvement à gauche.",
+      "p2": "Cette stimulation bilatérale est la façon dont votre cerveau traite et intègre les informations accablantes. C'est le même mécanisme qui se produit pendant le sommeil paradoxal, lorsque vos yeux bougent de côté à côté. Il aide votre système nerveux à traverser le stress."
+    },
+    "emdr": {
+      "label": "Fondation clinique",
+      "title": "Construit sur la science EMDR.",
+      "imgAlt": "Geste du câlin papillon avec ondes apaisantes",
+      "p1": "La Dre Francine Shapiro a développé la thérapie EMDR (Désensibilisation et Retraitement par les Mouvements Oculaires) à la fin des années 1980. Elle a découvert que les mouvements oculaires bilatéraux, combinés au traitement des souvenirs traumatiques, aidaient les gens à guérir du TSPT. Depuis, l'EMDR est devenu un traitement recommandé par l'OMS pour le stress post-traumatique.",
+      "p2": "Lucina Artigas a adapté cette science. Au lieu de mouvements oculaires guidés par un thérapeute, elle a créé une version auto-apaisante : deux mains, stimulation bilatérale, pas de thérapeute nécessaire. Le câlin papillon met la neuroscience clinique entre vos mains."
+    },
+    "neuro": {
+      "label": "La preuve",
+      "title": "Ce que montrent les scans cérébraux.",
+      "imgAlt": "Scan cérébral montrant l'activation du cortex préfrontal",
+      "p1": "Les études d'IRM fonctionnelle sur des personnes utilisant la stimulation bilatérale montrent une activation réduite de l'amygdale — la partie de votre cerveau qui déclenche la peur et l'anxiété. En même temps, l'activité augmente dans le cortex préfrontal, la partie qui vous aide à penser clairement, à prendre des décisions rationnelles et à vous sentir en sécurité.",
+      "p2": "En langage clair : le câlin papillon dit à votre système d'alarme de se calmer. Il ne fait pas disparaître la menace. Il aide votre cerveau à reconnaître que, en ce moment même, vous pouvez respirer."
+    },
+    "quote": {
+      "text": "Le câlin papillon n'est pas une thérapie. C'est ce que les humains font instinctivement quand quelqu'un souffre. Maintenant, nous savons pourquoi cela fonctionne.",
+      "attribution": "— Littérature de neuroscience clinique sur la stimulation bilatérale"
+    },
+    "disclaimer": {
+      "badge": "⚕️ Distinction importante",
+      "text": "Le câlin papillon est un outil d'ancrage, pas un substitut à la thérapie. Si vous luttez contre un traumatisme, une dépression ou des pensées suicidaires, parlez à un professionnel.",
+      "label": "Clarification importante",
+      "title": "Ce n'est pas une thérapie.",
+      "p1": "Le câlin papillon est fondé sur des preuves. Il est utilisé par les thérapeutes. Mais faire le geste n'est pas la même chose que la thérapie. C'est un outil. Un geste. Un moment où votre système nerveux peut trouver un peu plus de calme.",
+      "p2": "Mais pour les moments quotidiens où vous êtes stressé, submergé ou avez besoin de vous ancrer ? La science dit : essayez-le. Votre cerveau vous remerciera."
+    },
+    "cta": {
+      "title": "Prêt à l'essayer ?",
+      "sub": "Apprenez le geste. Relevez le défi. Partagez-le avec le monde.",
+      "learn": "Apprendre le signe",
+      "fullStory": "Histoire complète"
+    }
+  },
+  "alliancePage": {
+    "heroTitle": "Qui se présente.",
+    "heroSub": "Les leaders, partenaires et porteurs qui rendent cela réel.",
+    "rolesLabel": "Comment le monde se présente",
+    "rolesTitle": "Chaque rôle. Chaque alliance.",
+    "rolesSub": "Appuyez sur un rôle pour en savoir plus.",
+    "alliancesLabel": "Partenaires de l'alliance",
+    "alliancesTitle": "Un milliard de mains ont besoin d'une route.",
+    "alliancesSub": "Six catégories fondatrices. Appuyez pour voir le résumé.",
+    "trustLabel": "Pourquoi faire confiance",
+    "trustTitle": "Construit pour être digne de confiance.",
+    "trustSub": "Organisme à but non lucratif 501(c)(3) · 100 % à la santé mentale · Gratuit pour toujours",
+    "trustAlt": "Confiance et gouvernance",
+    "viewGovernance": "Voir la gouvernance",
+    "cultureTitle": "Construit par des personnes qui ont fait bouger la culture.",
+    "stats": {
+      "leaders": { "num": "1 000+", "label": "Leaders réunis", "sub": "Bel-Air 2024" },
+      "reach": { "num": "47M", "label": "Personnes atteintes", "sub": "110+ parutions médiatiques" },
+      "raised": { "num": "$220M", "label": "Collectés par le même mécanisme", "sub": "Ice Bucket Challenge 2014" }
+    },
+    "cultureFoundation": "One Humanity Foundation · 501(c)(3)",
+    "cultureRouted": "Dirigé vers le 988 — Ligne de suicide et crise",
+    "ourFoundation": "Notre fondation",
+    "orgsLabel": "Pour les lieux de travail, écoles et organisations",
+    "orgsTitle": "Apportez cela à votre communauté",
+    "orgs": {
+      "schools": { "title": "Pour les écoles", "desc": "Guides de classe, diapositives d'assemblée et ressources pour les parents. Conforme à COPPA." },
+      "teams": { "title": "Pour les équipes", "desc": "Briefings pour managers, modèles pour réunions générales et intégration EAP." },
+      "brands": { "title": "Pour les marques", "desc": "Lignes directrices de participation, kits de ressources et opportunités de partenariat." }
+    },
+    "learnMore": "En savoir plus",
+    "protocolTitle": "Le Protocole Papillon",
+    "protocolDesc": "Le geste enseigne la reconnaissance. Le Protocole Papillon enseigne la réponse. Un script gratuit de 30 secondes que vos managers peuvent déployer en une semaine. Conforme aux limites OSHA, ADA et HIPAA.",
+    "protocolBtn": "En savoir plus sur le protocole",
+    "ctaTitle": "Votre organisation peut mener.",
+    "ctaSub": "Rejoignez l'alliance. Façonnez le mouvement.",
+    "ctaBtn": "Rejoindre comme organisation"
+  },
+  "workingProgress": {
+    "label": "EN CONSTRUCTION",
+    "heading1": "Nous construisons",
+    "heading2": "Quelque chose de grand",
+    "typed": "Actuellement en construction — revenez bientôt.",
+    "systems": "chargement des systèmes"
+  },
+  "toast": {
+    "copied": "Copié"
+  }
+}

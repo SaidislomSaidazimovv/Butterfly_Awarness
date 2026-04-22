@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef, lazy, Suspense } from "react";
 import { useTranslation } from 'react-i18next';
+import { mapCountryToLang } from './i18n/index.js';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import confetti from 'canvas-confetti';
 import { TEAL, ff, g, HAND_RAISE_BOOST } from './constants/index.js';
@@ -21,8 +22,27 @@ const LivePage = lazy(() => import('./pages/LivePage.jsx'));
 
 
 export default function App() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const queryClient = useQueryClient();
+
+  // Auto-detect language from IP on first visit (no stored preference yet).
+  // The explicit LanguageSwitcher choice writes bc_lang, which takes priority.
+  useEffect(() => {
+    if (typeof localStorage === 'undefined') return;
+    if (localStorage.getItem('bc_lang')) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const loc = await getLocationData();
+        if (cancelled) return;
+        const detected = mapCountryToLang(loc.country);
+        if (detected && detected !== i18n.language) {
+          await i18n.changeLanguage(detected);
+        }
+      } catch {}
+    })();
+    return () => { cancelled = true; };
+  }, [i18n]);
   const { entries } = useLiveHands();
   const { toast, show } = useToast();
   const cp = useCallback(text => { navigator.clipboard.writeText(text).then(() => show(t('toast.copied'))); }, [show, t]);
