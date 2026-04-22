@@ -5,6 +5,7 @@ import * as Sentry from "@sentry/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import "./index.css";
+import "./i18n";
 import App from "./App.jsx";
 
 Sentry.init({

@@ -1,9 +1,11 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { g, ff } from '../constants/index.js';
 import { HL_CARDS } from '../data/index.js';
 import { Reveal } from './ui/index.js';
 
 export function HighlightCarousel() {
+  const { t } = useTranslation();
   const trackRef = useRef(null);
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(true);
@@ -88,11 +90,11 @@ export function HighlightCarousel() {
             display: "flex", flexDirection: "column",
             boxShadow: "0 1px 4px rgba(0,0,0,.04)",
           }}>
-            <p style={{ fontSize: 18, fontWeight: 600, color: g.t1, lineHeight: 1.35, letterSpacing: "-.01em" }}>{c.title}</p>
+            <p style={{ fontSize: 18, fontWeight: 600, color: g.t1, lineHeight: 1.35, letterSpacing: "-.01em" }}>{t(`highlights.${c.id}.title`)}</p>
             <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "8px 0" }}>
               <img src={c.img} alt="" loading={i === 0 ? "eager" : "lazy"} decoding="async" style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }} />
             </div>
-            <p style={{ fontSize: 14, color: g.t1, opacity: .5, fontWeight: 500 }}>{c.sub}</p>
+            <p style={{ fontSize: 14, color: g.t1, opacity: .5, fontWeight: 500 }}>{t(`highlights.${c.id}.sub`)}</p>
           </div>
         ))}
       </div>

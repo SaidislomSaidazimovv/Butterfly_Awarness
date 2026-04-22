@@ -1,0 +1,459 @@
+{
+  "nav": {
+    "story": "Historia",
+    "science": "Ciencia",
+    "alliance": "Alianza",
+    "live": "En Vivo",
+    "safeExit": "Salida Segura",
+    "getSupport": "Obtener Ayuda",
+    "takeTheChallenge": "Acepta el Reto",
+    "join": "Unirse",
+    "signIn": "Iniciar sesión",
+    "signOut": "Cerrar sesión",
+    "userMenu": "Menú de usuario",
+    "openMenu": "Abrir menú de navegación",
+    "closeMenu": "Cerrar menú de navegación"
+  },
+  "home": {
+    "heroAlt": "Dos personas haciendo el Signo Mariposa",
+    "label": "Reto Mariposa",
+    "headline": "Levanta mil millones de manos.",
+    "subheadPart1": "Un gesto de 60 segundos por la salud mental.",
+    "subheadPart2": "Siéntelo. Hazlo. Compártelo.",
+    "joinCTA": "Acepta el Reto",
+    "iDidIt": "Lo hice",
+    "handsRaised": "{{count}} manos levantadas",
+    "handsRaisedAria": "{{count}} manos levantadas en todo el mundo",
+    "highlightsTitle": "Lo más destacado.",
+    "communityLabel": "De La Comunidad",
+    "communityTitle": "Haciéndolo juntos.",
+    "communitySub": "Personas reales. Historias reales.",
+    "communityEmpty": "Sé el primero en compartir tu momento mariposa.",
+    "shareStory": "Comparte Tu Historia",
+    "signLabel": "El Signo",
+    "signTitle": "Dos manos. Una señal.",
+    "signSub": "El primer gesto universal por la salud mental. Pruébalo.",
+    "howLabel": "Cómo Funciona",
+    "howTitle": "Tres pasos. Un minuto.",
+    "effectLabel": "El Efecto Mariposa",
+    "effectTitle": "Mira cómo 1 se convierte en 1.000 millones.",
+    "eventLabel": "Ya en Marcha",
+    "eventTitle": "30 de abril. Miami.",
+    "eventSub": "Donde todo comienza.",
+    "eventFounding": "Evento Fundacional",
+    "eventName": "Una Noche Por Una Humanidad",
+    "eventVenue": "Queen Miami Beach · Fin de Semana del Gran Premio de Miami",
+    "eventReveal": "El Hero Act — revelado en vivo.",
+    "eventDate": "30 de abril de 2026",
+    "eventCity": "Miami, FL",
+    "viewSchedule": "Ver Programa Completo",
+    "faqTitle": "Preguntas.",
+    "ctaAlt": "Cientos de personas haciendo el Signo Mariposa",
+    "ctaHeadline": "60 segundos.",
+    "ctaSub": "Sé la persona que se presentó.",
+    "remindMe": "Recuérdame el 1 de mayo"
+  },
+  "live": {
+    "label": "En Vivo",
+    "title": "Manos levantadas en todo el mundo.",
+    "participants": "{{count}} participantes",
+    "topCountries": "Países Destacados",
+    "topCities": "Ciudades Destacadas",
+    "topParticipants": "Participantes Destacados",
+    "shareMoment": "Comparte Tu Momento"
+  },
+  "footer": {
+    "tagline": "Una iniciativa de One Humanity Foundation · 501(c)(3).",
+    "manyFlagsTitle": "Una humanidad. Muchas banderas. Una mariposa.",
+    "manyFlagsSub": "Un símbolo compartido entre naciones, culturas y comunidades.",
+    "resources": "Recursos",
+    "forOrgs": "Para Organizaciones",
+    "forSchools": "Para Escuelas",
+    "forTeams": "Para Equipos",
+    "forBrands": "Para Marcas",
+    "butterflyProtocol": "Protocolo Mariposa",
+    "needHelp": "¿Necesitas Ayuda?",
+    "us988": "EE. UU.: Llama o envía SMS al 988",
+    "us988Sub": "Apoyo gratuito y confidencial las 24 horas.",
+    "getSupportNow": "Obtén Ayuda Ahora",
+    "privacy": "Privacidad",
+    "terms": "Términos",
+    "accessibility": "Accesibilidad",
+    "about": "Acerca de",
+    "disclaimer": "El Reto Mariposa es un gesto social, no un sustituto de la atención profesional. Si alguien que conoces está en peligro, llama al 911 o a tu número de emergencia local.",
+    "copyright": "© 2026 One Humanity Foundation. Todos los derechos reservados."
+  },
+  "language": {
+    "label": "Idioma"
+  },
+  "faq": {
+    "what": {
+      "q": "¿Qué es el Reto Mariposa?",
+      "a": "Un acto de conexión de 60 segundos. Haz el signo, di el mensaje, reta a 3 personas más. Gratis para siempre."
+    },
+    "why": {
+      "q": "¿Por qué una mariposa?",
+      "a": "El símbolo más universal de la transformación. Ya reconocido en ASL. No necesita traducción."
+    },
+    "donate": {
+      "q": "¿Necesito donar?",
+      "a": "No. El reto es gratis para todos, en todas partes, para siempre."
+    },
+    "therapy": {
+      "q": "¿Esto es terapia?",
+      "a": "No. Es una señal. Los recursos de crisis están en esta página."
+    },
+    "month": {
+      "q": "¿Qué es el Mes Mariposa?",
+      "a": "Mayo, cada año. El mes reconocido mundialmente por la salud mental."
+    },
+    "who": {
+      "q": "¿Quién está detrás de esto?",
+      "a": "ONE HUMANITY Foundation — 501(c)(3) de EE. UU. 100% para la salud mental."
+    }
+  },
+  "highlights": {
+    "card1": { "title": "Casi mil millones de personas viven con una condición de salud mental.", "sub": "OMS, 2025" },
+    "card2": { "title": "Nunca ha existido un gesto universal que diga: Te veo y me importa.", "sub": "Hasta ahora." },
+    "card3": { "title": "Mayo es el Mes Mariposa. El mes reconocido mundialmente por la salud mental.", "sub": "A partir de 2026." },
+    "card4": { "title": "Uno se convierte en tres, en nueve, en mil millones.", "sub": "Levanta 3 Más." }
+  },
+  "stepTabs": {
+    "step1": {
+      "num": "01", "title": "Acepta el Reto",
+      "heading": "Haz el signo. Grábalo.",
+      "body": "Abre tu cámara. Apúntala hacia ti. Haz el Signo Mariposa — manos al corazón, abiertas como alas. Sin filtro. Sin producción. Solo tú, presente por alguien.",
+      "tip": "Piensa en un nombre. No necesitas decirlo en voz alta."
+    },
+    "step2": {
+      "num": "02", "title": "Muestra el Amor",
+      "heading": "Di su nombre.",
+      "body": "Mira a la cámara y di: \"Te veo. Me importa. No estás solo.\" O: \"Te apoyo, [nombre].\" Di su nombre en voz alta. Eso lo hace real.",
+      "tip": "Esto no es un guion. Di lo que sea verdad."
+    },
+    "step3": {
+      "num": "03", "title": "Levanta a 3 Más",
+      "heading": "Etiqueta a 3 personas. Pásalo adelante.",
+      "body": "Nomina a 3 personas que te importan. Dales 24 horas. Uno se convierte en tres, en nueve, en mil millones. Ese es el efecto mariposa.",
+      "tip": "No necesitan seguidores. Necesitan pensar en una persona."
+    },
+    "nextStep": "Siguiente paso ›",
+    "ready": "Estoy listo — unirme"
+  },
+  "signBuilder": {
+    "intro": {
+      "title": "Aprende el Signo Mariposa",
+      "sub": "3 pasos. 10 segundos. Sin palabras.",
+      "start": "Pruébalo tú"
+    },
+    "step1": { "instruction": "Coloca ambas manos sobre tu corazón.", "detail": "Palmas planas contra tu pecho.", "alt": "Manos en el corazón" },
+    "step2": { "instruction": "Cruza tus muñecas.", "detail": "Derecha sobre izquierda, pulgares enlazados.", "alt": "Muñecas cruzadas" },
+    "step3": { "instruction": "Abre como alas.", "detail": "Extiende bien los dedos. Ese es el Signo Mariposa.", "alt": "Manos abiertas como alas" },
+    "progress": "Paso {{n}} de 3",
+    "next": "Siguiente",
+    "complete": "Completar",
+    "done": {
+      "label": "El Signo Mariposa",
+      "line1": "Te veo.",
+      "line2": "Me importa.",
+      "line3": "No estás solo.",
+      "caption": "Sin idioma. Sin diagnóstico. Sin barrera. Solo dos manos.",
+      "got": "Entendido",
+      "again": "Intentar de nuevo"
+    }
+  },
+  "chain": {
+    "level1": { "label": "Tú", "msg": "Una persona. Un gesto." },
+    "level2": { "label": "3", "msg": "Levantas a 3 personas." },
+    "level3": { "label": "9", "msg": "Cada uno levanta a 3 más." },
+    "level4": { "label": "27", "msg": "Ya se está extendiendo." },
+    "level5": { "label": "81", "msg": "Cuatro generaciones." },
+    "level6": { "label": "243", "msg": "Cinco generaciones. Ahora observa." },
+    "first": "Levanta 3",
+    "next": "Próxima generación",
+    "keepGoing": "Continuar →",
+    "growing": "Creciendo...",
+    "stillGoing": "Aún avanza...",
+    "almostThere": "Casi llegamos...",
+    "done": {
+      "number": "1.000.000.000",
+      "title": "Mil millones de manos.",
+      "subLine1": "20 generaciones. Comenzando con una persona.",
+      "subLine2": "Comenzando contigo.",
+      "cta": "Sé esa persona",
+      "again": "Ver de nuevo"
+    }
+  },
+  "popups": {
+    "role": {
+      "creators": { "name": "Creadores", "word": "Ignición", "line": "Tienes el alcance.", "detail": "Cuando un creador hace el signo, su audiencia no ve una campaña. Ven a alguien en quien confían presentándose. Invitamos a un grupo fundador para ayudar a encender esto como cultura. Un video. Tres nominaciones. Para siempre." },
+      "celebrities": { "name": "Celebridades", "word": "Consecuencia", "line": "Una voz en la que el mundo confía.", "detail": "Cuando una celebridad hace el signo, el mundo no ve una promoción. Ve a una persona diciendo algo verdadero. No embajadores — personas que eligieron presentarse cuando importaba." },
+      "athletes": { "name": "Atletas", "word": "Fuerza", "line": "Presentarse es fuerza.", "detail": "Cuando un atleta hace el signo, la gente ve valor. El deporte es donde la humanidad procesa sus emociones más difíciles. El estadio es donde la gente se siente unida." },
+      "music": { "name": "Música", "word": "Sonido", "line": "Antes del lenguaje, hay sonido.", "detail": "La música llega donde las palabras se detienen. Mil millones de personas cargan algo en silencio. Ese silencio nunca ha tenido un sonido. Hasta ahora." },
+      "dance": { "name": "Danza", "word": "Movimiento", "line": "Un cuerpo antes que una palabra.", "detail": "La danza convierte la emoción en movimiento. Cada movimiento que vivió en el cuerpo duró más que cada movimiento que vivió solo en la mente." },
+      "film": { "name": "Cine", "word": "Historia", "line": "Una historia antes del recuerdo.", "detail": "El cine da forma a cómo el mundo ve la cultura. 30 de abril. Miami. La historia comienza ahí. Una historia contada honestamente." },
+      "fashion": { "name": "Moda", "word": "Declaración", "line": "Una declaración antes del discurso.", "detail": "Lo que la gente viste es lo que la gente significa. Cuando la moda lleva la mariposa, el movimiento se lleva puesto al mundo." },
+      "art": { "name": "Arte", "word": "Imagen", "line": "Una imagen antes de la explicación.", "detail": "El arte hace imposible ignorar lo invisible. Las primeras obras no decoran el movimiento — definen cómo el mundo lo recuerda." },
+      "faith": { "name": "Fe", "word": "Confianza", "line": "Confianza antes que alcance.", "detail": "La fe y la comunidad llegan donde ninguna campaña puede — a los hogares, familias, duelo, la vida cotidiana. Una señal que cualquiera puede hacer." },
+      "gaming": { "name": "Videojuegos", "word": "Mundo", "line": "3.600 millones de jugadores.", "detail": "Los videojuegos son pertenencia. Equipos, escuadras, misiones compartidas. La mariposa es una señal esperando convertirse en una misión." },
+      "podcast": { "name": "Podcast", "word": "Voz", "line": "Demasiado personal para el feed.", "detail": "Lo más poderoso que un anfitrión puede hacer no es explicar el movimiento — es decir: Hice el signo. Pensé en alguien que amo." },
+      "everyone": { "name": "Todos", "word": "Humanidad", "line": "Necesitas una persona.", "detail": "No necesitas seguidores ni una cámara. Necesitas un nombre en tu mente y sesenta segundos de coraje." },
+      "join": "Acepta el Reto"
+    },
+    "alliance": {
+      "platforms": { "name": "Plataformas", "line": "Cómo viaja un movimiento.", "brief": "TikTok, YouTube, Meta, Instagram, X. Destaquen el reto, activen filtros del signo, mecánicas de nominación. Botón de Ayuda BOS antes del lanzamiento." },
+      "care": { "name": "Cuidado", "line": "Uniéndose a quienes ya se presentan.", "brief": "Organizaciones de salud mental, ONG, fundaciones. Verificadas en el Mapa de Derivación Humana. El movimiento apunta al cuidado — nunca lo reemplaza." },
+      "media": { "name": "Medios", "line": "Cómo se presencia un movimiento.", "brief": "Emisoras, editoriales, prensa. Mensajería segura IASP en cada pieza de cobertura. Acceso al 30 de abril." },
+      "business": { "name": "Empresas", "line": "Cómo se convierte en cultura.", "brief": "Marcas, empleadores, equipos de RSC. Mes Mariposa en tu calendario. Sin lavado emocional." },
+      "education": { "name": "Educación", "line": "La próxima generación.", "brief": "Escuelas, universidades, organizaciones juveniles. Ningún estudiante encuentra el reto sin una ruta hacia ayuda real." },
+      "connectivity": { "name": "Conectividad", "line": "Cada mano.", "brief": "Telecos, SMS, ecosistemas de dispositivos. La persona sin datos puede encontrar ayuda. Siempre." },
+      "nonNegotiable": "Innegociable:",
+      "nonNegotiableText": "Seguridad antes que escala.",
+      "becomePartner": "Conviértete en socio fundador"
+    },
+    "trust": {
+      "title": "Construido para ganar confianza.",
+      "items": {
+        "nonprofit": { "t": "Sin fines de lucro 501(c)(3)", "d": "Gobierno independiente. Auditable desde el Día 1." },
+        "safety": { "t": "Oficial de Seguridad", "d": "Veto unilateral. No puede ser anulado." },
+        "transparency": { "t": "Transparencia Radical", "d": "Semanalmente: Ingresos → Egresos → Programas → Resultados." },
+        "editorial": { "t": "Independencia Editorial", "d": "Ningún patrocinador tiene control editorial. Jamás." },
+        "dignity": { "t": "Dignidad Primero", "d": "No diagnóstico. Mensajería segura IASP." },
+        "free": { "t": "Gratis Para Siempre", "d": "Abierto a todos, en todas partes." }
+      }
+    },
+    "timeline": {
+      "upNext": "A continuación",
+      "apr30": { "t": "Una Noche Por Una Humanidad", "s": "Queen Miami Beach · Evento fundacional", "detail": "La noche que inicia todo. El Hero Act se revela en vivo. Los socios fundadores son reconocidos. El Reto Mariposa se lanza a la mañana siguiente. Fin de Semana del Gran Premio de Miami — el mundo ya está mirando." },
+      "may1": { "t": "Comienza el Mes Mariposa", "s": "El reto se vuelve global", "detail": "El 1 de mayo es el Día Uno. El reto se activa mundialmente. Los creadores se activan. Cada plataforma, cada idioma, cada país. La mariposa empieza a volar." },
+      "mayJun": { "t": "Superficies culturales se activan", "s": "Deporte · Música · Cine · Moda", "detail": "El Signo Mariposa entra en estadios, escenarios, pasarelas, sets de cine. Cada superficie cultural que acordó llevar la señal se activa en esta ventana." },
+      "jul19": { "t": "Final de la Copa Mundial FIFA", "s": "MetLife Stadium · 5 mil millones mirando", "detail": "El mayor momento de audiencia única en la historia humana. Si el Signo Mariposa es visible aquí, 5 mil millones de personas lo ven en el mismo segundo. Esa es la meta." },
+      "sep2026": { "t": "Asamblea General de la ONU", "s": "Semana Mariposa · Mandato institucional", "detail": "El movimiento se institucionaliza. Semana Mariposa en las Naciones Unidas. La petición: reconocer formalmente mayo como el Mes Mundial de Conciencia sobre la Salud Mental con la mariposa como símbolo internacional." }
+    },
+    "join": {
+      "title": "Acepta el Reto"
+    },
+    "share": {
+      "title": "Comparte tu Mariposa"
+    }
+  },
+  "countdown": {
+    "days": "Días",
+    "hours": "Horas",
+    "minutes": "Min",
+    "seconds": "Seg",
+    "happening": "Está ocurriendo ahora."
+  },
+  "joinC": {
+    "step": "Paso {{n}}",
+    "step1": { "t": "Haz el signo", "d": "Manos al corazón. Abiertas como alas." },
+    "step2": { "t": "Di el mensaje" },
+    "step3": { "t": "Levanta a 3 más", "d": "Etiqueta a 3 personas. 24 horas." },
+    "back": "Atrás",
+    "next": "Siguiente",
+    "doneShare": "Listo — compartir"
+  },
+  "reminderC": {
+    "heading": "Recibe un recordatorio para el 1 de mayo",
+    "placeholder": "tu@email.com",
+    "button": "Recuérdame el 1 de mayo",
+    "disclaimer": "Sin spam. Solo un recordatorio. Cancela cuando quieras.",
+    "success": "Estás en la lista.",
+    "done": "Listo"
+  },
+  "support": {
+    "title": "Obtener Ayuda",
+    "sub": "No estás solo. Hay ayuda disponible las 24 horas.",
+    "unitedStates": "Estados Unidos",
+    "lifeline": {
+      "name": "988 Línea de Suicidio y Crisis",
+      "detail": "Llama o envía SMS al 988 · Gratis · 24/7"
+    },
+    "textLine": {
+      "name": "Línea de Texto de Crisis",
+      "detail": "Envía HOME al 741741 · Gratis · 24/7"
+    },
+    "international": "Fuera de EE. UU.",
+    "selectCountry": "Selecciona tu país",
+    "choose": "Elegir...",
+    "visitWebsite": "Visitar sitio web →",
+    "findLocal": "Buscar recursos locales",
+    "confidentialTitle": "Lo que compartes es tu elección.",
+    "confidentialBody": "Todas las conversaciones con las líneas de crisis son confidenciales."
+  },
+  "visualTimeline": {
+    "apr30": { "t": "Una Noche Por Una Humanidad", "s": "El evento fundacional. Hero Act revelado en vivo. Queen Miami Beach." },
+    "may1": { "t": "Comienza el Mes Mariposa", "s": "El reto se vuelve global. Los creadores se activan mundialmente." },
+    "mayJun": { "t": "Superficies culturales se activan", "s": "Fórmula 1 · Festivales de música · Cine · Semanas de moda · Deportes." },
+    "jul19": { "t": "Final de la Copa Mundial FIFA", "s": "MetLife Stadium. 5 mil millones mirando. El signo llega a todas partes." },
+    "sep": { "t": "Asamblea General de la ONU", "s": "Semana Mariposa. Mandato institucional. El movimiento se vuelve permanente." }
+  },
+  "shareC": {
+    "sub": "Comparte en 10 segundos.",
+    "copyLink": "Copiar enlace",
+    "whatsapp": "WhatsApp",
+    "telegram": "Telegram",
+    "facebook": "Facebook",
+    "email": "Correo",
+    "captionHint": "Copia un pie para Instagram y TikTok.",
+    "captions": {
+      "a": "Estoy haciendo el #RetoMariposa. [Nombre], te veo. Me importa. No estás solo. Levantando 3 más: @__ @__ @__",
+      "b": "Un check‑in de 60 segundos. [Nombre], te apoyo. #RetoMariposa Levantando 3: @__ @__ @__",
+      "c": "Si cargas algo en silencio: Te veo. Me importa. No estás solo. #RetoMariposa"
+    },
+    "copy": "Copiar",
+    "copied": "Copiado",
+    "remindHeading": "Recibe un recordatorio para el 1 de mayo",
+    "remindBtn": "Recuérdame",
+    "remindSuccess": "¡Estás en la lista!"
+  },
+  "livePage": {
+    "heroTitle": "30 de abril. Queen Miami Beach.",
+    "heroSub": "El evento fundacional. El momento en que todo comienza.",
+    "scheduleLabel": "Lo Que Ocurre",
+    "scheduleTitle": "El programa completo.",
+    "foundingEvent": "Evento Fundacional",
+    "eventName": "Una Noche Por Una Humanidad",
+    "eventVenue": "Queen Miami Beach · Fin de Semana del Gran Premio de Miami",
+    "eventReveal": "El Hero Act — revelado en vivo.",
+    "eventDate": "30 de abril de 2026",
+    "eventCity": "Miami, FL",
+    "ctaTitle": "Sé parte de este momento.",
+    "ctaSub": "Únete al evento fundacional. Comparte tu mariposa.",
+    "ctaBtn": "Comparte Tu Momento"
+  },
+  "story": {
+    "heroTitle": "De dónde viene.",
+    "heroSub": "De un momento de crisis en 1998 a un movimiento global en 2026.",
+    "origin": {
+      "label": "El Origen",
+      "title": "1998 · Huracán Pauline",
+      "imgAlt": "Lucina Artigas guiando a sobrevivientes a través del abrazo mariposa tras el Huracán Pauline",
+      "p1": "Lucina Artigas era terapeuta en México cuando el Huracán Pauline devastó la costa. Tras la tormenta, miles de personas — muchas de ellas niños — vivían un trauma psicológico severo sin a dónde acudir.",
+      "p2": "Creó un gesto simple de estimulación bilateral que cualquiera podía hacer sin un terapeuta presente. Dos manos cruzadas sobre el pecho, toques alternados. Lo llamó el abrazo mariposa."
+    },
+    "spread": {
+      "label": "Adopción Global",
+      "title": "2000–2024 · La Difusión",
+      "imgAlt": "El abrazo mariposa extendiéndose globalmente",
+      "p": "El abrazo mariposa recorrió zonas de desastre, campos de refugiados y centros de crisis a nivel mundial. Se integró en la terapia EMDR, en protocolos de ONG, en el entrenamiento de primeros respondedores. Funcionó. Fue simple. Fue gratuito. Y no requería permiso."
+    },
+    "tipping": {
+      "label": "El Punto de Inflexión",
+      "title": "Mayo 2024 · El Momento",
+      "imgAlt": "El abrazo mariposa demostrado en un escenario global",
+      "p": "El Príncipe Harry demostró el abrazo mariposa en el escenario. Fue visto por millones. De repente, el gesto ya no estaba oculto en artículos clínicos. Era visible. Era real. Y le pertenecía a todos."
+    },
+    "challenge": {
+      "label": "Este Momento",
+      "title": "Abril 2026 · El Reto",
+      "p": "Organizamos el primer momento global coordinado. Una noche. Un gesto. Prueba visible de que la salud mental es un derecho humano, no un lujo. De que puedes liderar el cambio sin permiso."
+    },
+    "timeline": {
+      "label": "La Línea de Tiempo",
+      "title": "Hitos clave."
+    },
+    "cta": {
+      "title": "Eres parte de esta historia.",
+      "sub": "Comenzó con una persona ayudando a otra. Únete al próximo capítulo.",
+      "join": "Acepta el Reto",
+      "science": "Ver la Ciencia"
+    }
+  },
+  "science": {
+    "heroTitle": "Por qué funciona.",
+    "heroSub": "La neurociencia detrás del abrazo mariposa — respaldada por investigación, usada por terapeutas en todo el mundo.",
+    "stats": {
+      "who": { "num": "OMS", "sub": "Tratamiento recomendado" },
+      "years": { "num": "30+", "sub": "Años de investigación" },
+      "countries": { "num": "100+", "sub": "Países que usan EMDR" }
+    },
+    "brain": {
+      "label": "Cómo Funciona Tu Cerebro",
+      "title": "Cruzando la línea media.",
+      "imgAlt": "Hemisferios cerebrales mostrando estimulación bilateral",
+      "p1": "Cuando haces el abrazo mariposa — estimulación alterna a través de la línea media de tu cuerpo — activas ambos hemisferios cerebrales simultáneamente. Tu lado izquierdo nota el movimiento a la derecha. Tu lado derecho nota el movimiento a la izquierda.",
+      "p2": "Esta estimulación bilateral es cómo tu cerebro procesa e integra información abrumadora. Es el mismo mecanismo que ocurre durante el sueño REM, cuando tus ojos se mueven de lado a lado. Ayuda a tu sistema nervioso a procesar el estrés."
+    },
+    "emdr": {
+      "label": "Fundamento Clínico",
+      "title": "Construido sobre la ciencia EMDR.",
+      "imgAlt": "Gesto del abrazo mariposa con ondas calmantes",
+      "p1": "La Dra. Francine Shapiro desarrolló la terapia EMDR (Desensibilización y Reprocesamiento por Movimientos Oculares) a finales de los años 80. Descubrió que los movimientos oculares bilaterales, combinados con el procesamiento de recuerdos traumáticos, ayudaban a las personas a sanar del TEPT. Desde entonces, EMDR se ha convertido en un tratamiento recomendado por la OMS para el estrés postraumático.",
+      "p2": "Lucina Artigas adaptó esta ciencia. En lugar de movimientos oculares guiados por un terapeuta, creó una versión auto-calmante: dos manos, estimulación bilateral, sin terapeuta necesario. El abrazo mariposa pone la neurociencia clínica en tus propias manos."
+    },
+    "neuro": {
+      "label": "La Evidencia",
+      "title": "Lo que muestran los escáneres cerebrales.",
+      "imgAlt": "Escáner cerebral mostrando activación de la corteza prefrontal",
+      "p1": "Estudios de fMRI de personas que usan estimulación bilateral muestran activación reducida en la amígdala — la parte del cerebro que desencadena miedo y ansiedad. Al mismo tiempo, aumenta la actividad en la corteza prefrontal, la parte que te ayuda a pensar claramente, tomar decisiones racionales y sentirte seguro.",
+      "p2": "En lenguaje sencillo: el abrazo mariposa le dice a tu sistema de alarma que se calme. No hace desaparecer la amenaza. Ayuda a tu cerebro a reconocer que, ahora mismo, en este momento, puedes respirar."
+    },
+    "quote": {
+      "text": "El abrazo mariposa no es terapia. Es lo que los humanos hacen instintivamente cuando alguien sufre. Ahora sabemos por qué funciona.",
+      "attribution": "— Literatura de neurociencia clínica sobre estimulación bilateral"
+    },
+    "disclaimer": {
+      "badge": "⚕️ Distinción importante",
+      "text": "El abrazo mariposa es una herramienta de apoyo, no un sustituto de la terapia. Si luchas con trauma, depresión o pensamientos suicidas, por favor habla con un profesional.",
+      "label": "Aclaración Importante",
+      "title": "Esto no es terapia.",
+      "p1": "El abrazo mariposa tiene respaldo científico. Lo usan los terapeutas. Pero hacer el gesto no es lo mismo que la terapia. Es una herramienta. Un gesto. Un momento donde tu sistema nervioso puede encontrar un poco más de calma.",
+      "p2": "Pero para los momentos cotidianos en los que estás estresado, abrumado o necesitas calmarte? La ciencia dice: pruébalo. Tu cerebro te lo agradecerá."
+    },
+    "cta": {
+      "title": "¿Listo para probarlo?",
+      "sub": "Aprende el gesto. Haz el reto. Compártelo con el mundo.",
+      "learn": "Aprende el Signo",
+      "fullStory": "Historia Completa"
+    }
+  },
+  "alliancePage": {
+    "heroTitle": "Quiénes se presentan.",
+    "heroSub": "Los líderes, socios y portadores que hacen esto real.",
+    "rolesLabel": "Cómo el Mundo Se Presenta",
+    "rolesTitle": "Cada rol. Cada alianza.",
+    "rolesSub": "Toca cualquier rol para saber más.",
+    "alliancesLabel": "Socios de la Alianza",
+    "alliancesTitle": "Mil millones de manos necesitan un camino.",
+    "alliancesSub": "Seis categorías fundadoras. Toca para ver el resumen.",
+    "trustLabel": "Por Qué Confiar",
+    "trustTitle": "Construido para ganar confianza.",
+    "trustSub": "Sin fines de lucro 501(c)(3) · 100% a la salud mental · Gratis para siempre",
+    "trustAlt": "Confianza y gobierno",
+    "viewGovernance": "Ver gobierno",
+    "cultureTitle": "Construido por personas que han movido la cultura.",
+    "stats": {
+      "leaders": { "num": "1.000+", "label": "Líderes reunidos", "sub": "Bel-Air 2024" },
+      "reach": { "num": "47M", "label": "Personas alcanzadas", "sub": "110+ apariciones en medios" },
+      "raised": { "num": "$220M", "label": "Recaudado por el mismo mecanismo", "sub": "Ice Bucket Challenge 2014" }
+    },
+    "cultureFoundation": "One Humanity Foundation · 501(c)(3)",
+    "cultureRouted": "Dirigido al 988 — Línea de Suicidio y Crisis",
+    "ourFoundation": "Nuestra Fundación",
+    "orgsLabel": "Para Empresas, Escuelas y Organizaciones",
+    "orgsTitle": "Lleva esto a tu comunidad",
+    "orgs": {
+      "schools": { "title": "Para Escuelas", "desc": "Guías para el aula, diapositivas para asambleas y recursos para padres. Cumple con COPPA." },
+      "teams": { "title": "Para Equipos", "desc": "Resúmenes para gerentes, plantillas para reuniones e integración con EAP." },
+      "brands": { "title": "Para Marcas", "desc": "Guías de participación, kits de recursos y oportunidades de asociación." }
+    },
+    "learnMore": "Saber más",
+    "protocolTitle": "El Protocolo Mariposa",
+    "protocolDesc": "El gesto enseña reconocimiento. El Protocolo Mariposa enseña respuesta. Un guion gratuito de 30 segundos que tus gerentes pueden implementar en una semana. Cumple con OSHA, ADA y los límites de HIPAA.",
+    "protocolBtn": "Conocer el Protocolo",
+    "ctaTitle": "Tu organización puede liderar.",
+    "ctaSub": "Únete a la alianza. Da forma al movimiento.",
+    "ctaBtn": "Únete como Organización"
+  },
+  "workingProgress": {
+    "label": "EN CONSTRUCCIÓN",
+    "heading1": "Estamos Construyendo",
+    "heading2": "Algo Grande",
+    "typed": "Actualmente en construcción — vuelve pronto.",
+    "systems": "cargando sistemas"
+  },
+  "toast": {
+    "copied": "Copiado"
+  }
+}

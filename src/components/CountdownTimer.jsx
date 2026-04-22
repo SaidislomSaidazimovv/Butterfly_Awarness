@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { g, TEAL, ff } from '../constants/index.js';
 
 export function CountdownTimer() {
+  const { t } = useTranslation();
   const target = new Date("2026-04-30T19:00:00-04:00").getTime();
   const [now, setNow] = useState(Date.now());
 
@@ -32,10 +34,10 @@ export function CountdownTimer() {
     <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-start", gap: 6, marginBottom: 28 }}>
       {past ? (
         <div style={{ textAlign: "center" }}>
-          <p style={{ fontSize: 18, fontWeight: 600, color: TEAL }}>It's happening now.</p>
+          <p style={{ fontSize: 18, fontWeight: 600, color: TEAL }}>{t('countdown.happening')}</p>
         </div>
       ) : (
-        <>{unit(days, "Days")}{sep}{unit(hrs, "Hours")}{sep}{unit(mins, "Min")}{sep}{unit(secs, "Sec")}</>
+        <>{unit(days, t('countdown.days'))}{sep}{unit(hrs, t('countdown.hours'))}{sep}{unit(mins, t('countdown.minutes'))}{sep}{unit(secs, t('countdown.seconds'))}</>
       )}
     </div>
   );

@@ -1,15 +1,17 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ChevronDown } from 'lucide-react';
 import { g, TEAL, ff } from '../constants/index.js';
 
 export function VisualTimeline() {
+  const { t } = useTranslation();
   const [active, setActive] = useState(null);
   const items = [
-    { d: "Apr 30", t: "One Night For One Humanity", s: "The founding event. Hero Act revealed live. Queen Miami Beach.", live: true },
-    { d: "May 1", t: "Butterfly Month begins", s: "The challenge goes global. Creators activate worldwide." },
-    { d: "May–Jun", t: "Culture surfaces activate", s: "Formula 1 · Music festivals · Film · Fashion weeks · Sports." },
-    { d: "Jul 19", t: "FIFA World Cup Final", s: "MetLife Stadium. 5 billion people watching. The sign goes everywhere." },
-    { d: "Sep", t: "UN General Assembly", s: "Butterfly Week. Institutional mandate. The movement becomes permanent." },
+    { d: "Apr 30", t: t('visualTimeline.apr30.t'), s: t('visualTimeline.apr30.s'), live: true },
+    { d: "May 1", t: t('visualTimeline.may1.t'), s: t('visualTimeline.may1.s') },
+    { d: "May–Jun", t: t('visualTimeline.mayJun.t'), s: t('visualTimeline.mayJun.s') },
+    { d: "Jul 19", t: t('visualTimeline.jul19.t'), s: t('visualTimeline.jul19.s') },
+    { d: "Sep", t: t('visualTimeline.sep.t'), s: t('visualTimeline.sep.s') },
   ];
 
   return (

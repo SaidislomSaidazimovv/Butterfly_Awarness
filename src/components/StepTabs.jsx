@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { g, ff, TEAL, STEP_DFD1, STEP_DFD2, STEP_DFD3 } from '../constants/index.js';
 import { Btn } from './ui/index.js';
 
 export function StepTabs({ onJoin }) {
+  const { t } = useTranslation();
   const [active, setActive] = useState(0);
   const ease = "cubic-bezier(.16,1,.3,1)";
 
@@ -12,25 +14,17 @@ export function StepTabs({ onJoin }) {
   }, []);
 
   const steps = [
-    {
-      num: "01", title: "Take the Challenge", img: STEP_DFD1,
-      heading: "Make the sign. Film it.",
-      body: "Open your camera. Face it toward you. Make the Butterfly Sign — hands on heart, open like wings. No filter. No production. Just you, showing up for someone.",
-      tip: "Hold a name in your mind. You don't have to say it out loud.",
-    },
-    {
-      num: "02", title: "Show the Love", img: STEP_DFD2,
-      heading: "Say their name.",
-      body: "Look into the camera and say: \"I see you. I care. You're not alone.\" Or: \"I got you, [name].\" Say their name out loud. That's what makes it real.",
-      tip: "This isn't a script. Say whatever is true.",
-    },
-    {
-      num: "03", title: "Lift 3 More", img: STEP_DFD3,
-      heading: "Tag 3 people. Pass it forward.",
-      body: "Nominate 3 people you care about. Give them 24 hours. One becomes three becomes nine becomes a billion. That's the butterfly effect.",
-      tip: "They don't need followers. They need one person to think of.",
-    },
-  ];
+    { key: 'step1', img: STEP_DFD1 },
+    { key: 'step2', img: STEP_DFD2 },
+    { key: 'step3', img: STEP_DFD3 },
+  ].map(s => ({
+    img: s.img,
+    num: t(`stepTabs.${s.key}.num`),
+    title: t(`stepTabs.${s.key}.title`),
+    heading: t(`stepTabs.${s.key}.heading`),
+    body: t(`stepTabs.${s.key}.body`),
+    tip: t(`stepTabs.${s.key}.tip`),
+  }));
 
   const s = steps[active];
 
@@ -81,11 +75,11 @@ export function StepTabs({ onJoin }) {
         </div>
         {active === 2 ? (
           <Btn primary onClick={onJoin} style={{ fontSize: 14, padding: "10px 22px" }}>
-            I'm ready — join
+            {t('stepTabs.ready')}
           </Btn>
         ) : (
           <Btn onClick={() => setActive(a => a + 1)} style={{ fontSize: 14, padding: "10px 22px", color: g.link, borderColor: "transparent" }}>
-            Next step ›
+            {t('stepTabs.nextStep')}
           </Btn>
         )}
       </div>

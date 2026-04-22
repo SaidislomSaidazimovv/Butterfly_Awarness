@@ -1,19 +1,21 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
-const TYPED_TEXT = "Currently under construction — check back soon.";
 const TYPING_SPEED = 55;
 const PAUSE_BEFORE_RESET = 2200;
 const PAUSE_BEFORE_TYPING = 600;
 
 export function WorkingProgress() {
+  const { t } = useTranslation();
+  const typedText = t('workingProgress.typed');
   const [displayedLen, setDisplayedLen] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     let timeout;
-    if (!isDeleting && displayedLen < TYPED_TEXT.length) {
+    if (!isDeleting && displayedLen < typedText.length) {
       timeout = setTimeout(() => setDisplayedLen(d => d + 1), TYPING_SPEED);
-    } else if (!isDeleting && displayedLen === TYPED_TEXT.length) {
+    } else if (!isDeleting && displayedLen === typedText.length) {
       timeout = setTimeout(() => setIsDeleting(true), PAUSE_BEFORE_RESET);
     } else if (isDeleting && displayedLen > 0) {
       timeout = setTimeout(() => setDisplayedLen(d => d - 1), 25);
@@ -21,7 +23,10 @@ export function WorkingProgress() {
       timeout = setTimeout(() => setIsDeleting(false), PAUSE_BEFORE_TYPING);
     }
     return () => clearTimeout(timeout);
-  }, [displayedLen, isDeleting]);
+  }, [displayedLen, isDeleting, typedText]);
+
+  // Reset progress when language (and thus typedText) changes
+  useEffect(() => { setDisplayedLen(0); setIsDeleting(false); }, [typedText]);
 
   return (
     <>
@@ -48,16 +53,16 @@ export function WorkingProgress() {
         <div className="wip-grid" />
         <div className="wip-scanline" />
         <div className="wip-content">
-          <span className="wip-label">WORK IN PROGRESS</span>
-          <h1 className="wip-heading">We're Building<br />Something Great</h1>
+          <span className="wip-label">{t('workingProgress.label')}</span>
+          <h1 className="wip-heading">{t('workingProgress.heading1')}<br />{t('workingProgress.heading2')}</h1>
           <p className="wip-typed">
-            {TYPED_TEXT.slice(0, displayedLen)}
+            {typedText.slice(0, displayedLen)}
             <span className="wip-cursor" />
           </p>
         </div>
         <div className="wip-bar">
           <span className="wip-dot" />
-          <span>systems loading</span>
+          <span>{t('workingProgress.systems')}</span>
         </div>
       </div>
     </>

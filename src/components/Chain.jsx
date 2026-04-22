@@ -1,8 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { g, ff, TEAL, ICON_BUTTERFLY } from '../constants/index.js';
 import { Btn } from './ui/index.js';
 
 export function Chain({ onJoin }) {
+  const { t } = useTranslation();
   const [lv, sL] = useState(0);
   const [counting, setCounting] = useState(false);
   const [counter, setCounter] = useState(0);
@@ -10,12 +12,12 @@ export function Chain({ onJoin }) {
   const cRef = useRef(null);
 
   const steps = [
-    { n: 1, label: "You", msg: "One person. One gesture.", emoji: 1 },
-    { n: 3, label: "3", msg: "You lift 3 people.", emoji: 3 },
-    { n: 9, label: "9", msg: "They each lift 3 more.", emoji: 9 },
-    { n: 27, label: "27", msg: "It's already spreading.", emoji: 27 },
-    { n: 81, label: "81", msg: "Four generations deep.", emoji: 40 },
-    { n: 243, label: "243", msg: "Five generations. Now watch.", emoji: 40 },
+    { n: 1, label: t('chain.level1.label'), msg: t('chain.level1.msg'), emoji: 1 },
+    { n: 3, label: t('chain.level2.label'), msg: t('chain.level2.msg'), emoji: 3 },
+    { n: 9, label: t('chain.level3.label'), msg: t('chain.level3.msg'), emoji: 9 },
+    { n: 27, label: t('chain.level4.label'), msg: t('chain.level4.msg'), emoji: 27 },
+    { n: 81, label: t('chain.level5.label'), msg: t('chain.level5.msg'), emoji: 40 },
+    { n: 243, label: t('chain.level6.label'), msg: t('chain.level6.msg'), emoji: 40 },
   ];
 
   const advance = () => {
@@ -49,7 +51,7 @@ export function Chain({ onJoin }) {
   useEffect(() => { return () => clearTimeout(cRef.current); }, []);
 
   const fmt = (n) => {
-    if (n >= 1e9) return "1,000,000,000";
+    if (n >= 1e9) return t('chain.done.number');
     if (n >= 1e6) return Math.floor(n / 1e6).toLocaleString() + "M";
     if (n >= 1e3) return Math.floor(n / 1e3).toLocaleString() + "K";
     return n.toLocaleString();
@@ -64,14 +66,14 @@ export function Chain({ onJoin }) {
           fontSize: "clamp(2rem,6vw,3rem)", fontWeight: 700, letterSpacing: "-.04em", lineHeight: 1,
           background: "linear-gradient(90deg," + TEAL + ",#2ecc71,#06b6d4)", WebkitBackgroundClip: "text",
           WebkitTextFillColor: "transparent", backgroundClip: "text", marginBottom: 6
-        }}>1,000,000,000</p>
-        <p style={{ fontSize: 18, fontWeight: 600, color: g.t1, marginBottom: 4 }}>One billion hands.</p>
+        }}>{t('chain.done.number')}</p>
+        <p style={{ fontSize: 18, fontWeight: 600, color: g.t1, marginBottom: 4 }}>{t('chain.done.title')}</p>
         <p style={{ fontSize: 15, color: g.t3, marginBottom: 20, lineHeight: 1.5 }}>
-          20 generations. Starting with one person.<br />Starting with you.
+          {t('chain.done.subLine1')}<br />{t('chain.done.subLine2')}
         </p>
         <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
-          <Btn primary onClick={onJoin} style={{ fontSize: 15, padding: "12px 24px" }}>Be that person</Btn>
-          <Btn onClick={reset} style={{ fontSize: 13, padding: "10px 18px", color: g.t3, borderColor: g.bdr }}>Watch again</Btn>
+          <Btn primary onClick={onJoin} style={{ fontSize: 15, padding: "12px 24px" }}>{t('chain.done.cta')}</Btn>
+          <Btn onClick={reset} style={{ fontSize: 13, padding: "10px 18px", color: g.t3, borderColor: g.bdr }}>{t('chain.done.again')}</Btn>
         </div>
       </div>
     );
@@ -87,7 +89,7 @@ export function Chain({ onJoin }) {
           fontVariantNumeric: "tabular-nums", transition: "all .1s", fontFamily: "monospace, " + ff
         }}>{fmt(counter)}</p>
         <p style={{ fontSize: 13, color: g.t3, animation: "fadeUp .3s ease" }}>
-          {counter < 1e4 ? "Growing..." : counter < 1e6 ? "Still going..." : counter < 1e8 ? "Almost there..." : "..."}
+          {counter < 1e4 ? t('chain.growing') : counter < 1e6 ? t('chain.stillGoing') : counter < 1e8 ? t('chain.almostThere') : "..."}
         </p>
       </div>
     );
@@ -106,7 +108,7 @@ export function Chain({ onJoin }) {
       <p style={{ fontSize: 36, fontWeight: 600, color: g.t1, letterSpacing: "-.03em" }}>{s.label}</p>
       <p style={{ fontSize: 14, color: g.t3, marginBottom: 16 }}>{s.msg}</p>
       <Btn primary onClick={advance} style={{ fontSize: 14, padding: "10px 22px" }}>
-        {lv === 0 ? "Lift 3" : lv < 5 ? "Next generation" : "Keep going →"}
+        {lv === 0 ? t('chain.first') : lv < 5 ? t('chain.next') : t('chain.keepGoing')}
       </Btn>
       <div style={{ display: "flex", gap: 4, justifyContent: "center", marginTop: 14 }}>
         {steps.map((_, i) => (

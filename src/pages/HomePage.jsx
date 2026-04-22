@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import {
   g,
   ff,
@@ -11,6 +12,7 @@ import {
   HERO_IMG,
   EVENT_BG,
   CTA_IMG,
+  SHOW_APR30_EVENT,
 } from "../constants/index.js";
 import { Reveal, Btn } from "../components/ui/index.js";
 import {
@@ -39,6 +41,8 @@ export default function HomePage({
   handCount,
   leaderboardData,
 }) {
+  const { t } = useTranslation();
+  const formattedCount = (handCount || 0).toLocaleString();
   return (
     <main id="main-content">
       {/* HERO */}
@@ -56,7 +60,7 @@ export default function HomePage({
         <Reveal style={{ width: "100%" }}>
           <img
             src={HERO_IMG}
-            alt="Two people making the Butterfly Sign"
+            alt={t('home.heroAlt')}
             width="1900"
             height="1060"
             loading="eager"
@@ -81,7 +85,7 @@ export default function HomePage({
           }}
         >
           <Reveal delay={0.1}>
-            <p style={{ ...label, marginTop: 0 }}>Butterfly Challenge</p>
+            <p style={{ ...label, marginTop: 0 }}>{t('home.label')}</p>
           </Reveal>
           <Reveal delay={0.15}>
             <h1
@@ -91,7 +95,7 @@ export default function HomePage({
                 marginBottom: 14,
               }}
             >
-              Lift a billion hands.
+              {t('home.headline')}
             </h1>
           </Reveal>
           <Reveal delay={0.2}>
@@ -104,21 +108,21 @@ export default function HomePage({
                 lineHeight: 1.45,
               }}
             >
-              A 60‑second gesture for mental health.
+              {t('home.subheadPart1')}
               <br />
               <em style={{ fontStyle: "normal", color: g.t1 }}>
-                Feel it. Do it. Share it.
+                {t('home.subheadPart2')}
               </em>
             </p>
           </Reveal>
           <Reveal delay={0.25}>
             <div style={{ display: "flex", justifyContent: "center", gap: 12 }}>
               <Btn primary onClick={onJoin} style={{ fontSize: 17 }}>
-                Join the Challenge
+                {t('home.joinCTA')}
               </Btn>
               <div style={{ position: "relative", display: "inline-flex" }}>
                 <Btn onClick={onDidIt} style={{ fontSize: 17 }}>
-                  I did it
+                  {t('home.iDidIt')}
                 </Btn>
                 {showPlusOne && (
                   <span
@@ -154,7 +158,7 @@ export default function HomePage({
                 }}
                 aria-live="polite"
                 aria-atomic="true"
-                aria-label={`${handCount.toLocaleString()} hands raised worldwide`}
+                aria-label={t('home.handsRaisedAria', { count: formattedCount })}
               >
                 <span
                   style={{
@@ -166,7 +170,7 @@ export default function HomePage({
                   }}
                 />
                 <span style={{ fontSize: 14, fontWeight: 600, color: g.t1 }}>
-                  {handCount.toLocaleString()} hands raised
+                  {t('home.handsRaised', { count: formattedCount })}
                 </span>
               </div>
             </Reveal>
@@ -181,7 +185,7 @@ export default function HomePage({
       <section style={sec("#fff")}>
         <div style={{ maxWidth: 900, margin: "0 auto" }}>
           <Reveal>
-            <p style={label}>From The Community</p>
+            <p style={label}>{t('home.communityLabel')}</p>
             <h2
               style={{
                 ...h2s,
@@ -189,10 +193,10 @@ export default function HomePage({
                 marginBottom: 8,
               }}
             >
-              Doing it together.
+              {t('home.communityTitle')}
             </h2>
             <p style={{ fontSize: 16, color: g.t2, marginBottom: 28 }}>
-              Real people. Real stories.
+              {t('home.communitySub')}
             </p>
           </Reveal>
           {communityData && communityData.length > 0 ? (
@@ -257,7 +261,7 @@ export default function HomePage({
                 }}
               >
                 <p style={{ fontSize: 15, color: g.t3 }}>
-                  Be the first to share your butterfly moment.
+                  {t('home.communityEmpty')}
                 </p>
               </div>
             </Reveal>
@@ -268,7 +272,7 @@ export default function HomePage({
                 onClick={onUgcOpen}
                 style={{ fontSize: 15, borderColor: TEAL, color: TEAL }}
               >
-                Share Your Story
+                {t('home.shareStory')}
               </Btn>
             </div>
           </Reveal>
@@ -279,12 +283,12 @@ export default function HomePage({
       <section style={sec("#fff")}>
         <div style={{ maxWidth: 600, margin: "0 auto" }}>
           <Reveal>
-            <p style={label}>The Sign</p>
+            <p style={label}>{t('home.signLabel')}</p>
             <h2 style={{ ...gradH, marginBottom: 8 }}>
-              Two hands. One signal.
+              {t('home.signTitle')}
             </h2>
             <p style={{ fontSize: 17, color: g.t2, marginBottom: 32 }}>
-              The first universal gesture for mental health. Try it.
+              {t('home.signSub')}
             </p>
           </Reveal>
           <Reveal delay={0.1}>
@@ -297,9 +301,9 @@ export default function HomePage({
       <section id="how-it-works" style={sec(g.bg)}>
         <div style={{ maxWidth: 680, margin: "0 auto" }}>
           <Reveal>
-            <p style={label}>How It Works</p>
+            <p style={label}>{t('home.howLabel')}</p>
             <h2 style={{ ...h2s, marginBottom: 36 }}>
-              Three steps. One minute.
+              {t('home.howTitle')}
             </h2>
           </Reveal>
           <Reveal delay={0.1}>
@@ -312,7 +316,7 @@ export default function HomePage({
       <section style={sec("#fff")}>
         <Reveal>
           <div style={{ maxWidth: 420, margin: "0 auto" }}>
-            <p style={label}>The Butterfly Effect</p>
+            <p style={label}>{t('home.effectLabel')}</p>
             <h2
               style={{
                 ...h2s,
@@ -320,7 +324,7 @@ export default function HomePage({
                 marginBottom: 28,
               }}
             >
-              See how 1 becomes 1 billion.
+              {t('home.effectTitle')}
             </h2>
             <div
               style={{
@@ -335,11 +339,12 @@ export default function HomePage({
         </Reveal>
       </section>
 
-      {/* EVENT TEASER */}
+      {/* EVENT TEASER — Hidden until event is active (SHOW_APR30_EVENT) */}
+      {SHOW_APR30_EVENT && (
       <section style={sec(g.bg)}>
         <div style={{ maxWidth: 560, margin: "0 auto" }}>
           <Reveal>
-            <p style={label}>Already in Motion</p>
+            <p style={label}>{t('home.eventLabel')}</p>
             <h2
               style={{
                 ...h2s,
@@ -347,10 +352,10 @@ export default function HomePage({
                 marginBottom: 8,
               }}
             >
-              April 30. Miami.
+              {t('home.eventTitle')}
             </h2>
             <p style={{ fontSize: 17, color: g.t2, marginBottom: 32 }}>
-              Where it all begins.
+              {t('home.eventSub')}
             </p>
           </Reveal>
           <Reveal delay={0.1}>
@@ -412,7 +417,7 @@ export default function HomePage({
                       color: TEAL,
                     }}
                   >
-                    Founding Event
+                    {t('home.eventFounding')}
                   </span>
                 </div>
                 <p
@@ -425,9 +430,7 @@ export default function HomePage({
                     letterSpacing: "-.02em",
                   }}
                 >
-                  One Night For
-                  <br />
-                  One Humanity
+                  {t('home.eventName')}
                 </p>
                 <p
                   style={{
@@ -437,9 +440,9 @@ export default function HomePage({
                     lineHeight: 1.5,
                   }}
                 >
-                  Queen Miami Beach · Miami Grand Prix Weekend
+                  {t('home.eventVenue')}
                   <br />
-                  The Hero Act — revealed live.
+                  {t('home.eventReveal')}
                 </p>
                 <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
                   <span
@@ -452,7 +455,7 @@ export default function HomePage({
                       borderRadius: 99,
                     }}
                   >
-                    April 30, 2026
+                    {t('home.eventDate')}
                   </span>
                   <span
                     style={{
@@ -464,7 +467,7 @@ export default function HomePage({
                       borderRadius: 99,
                     }}
                   >
-                    Miami, FL
+                    {t('home.eventCity')}
                   </span>
                 </div>
               </div>
@@ -480,11 +483,12 @@ export default function HomePage({
               }}
               style={{ fontSize: 15 }}
             >
-              View Full Schedule
+              {t('home.viewSchedule')}
             </Btn>
           </Reveal>
         </div>
       </section>
+      )}
 
       {/* LIVE FEED */}
       <LiveFeed
@@ -505,7 +509,7 @@ export default function HomePage({
                 marginBottom: 20,
               }}
             >
-              Questions.
+              {t('home.faqTitle')}
             </h2>
             <FAQ />
           </div>
@@ -517,7 +521,7 @@ export default function HomePage({
         <Reveal>
           <img
             src={CTA_IMG}
-            alt="Hundreds of people doing the Butterfly Sign"
+            alt={t('home.ctaAlt')}
             width="2000"
             height="852"
             loading="lazy"
@@ -539,21 +543,21 @@ export default function HomePage({
               marginBottom: 6,
             }}
           >
-            60 seconds.
+            {t('home.ctaHeadline')}
           </h2>
         </Reveal>
         <Reveal delay={0.15}>
           <p style={{ fontSize: 19, color: g.t2, marginBottom: 28 }}>
-            Be the person who showed up.
+            {t('home.ctaSub')}
           </p>
         </Reveal>
         <Reveal delay={0.2}>
           <div style={{ display: "flex", justifyContent: "center", gap: 12 }}>
             <Btn primary onClick={onJoin} style={{ fontSize: 17 }}>
-              Join the Challenge
+              {t('home.joinCTA')}
             </Btn>
             <Btn onClick={onRemind} style={{ fontSize: 17 }}>
-              Remind Me May 1
+              {t('home.remindMe')}
             </Btn>
           </div>
         </Reveal>

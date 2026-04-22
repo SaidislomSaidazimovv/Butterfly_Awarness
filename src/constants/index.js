@@ -6,6 +6,9 @@ export const URL_ = "https://thebutterflychallenge.com";
 export const STXT = "I'm doing the #ButterflyChallenge. I see you. I care. You're not alone.";
 export const SCRIPT = "I see you. I care. You're not alone.";
 export const HAND_RAISE_BOOST = 350;
+// Toggle off to hide every April 30 founding-event UI (countdown, hero,
+// event card, timeline sections). Flip to true to bring them back.
+export const SHOW_APR30_EVENT = false;
 export const g = { bg: "#f5f5f7", t1: "#1d1d1f", t2: "#6e6e73", t3: "#6b6b70", t4: "#7c7c82", bdr: "#d2d2d7", link: "#007D65" };
 
 // Image paths

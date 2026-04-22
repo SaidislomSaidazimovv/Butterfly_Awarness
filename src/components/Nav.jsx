@@ -1,14 +1,22 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ExternalLink } from 'lucide-react';
 import { g, ff, TEAL, LOGO_DARK } from '../constants/index.js';
 import { Btn } from './ui/index.js';
+import { LanguageSwitcher } from './LanguageSwitcher.jsx';
 
 export function Nav({ page, navigate, onJoin, onSupport, currentUser, onSignIn, onSignOut, userDropdownOpen, setUserDropdownOpen, displayName, avatarUrl }) {
+  const { t } = useTranslation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [avatarFailed, setAvatarFailed] = useState(false);
   const showAvatarImg = !!avatarUrl && !avatarFailed;
   const ease = "cubic-bezier(.16,1,.3,1)";
-  const links = [{l:"Story",p:"story"},{l:"Science",p:"science"},{l:"Alliance",p:"alliance"},{l:"Live",p:"live"}];
+  const links = [
+    { l: t('nav.story'), p: 'story' },
+    { l: t('nav.science'), p: 'science' },
+    { l: t('nav.alliance'), p: 'alliance' },
+    { l: t('nav.live'), p: 'live' },
+  ];
 
   const go = (p) => { navigate(p); setMenuOpen(false); };
 
@@ -28,10 +36,10 @@ export function Nav({ page, navigate, onJoin, onSupport, currentUser, onSignIn, 
 
           {/* Desktop center links */}
           <div className="nav-desktop nav-center-links" style={{ display: "none", alignItems: "center", gap: 24 }}>
-            {links.map(t => (
-              <button key={t.p} onClick={() => navigate(t.p)} style={{ background: "none", border: "none", fontFamily: ff, fontSize: 13, fontWeight: 500, color: page === t.p ? TEAL : g.t2, cursor: "pointer", padding: 0, position: "relative" }}>
-                {t.l}
-                {page === t.p && <div style={{ position: "absolute", bottom: -8, left: 0, right: 0, height: 2, background: TEAL, borderRadius: 1 }} />}
+            {links.map(link => (
+              <button key={link.p} onClick={() => navigate(link.p)} style={{ background: "none", border: "none", fontFamily: ff, fontSize: 13, fontWeight: 500, color: page === link.p ? TEAL : g.t2, cursor: "pointer", padding: 0, position: "relative" }}>
+                {link.l}
+                {page === link.p && <div style={{ position: "absolute", bottom: -8, left: 0, right: 0, height: 2, background: TEAL, borderRadius: 1 }} />}
               </button>
             ))}
           </div>
@@ -39,18 +47,19 @@ export function Nav({ page, navigate, onJoin, onSupport, currentUser, onSignIn, 
           {/* Desktop right actions */}
           <div className="nav-desktop" style={{ display: "none", alignItems: "center", gap: 10 }}>
             <button className="nav-safe-exit" onClick={() => window.open("https://google.com","_blank","noopener")} style={{ background: "none", border: "none", fontFamily: ff, fontSize: 12, fontWeight: 500, color: g.t3, cursor: "pointer", padding: "6px 0", display: "flex", alignItems: "center", gap: 4 }}>
-              <ExternalLink size={11} />Safe Exit
+              <ExternalLink size={11} />{t('nav.safeExit')}
             </button>
             <button onClick={onSupport} style={{ background: "none", border: "1px solid " + g.bdr, borderRadius: 980, fontFamily: ff, fontSize: 13, fontWeight: 500, color: g.t1, cursor: "pointer", padding: "7px 14px", display: "flex", alignItems: "center", gap: 5 }}>
-              <span style={{ color: TEAL }}>♡</span> Get Support
+              <span style={{ color: TEAL }}>♡</span> {t('nav.getSupport')}
             </button>
-            <Btn primary onClick={onJoin} style={{ padding: "8px 18px", fontSize: 13, borderRadius: 980 }}>Take the Challenge</Btn>
+            <Btn primary onClick={onJoin} style={{ padding: "8px 18px", fontSize: 13, borderRadius: 980 }}>{t('nav.takeTheChallenge')}</Btn>
+            <LanguageSwitcher />
             {/* Auth: Sign In or User Menu */}
             {!currentUser ? (
-              <button onClick={onSignIn} style={{ background: "none", border: "1px solid " + g.bdr, borderRadius: 980, fontFamily: ff, fontSize: 13, fontWeight: 500, color: g.t1, cursor: "pointer", padding: "7px 14px" }}>Sign in</button>
+              <button onClick={onSignIn} style={{ background: "none", border: "1px solid " + g.bdr, borderRadius: 980, fontFamily: ff, fontSize: 13, fontWeight: 500, color: g.t1, cursor: "pointer", padding: "7px 14px" }}>{t('nav.signIn')}</button>
             ) : (
               <div style={{ position: "relative" }}>
-                <button aria-label="User menu" onClick={() => setUserDropdownOpen(v => !v)} style={{ display: "flex", alignItems: "center", gap: 6, background: "none", border: "1px solid " + g.bdr, borderRadius: 980, padding: "4px 12px 4px 4px", cursor: "pointer", fontFamily: ff }}>
+                <button aria-label={t('nav.userMenu')} onClick={() => setUserDropdownOpen(v => !v)} style={{ display: "flex", alignItems: "center", gap: 6, background: "none", border: "1px solid " + g.bdr, borderRadius: 980, padding: "4px 12px 4px 4px", cursor: "pointer", fontFamily: ff }}>
                   {showAvatarImg ? (
                     <img src={avatarUrl} alt="" width="26" height="26" referrerPolicy="no-referrer" decoding="async" onError={() => setAvatarFailed(true)} style={{ width: 26, height: 26, borderRadius: 13, objectFit: "cover" }} />
                   ) : (
@@ -61,7 +70,7 @@ export function Nav({ page, navigate, onJoin, onSupport, currentUser, onSignIn, 
                 {userDropdownOpen && (
                   <div style={{ position: "absolute", top: "calc(100% + 6px)", right: 0, background: "#fff", borderRadius: 14, boxShadow: "0 4px 24px rgba(0,0,0,.1)", border: "1px solid rgba(0,0,0,.06)", padding: "8px 4px", minWidth: 160, zIndex: 10, animation: "fadeUp .2s cubic-bezier(.16,1,.3,1)" }}>
                     <p style={{ padding: "8px 14px", fontSize: 12, color: g.t4, fontFamily: ff }}>{currentUser.email}</p>
-                    <button onClick={onSignOut} style={{ width: "100%", textAlign: "left", padding: "10px 14px", background: "none", border: "none", fontFamily: ff, fontSize: 14, fontWeight: 500, color: "#ef4444", cursor: "pointer", borderRadius: 8 }}>Sign out</button>
+                    <button onClick={onSignOut} style={{ width: "100%", textAlign: "left", padding: "10px 14px", background: "none", border: "none", fontFamily: ff, fontSize: 14, fontWeight: 500, color: "#ef4444", cursor: "pointer", borderRadius: 8 }}>{t('nav.signOut')}</button>
                   </div>
                 )}
               </div>
@@ -70,10 +79,11 @@ export function Nav({ page, navigate, onJoin, onSupport, currentUser, onSignIn, 
 
           {/* Mobile right: Join + Hamburger */}
           <div className="nav-mobile" style={{ display: "none", alignItems: "center", gap: 8 }}>
-            <Btn primary onClick={onJoin} style={{ padding: "7px 14px", fontSize: 12, borderRadius: 980 }}>Join</Btn>
+            <LanguageSwitcher />
+            <Btn primary onClick={onJoin} style={{ padding: "7px 14px", fontSize: 12, borderRadius: 980 }}>{t('nav.join')}</Btn>
             {currentUser && (
               <div style={{ position: "relative" }}>
-                <button aria-label="User menu" onClick={() => setUserDropdownOpen(v => !v)} style={{ background: "none", border: "none", padding: 0, cursor: "pointer", display: "flex", alignItems: "center" }}>
+                <button aria-label={t('nav.userMenu')} onClick={() => setUserDropdownOpen(v => !v)} style={{ background: "none", border: "none", padding: 0, cursor: "pointer", display: "flex", alignItems: "center" }}>
                   {showAvatarImg ? (
                     <img src={avatarUrl} alt="" width="32" height="32" referrerPolicy="no-referrer" decoding="async" onError={() => setAvatarFailed(true)} style={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'cover' }} />
                   ) : (
@@ -85,12 +95,12 @@ export function Nav({ page, navigate, onJoin, onSupport, currentUser, onSignIn, 
                 {userDropdownOpen && (
                   <div style={{ position: "absolute", top: "calc(100% + 6px)", right: 0, background: "#fff", borderRadius: 14, boxShadow: "0 4px 24px rgba(0,0,0,.1)", border: "1px solid rgba(0,0,0,.06)", padding: "8px 4px", minWidth: 180, zIndex: 10, animation: "fadeUp .2s cubic-bezier(.16,1,.3,1)" }}>
                     <p style={{ padding: "8px 14px", fontSize: 12, color: g.t4, fontFamily: ff }}>{currentUser.email}</p>
-                    <button onClick={onSignOut} style={{ width: "100%", textAlign: "left", padding: "10px 14px", background: "none", border: "none", fontFamily: ff, fontSize: 14, fontWeight: 500, color: "#ef4444", cursor: "pointer", borderRadius: 8 }}>Sign out</button>
+                    <button onClick={onSignOut} style={{ width: "100%", textAlign: "left", padding: "10px 14px", background: "none", border: "none", fontFamily: ff, fontSize: 14, fontWeight: 500, color: "#ef4444", cursor: "pointer", borderRadius: 8 }}>{t('nav.signOut')}</button>
                   </div>
                 )}
               </div>
             )}
-            <button aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"} onClick={() => setMenuOpen(v => !v)} style={{ background: "none", border: "none", cursor: "pointer", padding: 8, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", width: 36, height: 36 }}>
+            <button aria-label={menuOpen ? t('nav.closeMenu') : t('nav.openMenu')} onClick={() => setMenuOpen(v => !v)} style={{ background: "none", border: "none", cursor: "pointer", padding: 8, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", width: 36, height: 36 }}>
               <span style={{ display: "block", width: 18, height: 1.5, background: g.t1, borderRadius: 1, transition: `all .35s ${ease}`, transform: menuOpen ? "translateY(3.75px) rotate(45deg)" : "none" }} />
               <span style={{ display: "block", width: 18, height: 1.5, background: g.t1, borderRadius: 1, margin: "3px 0", transition: `all .35s ${ease}`, opacity: menuOpen ? 0 : 1, transform: menuOpen ? "scaleX(0)" : "scaleX(1)" }} />
               <span style={{ display: "block", width: 18, height: 1.5, background: g.t1, borderRadius: 1, transition: `all .35s ${ease}`, transform: menuOpen ? "translateY(-3.75px) rotate(-45deg)" : "none" }} />
@@ -110,17 +120,17 @@ export function Nav({ page, navigate, onJoin, onSupport, currentUser, onSignIn, 
         transition: `opacity .4s ${ease}`,
       }}>
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 0, width: "100%", padding: "0 32px" }}>
-          {links.map((t, i) => (
-            <button key={t.p} onClick={() => go(t.p)} style={{
+          {links.map((link, i) => (
+            <button key={link.p} onClick={() => go(link.p)} style={{
               background: "none", border: "none", fontFamily: ff, cursor: "pointer", padding: "18px 0", width: "100%",
               fontSize: 32, fontWeight: 600, letterSpacing: "-.02em",
-              color: page === t.p ? TEAL : g.t1,
+              color: page === link.p ? TEAL : g.t1,
               borderBottom: i < links.length - 1 ? "1px solid " + g.bdr : "none",
               opacity: menuOpen ? 1 : 0,
               transform: menuOpen ? "translateY(0)" : "translateY(20px)",
               transition: `opacity .4s ${ease} ${(i + 1) * 60}ms, transform .5s ${ease} ${(i + 1) * 60}ms, color .3s`,
             }}>
-              {t.l}
+              {link.l}
             </button>
           ))}
         </div>
@@ -129,12 +139,12 @@ export function Nav({ page, navigate, onJoin, onSupport, currentUser, onSignIn, 
           opacity: menuOpen ? 1 : 0, transform: menuOpen ? "translateY(0)" : "translateY(20px)",
           transition: `opacity .4s ${ease} 320ms, transform .5s ${ease} 320ms`,
         }}>
-          <Btn primary onClick={() => { onJoin(); setMenuOpen(false); }} style={{ width: "100%", fontSize: 16, padding: "14px 20px", borderRadius: 14 }}>Take the Challenge</Btn>
+          <Btn primary onClick={() => { onJoin(); setMenuOpen(false); }} style={{ width: "100%", fontSize: 16, padding: "14px 20px", borderRadius: 14 }}>{t('nav.takeTheChallenge')}</Btn>
           <button onClick={() => { onSupport(); setMenuOpen(false); }} style={{ width: "100%", background: "none", border: "1px solid " + g.bdr, borderRadius: 14, fontFamily: ff, fontSize: 15, fontWeight: 500, color: g.t1, cursor: "pointer", padding: "13px 20px", display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
-            <span style={{ color: TEAL }}>♡</span> Get Support
+            <span style={{ color: TEAL }}>♡</span> {t('nav.getSupport')}
           </button>
           <button onClick={() => { window.open("https://google.com","_blank","noopener"); setMenuOpen(false); }} style={{ background: "none", border: "none", fontFamily: ff, fontSize: 13, fontWeight: 500, color: g.t3, cursor: "pointer", padding: "10px 0", display: "flex", alignItems: "center", justifyContent: "center", gap: 4 }}>
-            <ExternalLink size={11} />Safe Exit
+            <ExternalLink size={11} />{t('nav.safeExit')}
           </button>
           {/* Auth section in mobile menu */}
           <div style={{ borderTop: "1px solid " + g.bdr, paddingTop: 16, marginTop: 8 }}>
@@ -143,13 +153,13 @@ export function Nav({ page, navigate, onJoin, onSupport, currentUser, onSignIn, 
                 <p style={{ color: g.t3, fontSize: 13, marginBottom: 8, fontFamily: ff, textAlign: "center" }}>
                   {currentUser.user_metadata?.full_name || currentUser.email}
                 </p>
-                <button onClick={() => { onSignOut(); setMenuOpen(false); }} aria-label="Sign out" style={{ background: "none", border: "1px solid " + g.bdr, borderRadius: 14, color: "#ef4444", padding: "12px 20px", fontSize: 15, fontWeight: 500, cursor: "pointer", width: "100%", fontFamily: ff }}>
-                  Sign Out
+                <button onClick={() => { onSignOut(); setMenuOpen(false); }} aria-label={t('nav.signOut')} style={{ background: "none", border: "1px solid " + g.bdr, borderRadius: 14, color: "#ef4444", padding: "12px 20px", fontSize: 15, fontWeight: 500, cursor: "pointer", width: "100%", fontFamily: ff }}>
+                  {t('nav.signOut')}
                 </button>
               </div>
             ) : (
-              <button onClick={() => { onSignIn(); setMenuOpen(false); }} aria-label="Sign in" style={{ background: TEAL, border: "none", borderRadius: 14, color: "#fff", padding: "13px 20px", fontSize: 15, fontWeight: 600, cursor: "pointer", width: "100%", fontFamily: ff }}>
-                Sign In
+              <button onClick={() => { onSignIn(); setMenuOpen(false); }} aria-label={t('nav.signIn')} style={{ background: TEAL, border: "none", borderRadius: 14, color: "#fff", padding: "13px 20px", fontSize: 15, fontWeight: 600, cursor: "pointer", width: "100%", fontFamily: ff }}>
+                {t('nav.signIn')}
               </button>
             )}
           </div>

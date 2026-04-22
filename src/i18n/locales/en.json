@@ -1,0 +1,459 @@
+{
+  "nav": {
+    "story": "Story",
+    "science": "Science",
+    "alliance": "Alliance",
+    "live": "Live",
+    "safeExit": "Safe Exit",
+    "getSupport": "Get Support",
+    "takeTheChallenge": "Take the Challenge",
+    "join": "Join",
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "userMenu": "User menu",
+    "openMenu": "Open navigation menu",
+    "closeMenu": "Close navigation menu"
+  },
+  "home": {
+    "heroAlt": "Two people making the Butterfly Sign",
+    "label": "Butterfly Challenge",
+    "headline": "Lift a billion hands.",
+    "subheadPart1": "A 60-second gesture for mental health.",
+    "subheadPart2": "Feel it. Do it. Share it.",
+    "joinCTA": "Join the Challenge",
+    "iDidIt": "I did it",
+    "handsRaised": "{{count}} hands raised",
+    "handsRaisedAria": "{{count}} hands raised worldwide",
+    "highlightsTitle": "Get the highlights.",
+    "communityLabel": "From The Community",
+    "communityTitle": "Doing it together.",
+    "communitySub": "Real people. Real stories.",
+    "communityEmpty": "Be the first to share your butterfly moment.",
+    "shareStory": "Share Your Story",
+    "signLabel": "The Sign",
+    "signTitle": "Two hands. One signal.",
+    "signSub": "The first universal gesture for mental health. Try it.",
+    "howLabel": "How It Works",
+    "howTitle": "Three steps. One minute.",
+    "effectLabel": "The Butterfly Effect",
+    "effectTitle": "See how 1 becomes 1 billion.",
+    "eventLabel": "Already in Motion",
+    "eventTitle": "April 30. Miami.",
+    "eventSub": "Where it all begins.",
+    "eventFounding": "Founding Event",
+    "eventName": "One Night For One Humanity",
+    "eventVenue": "Queen Miami Beach · Miami Grand Prix Weekend",
+    "eventReveal": "The Hero Act — revealed live.",
+    "eventDate": "April 30, 2026",
+    "eventCity": "Miami, FL",
+    "viewSchedule": "View Full Schedule",
+    "faqTitle": "Questions.",
+    "ctaAlt": "Hundreds of people doing the Butterfly Sign",
+    "ctaHeadline": "60 seconds.",
+    "ctaSub": "Be the person who showed up.",
+    "remindMe": "Remind Me May 1"
+  },
+  "live": {
+    "label": "Live",
+    "title": "Hands raised worldwide.",
+    "participants": "{{count}} participants",
+    "topCountries": "Top Countries",
+    "topCities": "Top Cities",
+    "topParticipants": "Top Participants",
+    "shareMoment": "Share Your Moment"
+  },
+  "footer": {
+    "tagline": "An initiative of One Humanity Foundation · 501(c)(3).",
+    "manyFlagsTitle": "One humanity. Many flags. One butterfly.",
+    "manyFlagsSub": "A shared symbol across nations, cultures, and communities.",
+    "resources": "Resources",
+    "forOrgs": "For Organizations",
+    "forSchools": "For Schools",
+    "forTeams": "For Teams",
+    "forBrands": "For Brands",
+    "butterflyProtocol": "Butterfly Protocol",
+    "needHelp": "Need Help?",
+    "us988": "US: Call or Text 988",
+    "us988Sub": "24/7 free and confidential support.",
+    "getSupportNow": "Get Support Now",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "accessibility": "Accessibility",
+    "about": "About",
+    "disclaimer": "The Butterfly Challenge is a social gesture, not a replacement for professional care. If someone you know is in danger, call 911 or your local emergency number.",
+    "copyright": "© 2026 One Humanity Foundation. All rights reserved."
+  },
+  "language": {
+    "label": "Language"
+  },
+  "faq": {
+    "what": {
+      "q": "What is the Butterfly Challenge?",
+      "a": "A 60-second act of connection. Make the sign, say the message, challenge 3 others. Free forever."
+    },
+    "why": {
+      "q": "Why a butterfly?",
+      "a": "The most universal symbol of transformation. Already recognized in ASL. No translation needed."
+    },
+    "donate": {
+      "q": "Do I need to donate?",
+      "a": "No. The challenge is free for everyone, everywhere, forever."
+    },
+    "therapy": {
+      "q": "Is this therapy?",
+      "a": "No. It's a signal. Crisis resources are on this page."
+    },
+    "month": {
+      "q": "What is Butterfly Month?",
+      "a": "May, every year. The globally recognized month for mental health."
+    },
+    "who": {
+      "q": "Who is behind this?",
+      "a": "ONE HUMANITY Foundation — U.S. 501(c)(3). 100% to mental health."
+    }
+  },
+  "highlights": {
+    "card1": { "title": "Nearly 1 billion people live with a mental health condition.", "sub": "WHO, 2025" },
+    "card2": { "title": "There's never been a universal gesture that says: I see you and I care.", "sub": "Until now." },
+    "card3": { "title": "May is Butterfly Month. The globally recognized month for mental health.", "sub": "Starting 2026." },
+    "card4": { "title": "One becomes three becomes nine becomes a billion.", "sub": "Lift 3 More." }
+  },
+  "stepTabs": {
+    "step1": {
+      "num": "01", "title": "Take the Challenge",
+      "heading": "Make the sign. Film it.",
+      "body": "Open your camera. Face it toward you. Make the Butterfly Sign — hands on heart, open like wings. No filter. No production. Just you, showing up for someone.",
+      "tip": "Hold a name in your mind. You don't have to say it out loud."
+    },
+    "step2": {
+      "num": "02", "title": "Show the Love",
+      "heading": "Say their name.",
+      "body": "Look into the camera and say: \"I see you. I care. You're not alone.\" Or: \"I got you, [name].\" Say their name out loud. That's what makes it real.",
+      "tip": "This isn't a script. Say whatever is true."
+    },
+    "step3": {
+      "num": "03", "title": "Lift 3 More",
+      "heading": "Tag 3 people. Pass it forward.",
+      "body": "Nominate 3 people you care about. Give them 24 hours. One becomes three becomes nine becomes a billion. That's the butterfly effect.",
+      "tip": "They don't need followers. They need one person to think of."
+    },
+    "nextStep": "Next step ›",
+    "ready": "I'm ready — join"
+  },
+  "signBuilder": {
+    "intro": {
+      "title": "Learn the Butterfly Sign",
+      "sub": "3 steps. 10 seconds. No words needed.",
+      "start": "Try it yourself"
+    },
+    "step1": { "instruction": "Place both hands on your heart.", "detail": "Palms flat against your chest.", "alt": "Hands on heart" },
+    "step2": { "instruction": "Cross your wrists.", "detail": "Right over left, thumbs hooked together.", "alt": "Wrists crossed" },
+    "step3": { "instruction": "Open like wings.", "detail": "Spread your fingers wide. That's the Butterfly Sign.", "alt": "Hands open like wings" },
+    "progress": "Step {{n}} of 3",
+    "next": "Next",
+    "complete": "Complete",
+    "done": {
+      "label": "The Butterfly Sign",
+      "line1": "I see you.",
+      "line2": "I care.",
+      "line3": "You're not alone.",
+      "caption": "No language. No diagnosis. No barrier. Just two hands.",
+      "got": "Got it",
+      "again": "Try again"
+    }
+  },
+  "chain": {
+    "level1": { "label": "You", "msg": "One person. One gesture." },
+    "level2": { "label": "3", "msg": "You lift 3 people." },
+    "level3": { "label": "9", "msg": "They each lift 3 more." },
+    "level4": { "label": "27", "msg": "It's already spreading." },
+    "level5": { "label": "81", "msg": "Four generations deep." },
+    "level6": { "label": "243", "msg": "Five generations. Now watch." },
+    "first": "Lift 3",
+    "next": "Next generation",
+    "keepGoing": "Keep going →",
+    "growing": "Growing...",
+    "stillGoing": "Still going...",
+    "almostThere": "Almost there...",
+    "done": {
+      "number": "1,000,000,000",
+      "title": "One billion hands.",
+      "subLine1": "20 generations. Starting with one person.",
+      "subLine2": "Starting with you.",
+      "cta": "Be that person",
+      "again": "Watch again"
+    }
+  },
+  "popups": {
+    "role": {
+      "creators": { "name": "Creators", "word": "Ignition", "line": "You have the reach.", "detail": "When a creator makes the sign, their audience doesn't see a campaign. They see someone they trust showing up. We're inviting a founding group to help ignite this into culture. One video. Three nominations. Forever." },
+      "celebrities": { "name": "Celebrities", "word": "Consequence", "line": "A voice the world trusts.", "detail": "When a celebrity makes the sign, the world doesn't see a promotion. It sees a person saying something true. Not ambassadors — people who chose to show up when it mattered." },
+      "athletes": { "name": "Athletes", "word": "Strength", "line": "Showing up is strength.", "detail": "When an athlete makes the sign, people see courage. Sport is where humanity processes its hardest emotions. The stadium is where people feel together." },
+      "music": { "name": "Music", "word": "Sound", "line": "Before language, there's sound.", "detail": "Music reaches where words stop. 1 billion people carry something in silence. That silence has never had a sound. Until now." },
+      "dance": { "name": "Dance", "word": "Motion", "line": "A body before a word.", "detail": "Dance turns emotion into motion. Every movement that lived in the body outlasted every movement that lived only in the mind." },
+      "film": { "name": "Film", "word": "Story", "line": "A story before memory.", "detail": "Film shapes how the world sees culture. April 30. Miami. The story begins there. One story told honestly." },
+      "fashion": { "name": "Fashion", "word": "Statement", "line": "A statement before a speech.", "detail": "What people wear is what people mean. When fashion carries the butterfly, the movement is being worn into the world." },
+      "art": { "name": "Art", "word": "Image", "line": "An image before explanation.", "detail": "Art makes the invisible impossible to ignore. The first works don't decorate the movement — they define how the world remembers it." },
+      "faith": { "name": "Faith", "word": "Trust", "line": "Trust before reach.", "detail": "Faith and community go where no campaign can — into homes, families, grief, ordinary life. A signal anyone can make." },
+      "gaming": { "name": "Gaming", "word": "World", "line": "3.6 billion players.", "detail": "Gaming is belonging. Teams, squads, shared missions. The butterfly is a signal waiting to become a mission." },
+      "podcast": { "name": "Podcast", "word": "Voice", "line": "Too personal for the feed.", "detail": "The most powerful thing a host can do is not explain the movement — it's to say: I made the sign. I thought of someone I love." },
+      "everyone": { "name": "Everyone", "word": "Humanity", "line": "You need one person.", "detail": "You don't need followers or a camera. You need one name in your mind and sixty seconds of courage." },
+      "join": "Join the Challenge"
+    },
+    "alliance": {
+      "platforms": { "name": "Platforms", "line": "How a movement travels.", "brief": "TikTok, YouTube, Meta, Instagram, X. Feature the challenge, enable sign filters, nomination mechanics. BOS Help Button before launch." },
+      "care": { "name": "Care", "line": "Joining people already showing up.", "brief": "Mental health orgs, NGOs, foundations. Verified on the Human Routing Map. The movement points toward care — never replaces it." },
+      "media": { "name": "Media", "line": "How a movement is witnessed.", "brief": "Broadcasters, publishers, press. IASP safe messaging in every piece of coverage. April 30 access." },
+      "business": { "name": "Business", "line": "How it becomes culture.", "brief": "Brands, employers, CSR teams. Butterfly Month in your calendar. No emotional washing." },
+      "education": { "name": "Education", "line": "The next generation.", "brief": "Schools, universities, youth orgs. No student encounters the challenge without a pathway to real support." },
+      "connectivity": { "name": "Connectivity", "line": "Every hand.", "brief": "Telcos, SMS, device ecosystems. The person with no data can still find help. Always." },
+      "nonNegotiable": "Non-negotiable:",
+      "nonNegotiableText": "Safety before scale.",
+      "becomePartner": "Become a founding partner"
+    },
+    "trust": {
+      "title": "Built to be trusted.",
+      "items": {
+        "nonprofit": { "t": "501(c)(3) Nonprofit", "d": "Independent governance. Auditable from Day 1." },
+        "safety": { "t": "Safety Officer", "d": "Unilateral veto. Cannot be overruled." },
+        "transparency": { "t": "Radical Transparency", "d": "Weekly: Money In → Out → Programs → Outcomes." },
+        "editorial": { "t": "Editorial Independence", "d": "No sponsor has editorial control. Ever." },
+        "dignity": { "t": "Dignity-First", "d": "Non-diagnostic. IASP safe messaging." },
+        "free": { "t": "Free Forever", "d": "Open to everyone, everywhere." }
+      }
+    },
+    "timeline": {
+      "upNext": "Up next",
+      "apr30": { "t": "One Night For One Humanity", "s": "Queen Miami Beach · Founding event", "detail": "The night that starts everything. The Hero Act is revealed live. The founding partners are recognized. The Butterfly Challenge launches the next morning. Miami Grand Prix Weekend — the world is already watching." },
+      "may1": { "t": "Butterfly Month begins", "s": "Challenge goes global", "detail": "May 1 is Day One. The challenge goes live worldwide. Creators activate. Every platform, every language, every country. The butterfly starts to fly." },
+      "mayJun": { "t": "Culture surfaces activate", "s": "Sport · Music · Film · Fashion", "detail": "The butterfly sign enters stadiums, concert stages, runways, film sets. Every cultural surface that agreed to carry the signal activates during this window." },
+      "jul19": { "t": "FIFA World Cup Final", "s": "MetLife Stadium · 5 billion watching", "detail": "The biggest single-audience moment in human history. If the butterfly sign is visible here, 5 billion people see it in the same second. That's the goal." },
+      "sep2026": { "t": "UN General Assembly", "s": "Butterfly Week · Institutional mandate", "detail": "The movement goes institutional. Butterfly Week at the United Nations. The ask: formally recognize May as Global Mental Health Awareness Month with the butterfly as the international symbol." }
+    },
+    "join": {
+      "title": "Join the Challenge"
+    },
+    "share": {
+      "title": "Share your Butterfly"
+    }
+  },
+  "countdown": {
+    "days": "Days",
+    "hours": "Hours",
+    "minutes": "Min",
+    "seconds": "Sec",
+    "happening": "It's happening now."
+  },
+  "joinC": {
+    "step": "Step {{n}}",
+    "step1": { "t": "Make the sign", "d": "Hands on heart. Open like wings." },
+    "step2": { "t": "Say the message" },
+    "step3": { "t": "Lift 3 more", "d": "Tag 3 people. 24 hours." },
+    "back": "Back",
+    "next": "Next",
+    "doneShare": "Done — share"
+  },
+  "reminderC": {
+    "heading": "Get a reminder for May 1",
+    "placeholder": "your@email.com",
+    "button": "Remind Me May 1",
+    "disclaimer": "No spam. Just one reminder. Unsubscribe anytime.",
+    "success": "You're on the list.",
+    "done": "Done"
+  },
+  "support": {
+    "title": "Get Support",
+    "sub": "You're not alone. Help is available 24/7.",
+    "unitedStates": "United States",
+    "lifeline": {
+      "name": "988 Suicide & Crisis Lifeline",
+      "detail": "Call or text 988 · Free · 24/7"
+    },
+    "textLine": {
+      "name": "Crisis Text Line",
+      "detail": "Text HOME to 741741 · Free · 24/7"
+    },
+    "international": "Outside the US",
+    "selectCountry": "Select your country",
+    "choose": "Choose...",
+    "visitWebsite": "Visit website →",
+    "findLocal": "Find local resources",
+    "confidentialTitle": "What you share is your choice.",
+    "confidentialBody": "All conversations with crisis lines are confidential."
+  },
+  "visualTimeline": {
+    "apr30": { "t": "One Night For One Humanity", "s": "The founding event. Hero Act revealed live. Queen Miami Beach." },
+    "may1": { "t": "Butterfly Month begins", "s": "The challenge goes global. Creators activate worldwide." },
+    "mayJun": { "t": "Culture surfaces activate", "s": "Formula 1 · Music festivals · Film · Fashion weeks · Sports." },
+    "jul19": { "t": "FIFA World Cup Final", "s": "MetLife Stadium. 5 billion people watching. The sign goes everywhere." },
+    "sep": { "t": "UN General Assembly", "s": "Butterfly Week. Institutional mandate. The movement becomes permanent." }
+  },
+  "shareC": {
+    "sub": "Share in 10 seconds.",
+    "copyLink": "Copy link",
+    "whatsapp": "WhatsApp",
+    "telegram": "Telegram",
+    "facebook": "Facebook",
+    "email": "Email",
+    "captionHint": "Copy a caption for Instagram & TikTok.",
+    "captions": {
+      "a": "I'm doing the #ButterflyChallenge. [Name], I see you. I care. You're not alone. Lifting 3 more: @__ @__ @__",
+      "b": "A 60‑second check‑in. [Name], I got you. #ButterflyChallenge Lifting 3: @__ @__ @__",
+      "c": "If you're carrying something in silence: I see you. I care. You're not alone. #ButterflyChallenge"
+    },
+    "copy": "Copy",
+    "copied": "Copied",
+    "remindHeading": "Get a reminder for May 1",
+    "remindBtn": "Remind Me",
+    "remindSuccess": "You're on the list!"
+  },
+  "livePage": {
+    "heroTitle": "April 30. Queen Miami Beach.",
+    "heroSub": "The founding event. The moment it all begins.",
+    "scheduleLabel": "What's Happening",
+    "scheduleTitle": "The full schedule.",
+    "foundingEvent": "Founding Event",
+    "eventName": "One Night For One Humanity",
+    "eventVenue": "Queen Miami Beach · Miami Grand Prix Weekend",
+    "eventReveal": "The Hero Act — revealed live.",
+    "eventDate": "April 30, 2026",
+    "eventCity": "Miami, FL",
+    "ctaTitle": "Be part of this moment.",
+    "ctaSub": "Join the founding event. Share your butterfly.",
+    "ctaBtn": "Share Your Moment"
+  },
+  "story": {
+    "heroTitle": "Where it came from.",
+    "heroSub": "From a moment of crisis in 1998 to a global movement in 2026.",
+    "origin": {
+      "label": "The Origin",
+      "title": "1998 · Hurricane Pauline",
+      "imgAlt": "Lucina Artigas guiding survivors through the butterfly hug after Hurricane Pauline",
+      "p1": "Lucina Artigas was a therapist in Mexico when Hurricane Pauline devastated the coast. In the aftermath, thousands of people — many of them children — were in severe psychological trauma with nowhere to turn.",
+      "p2": "She created a simple bilateral stimulation gesture anyone could do without a therapist present. Two hands crossed on your chest, alternating taps. She called it the butterfly hug."
+    },
+    "spread": {
+      "label": "Global Adoption",
+      "title": "2000–2024 · The Spread",
+      "imgAlt": "The butterfly hug spreading globally",
+      "p": "The butterfly hug moved through disaster zones, refugee camps, and crisis centers globally. It became embedded in EMDR therapy, in NGO protocols, in first responder training. It worked. It was simple. It was free. And it didn't require permission."
+    },
+    "tipping": {
+      "label": "The Tipping Point",
+      "title": "May 2024 · The Moment",
+      "imgAlt": "The butterfly hug demonstrated on a global stage",
+      "p": "Prince Harry demonstrated the butterfly hug on stage. It was seen by millions. Suddenly, the gesture wasn't hidden in clinical papers anymore. It was visible. It was real. And it belonged to everyone."
+    },
+    "challenge": {
+      "label": "This Moment",
+      "title": "April 2026 · The Challenge",
+      "p": "We're organizing the first coordinated global moment. One night. One gesture. Visible proof that mental health care is a human right, not a luxury. That you can lead change without permission."
+    },
+    "timeline": {
+      "label": "The Timeline",
+      "title": "Key milestones."
+    },
+    "cta": {
+      "title": "You're part of this story.",
+      "sub": "It started with one person helping another. Join the next chapter.",
+      "join": "Join the Challenge",
+      "science": "See the Science"
+    }
+  },
+  "science": {
+    "heroTitle": "Why it works.",
+    "heroSub": "The neuroscience behind the butterfly hug — backed by research, used by therapists worldwide.",
+    "stats": {
+      "who": { "num": "WHO", "sub": "Recommended treatment" },
+      "years": { "num": "30+", "sub": "Years of research" },
+      "countries": { "num": "100+", "sub": "Countries using EMDR" }
+    },
+    "brain": {
+      "label": "How Your Brain Works",
+      "title": "Crossing the midline.",
+      "imgAlt": "Brain hemispheres showing bilateral stimulation",
+      "p1": "When you perform the butterfly hug — alternating stimulation across your body's midline — you activate both hemispheres of your brain simultaneously. Your left side notices movement on the right. Your right notices movement on the left.",
+      "p2": "This bilateral stimulation is how your brain processes and integrates overwhelming information. It's the same mechanism that happens during REM sleep, when your eyes move side-to-side. It helps your nervous system work through stress."
+    },
+    "emdr": {
+      "label": "Clinical Foundation",
+      "title": "Built on EMDR science.",
+      "imgAlt": "Butterfly hug gesture with calming ripples",
+      "p1": "Dr. Francine Shapiro developed EMDR (Eye Movement Desensitization and Reprocessing) therapy in the late 1980s. She discovered that bilateral eye movements, combined with processing traumatic memories, helped people heal from PTSD. Since then, EMDR has become a WHO-recommended treatment for post-traumatic stress.",
+      "p2": "Lucina Artigas adapted this science. Instead of eye movements guided by a therapist, she created a self-soothing version: two hands, bilateral stimulation, no therapist needed. The butterfly hug puts clinical neuroscience in your own hands."
+    },
+    "neuro": {
+      "label": "The Evidence",
+      "title": "What brain scans show.",
+      "imgAlt": "Brain scan showing prefrontal cortex activation",
+      "p1": "fMRI studies of people using bilateral stimulation show reduced activation in the amygdala — the part of your brain that triggers fear and anxiety. At the same time, activity increases in the prefrontal cortex, the part that helps you think clearly, make rational decisions, and feel safe.",
+      "p2": "In plain language: the butterfly hug tells your alarm system to stand down. It doesn't make the threat go away. It helps your brain recognize that, right now, in this moment, you can breathe."
+    },
+    "quote": {
+      "text": "The butterfly hug is not therapy. It's what humans do instinctively when someone is hurting. Now we know why it works.",
+      "attribution": "— Clinical neuroscience literature on bilateral stimulation"
+    },
+    "disclaimer": {
+      "badge": "⚕️ Important distinction",
+      "text": "The butterfly hug is a grounding tool, not a replacement for therapy. If you're struggling with trauma, depression, or suicidal thoughts, please talk to a professional.",
+      "label": "Important Clarification",
+      "title": "This is not therapy.",
+      "p1": "The butterfly hug is evidence-based. It's used by therapists. But performing the gesture is not the same as therapy. It's a tool. A gesture. A moment where your nervous system can find a little more calm.",
+      "p2": "But for the everyday moments when you're stressed, overwhelmed, or need to ground yourself? The science says: try it. Your brain will thank you."
+    },
+    "cta": {
+      "title": "Ready to try it?",
+      "sub": "Learn the gesture. Do the challenge. Share it with the world.",
+      "learn": "Learn the Sign",
+      "fullStory": "Full Story"
+    }
+  },
+  "alliancePage": {
+    "heroTitle": "Who's showing up.",
+    "heroSub": "The leaders, partners, and carriers making this real.",
+    "rolesLabel": "How the World Shows Up",
+    "rolesTitle": "Every role. Every alliance.",
+    "rolesSub": "Tap any role to learn more.",
+    "alliancesLabel": "Alliance Partners",
+    "alliancesTitle": "A billion hands need a road.",
+    "alliancesSub": "Six founding categories. Tap to see the brief.",
+    "trustLabel": "Why Trust This",
+    "trustTitle": "Built to be trusted.",
+    "trustSub": "501(c)(3) nonprofit · 100% to mental health · Free forever",
+    "trustAlt": "Trust & governance",
+    "viewGovernance": "View governance",
+    "cultureTitle": "Built by people who've moved culture.",
+    "stats": {
+      "leaders": { "num": "1,000+", "label": "Leaders gathered", "sub": "Bel-Air 2024" },
+      "reach": { "num": "47M", "label": "People reached", "sub": "110+ media placements" },
+      "raised": { "num": "$220M", "label": "Raised by this same mechanic", "sub": "Ice Bucket Challenge 2014" }
+    },
+    "cultureFoundation": "One Humanity Foundation · 501(c)(3)",
+    "cultureRouted": "Routed to 988 — Suicide & Crisis Lifeline",
+    "ourFoundation": "Our Foundation",
+    "orgsLabel": "For Workplaces, Schools & Organizations",
+    "orgsTitle": "Bring this to your community",
+    "orgs": {
+      "schools": { "title": "For Schools", "desc": "Classroom guides, assembly slides, and parent resources. COPPA compliant." },
+      "teams": { "title": "For Teams", "desc": "Manager briefings, all-hands templates, and EAP integration." },
+      "brands": { "title": "For Brands", "desc": "Participation guidelines, asset kits, and partnership opportunities." }
+    },
+    "learnMore": "Learn more",
+    "protocolTitle": "The Butterfly Protocol",
+    "protocolDesc": "The gesture teaches recognition. The Butterfly Protocol teaches response. A free, 30-second check-in script your managers can deploy in one week. Compliant with OSHA, ADA, and HIPAA boundaries.",
+    "protocolBtn": "Learn About the Protocol",
+    "ctaTitle": "Your organization can lead.",
+    "ctaSub": "Join the alliance. Shape the movement.",
+    "ctaBtn": "Join as an Organization"
+  },
+  "workingProgress": {
+    "label": "WORK IN PROGRESS",
+    "heading1": "We're Building",
+    "heading2": "Something Great",
+    "typed": "Currently under construction — check back soon.",
+    "systems": "systems loading"
+  },
+  "toast": {
+    "copied": "Copied"
+  }
+}

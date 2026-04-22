@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { g, ff, LOGO_DARK } from '../constants/index.js';
 import { Btn, InstagramIcon } from './ui/index.js';
 
@@ -18,28 +19,47 @@ const XIcon = ({ size = 14 }) => (
 );
 
 export function Footer({ navigate, onSupport }) {
+  const { t } = useTranslation();
   const socials = [
     { l: "TikTok", Icon: TikTokIcon, href: "https://www.tiktok.com/@butterflychal" },
     { l: "Instagram", Icon: () => <InstagramIcon size={14} />, href: "https://www.instagram.com/butterflychal" },
     { l: "Facebook", Icon: FacebookIcon, href: "https://www.facebook.com/butterflychal" },
     { l: "X", Icon: XIcon, href: "https://x.com/butterflychal" },
   ];
+  const resourceLinks = [
+    { l: t('nav.story'), p: 'story' },
+    { l: t('nav.science'), p: 'science' },
+    { l: t('nav.alliance'), p: 'alliance' },
+    { l: t('nav.live'), p: 'live' },
+  ];
+  const orgLinks = [
+    t('footer.forSchools'),
+    t('footer.forTeams'),
+    t('footer.forBrands'),
+    t('footer.butterflyProtocol'),
+  ];
+  const legalLinks = [
+    t('footer.privacy'),
+    t('footer.terms'),
+    t('footer.accessibility'),
+    t('footer.about'),
+  ];
   return (
     <footer style={{ background: g.bg, padding: "60px 24px 28px", fontFamily: ff }}>
       <div style={{ maxWidth: 1100, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: 48, paddingBottom: 40, borderBottom: "1px solid " + g.bdr }}>
           <h3 style={{ fontSize: "clamp(1.4rem,3vw,1.8rem)", fontWeight: 600, color: g.t1, letterSpacing: "-.02em", marginBottom: 8 }}>
-            One humanity. Many flags. One butterfly.
+            {t('footer.manyFlagsTitle')}
           </h3>
           <p style={{ fontSize: 14, color: g.t3, marginBottom: 24 }}>
-            A shared symbol across nations, cultures, and communities.
+            {t('footer.manyFlagsSub')}
           </p>
           <img src="/images/flags-butterflies.webp" alt="Butterflies in the colors of many national flags" width="2535" height="929" loading="lazy" decoding="async" style={{ width: "100%", maxWidth: 900, height: "auto", display: "block", margin: "0 auto", mixBlendMode: "multiply" }} />
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 40, marginBottom: 48 }}>
           <div>
             <img src={LOGO_DARK} alt="Butterfly Challenge" width="135" height="36" loading="lazy" decoding="async" style={{ height: 36, width: "auto", marginBottom: 14 }} />
-            <p style={{ fontSize: 13, color: g.t3, lineHeight: 1.5, marginBottom: 10 }}>An initiative of One Humanity Foundation · 501(c)(3).</p>
+            <p style={{ fontSize: 13, color: g.t3, lineHeight: 1.5, marginBottom: 10 }}>{t('footer.tagline')}</p>
             <a href="mailto:partnerships@butterfly.one" style={{ display: "inline-block", fontSize: 13, fontWeight: 500, color: g.t1, textDecoration: "none", marginBottom: 16, borderBottom: "1px solid " + g.bdr, paddingBottom: 1 }}>
               partnerships@butterfly.one
             </a>
@@ -52,36 +72,36 @@ export function Footer({ navigate, onSupport }) {
             </div>
           </div>
           <div>
-            <p style={{ fontSize: 14, fontWeight: 600, color: g.t1, marginBottom: 14 }}>Resources</p>
-            {[{l:"Story",p:"story"},{l:"Science",p:"science"},{l:"Alliance",p:"alliance"},{l:"Live Events",p:"live"}].map(t => (
-              <p key={t.p} style={{ marginBottom: 10 }}><button onClick={() => navigate(t.p)} style={{ background: "none", border: "none", fontFamily: ff, fontSize: 13, color: g.t2, cursor: "pointer", padding: 0 }}>{t.l}</button></p>
+            <p style={{ fontSize: 14, fontWeight: 600, color: g.t1, marginBottom: 14 }}>{t('footer.resources')}</p>
+            {resourceLinks.map(link => (
+              <p key={link.p} style={{ marginBottom: 10 }}><button onClick={() => navigate(link.p)} style={{ background: "none", border: "none", fontFamily: ff, fontSize: 13, color: g.t2, cursor: "pointer", padding: 0 }}>{link.l}</button></p>
             ))}
           </div>
           <div>
-            <p style={{ fontSize: 14, fontWeight: 600, color: g.t1, marginBottom: 14 }}>For Organizations</p>
-            {["For Schools", "For Teams", "For Brands", "Butterfly Protocol"].map(t => (
-              <p key={t} style={{ marginBottom: 10 }}><button onClick={() => navigate('alliance')} style={{ background: "none", border: "none", fontFamily: ff, fontSize: 13, color: g.t2, cursor: "pointer", padding: 0 }}>{t}</button></p>
+            <p style={{ fontSize: 14, fontWeight: 600, color: g.t1, marginBottom: 14 }}>{t('footer.forOrgs')}</p>
+            {orgLinks.map(label => (
+              <p key={label} style={{ marginBottom: 10 }}><button onClick={() => navigate('alliance')} style={{ background: "none", border: "none", fontFamily: ff, fontSize: 13, color: g.t2, cursor: "pointer", padding: 0 }}>{label}</button></p>
             ))}
           </div>
           <div>
-            <p style={{ fontSize: 14, fontWeight: 600, color: g.t1, marginBottom: 14 }}>Need Help?</p>
+            <p style={{ fontSize: 14, fontWeight: 600, color: g.t1, marginBottom: 14 }}>{t('footer.needHelp')}</p>
             <div style={{ border: "1px solid #e8e8ed", borderRadius: 14, padding: "16px 18px", marginBottom: 12 }}>
-              <p style={{ fontSize: 14, fontWeight: 600, color: g.t1, marginBottom: 2 }}>US: Call or Text 988</p>
-              <p style={{ fontSize: 12, color: g.t3 }}>24/7 free and confidential support.</p>
+              <p style={{ fontSize: 14, fontWeight: 600, color: g.t1, marginBottom: 2 }}>{t('footer.us988')}</p>
+              <p style={{ fontSize: 12, color: g.t3 }}>{t('footer.us988Sub')}</p>
             </div>
-            <Btn primary onClick={onSupport} style={{ width: "100%", fontSize: 14, padding: "11px 18px" }}>Get Support Now</Btn>
+            <Btn primary onClick={onSupport} style={{ width: "100%", fontSize: 14, padding: "11px 18px" }}>{t('footer.getSupportNow')}</Btn>
           </div>
         </div>
         <div style={{ borderTop: "1px solid " + g.bdr, paddingTop: 20 }}>
           <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "flex-start", gap: 16, marginBottom: 20 }}>
             <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
-              {["Privacy", "Terms", "Accessibility", "About"].map(t => (
-                <button key={t} onClick={() => {}} style={{ background: "none", border: "none", fontFamily: ff, fontSize: 12, color: g.t3, cursor: "pointer", padding: 0 }}>{t}</button>
+              {legalLinks.map(label => (
+                <button key={label} onClick={() => {}} style={{ background: "none", border: "none", fontFamily: ff, fontSize: 12, color: g.t3, cursor: "pointer", padding: 0 }}>{label}</button>
               ))}
             </div>
-            <p style={{ fontSize: 11, color: g.t4, maxWidth: 360, textAlign: "right", lineHeight: 1.5 }}>The Butterfly Challenge is a social gesture, not a replacement for professional care. If someone you know is in danger, call 911 or your local emergency number.</p>
+            <p style={{ fontSize: 11, color: g.t4, maxWidth: 360, textAlign: "right", lineHeight: 1.5 }}>{t('footer.disclaimer')}</p>
           </div>
-          <p style={{ fontSize: 12, color: g.t4, textAlign: "center" }}>© 2026 One Humanity Foundation. All rights reserved.</p>
+          <p style={{ fontSize: 12, color: g.t4, textAlign: "center" }}>{t('footer.copyright')}</p>
         </div>
       </div>
     </footer>
