@@ -226,8 +226,184 @@ def build_xlsx():
     return path
 
 
+# ---------- Excel summary — only the main details ----------
+# Curated list of the highest-impact strings a reviewer should check first.
+# Ordered the way a visitor experiences the site: top of page → bottom.
+SUMMARY = [
+    ("Navigation", [
+        "nav.story", "nav.science", "nav.alliance", "nav.live",
+        "nav.takeTheChallenge", "nav.getSupport", "nav.signIn",
+    ]),
+    ("Home — Hero", [
+        "home.label", "home.headline", "home.subheadPart1", "home.subheadPart2",
+        "home.joinCTA", "home.iDidIt",
+    ]),
+    ("Home — Section Headings", [
+        "home.highlightsTitle", "home.communityTitle", "home.communitySub",
+        "home.signTitle", "home.signSub",
+        "home.howTitle", "home.effectTitle",
+        "home.ctaHeadline", "home.ctaSub", "home.remindMe",
+    ]),
+    ("Highlights Cards", [
+        "highlights.card1.title", "highlights.card2.title",
+        "highlights.card3.title", "highlights.card4.title",
+    ]),
+    ("How It Works — Step Titles", [
+        "stepTabs.step1.title", "stepTabs.step1.heading",
+        "stepTabs.step2.title", "stepTabs.step2.heading",
+        "stepTabs.step3.title", "stepTabs.step3.heading",
+    ]),
+    ("Sign Builder", [
+        "signBuilder.intro.title", "signBuilder.intro.sub", "signBuilder.intro.start",
+        "signBuilder.done.label", "signBuilder.done.line1",
+        "signBuilder.done.line2", "signBuilder.done.line3",
+    ]),
+    ("Butterfly Effect Chain", [
+        "chain.done.title", "chain.done.cta",
+    ]),
+    ("Live Feed", [
+        "live.title", "live.topCountries", "live.topCities",
+        "live.topParticipants", "live.shareMoment",
+    ]),
+    ("FAQ — Questions", [
+        "faq.what.q", "faq.why.q", "faq.donate.q",
+        "faq.therapy.q", "faq.month.q", "faq.who.q",
+    ]),
+    ("Role Cards (Alliance Page)", [
+        "popups.role.creators.name", "popups.role.celebrities.name",
+        "popups.role.athletes.name", "popups.role.music.name",
+        "popups.role.dance.name", "popups.role.film.name",
+        "popups.role.fashion.name", "popups.role.art.name",
+        "popups.role.faith.name", "popups.role.gaming.name",
+        "popups.role.podcast.name", "popups.role.everyone.name",
+    ]),
+    ("Alliance Partners", [
+        "popups.alliance.platforms.name", "popups.alliance.care.name",
+        "popups.alliance.media.name", "popups.alliance.business.name",
+        "popups.alliance.education.name", "popups.alliance.connectivity.name",
+    ]),
+    ("Story Page", [
+        "story.heroTitle", "story.heroSub",
+        "story.cta.title", "story.cta.sub",
+    ]),
+    ("Science Page", [
+        "science.heroTitle", "science.heroSub",
+        "science.cta.title", "science.cta.sub",
+    ]),
+    ("Alliance Page", [
+        "alliancePage.heroTitle", "alliancePage.heroSub",
+        "alliancePage.ctaTitle", "alliancePage.ctaSub", "alliancePage.ctaBtn",
+    ]),
+    ("Live Page", [
+        "livePage.heroTitle", "livePage.heroSub",
+        "livePage.ctaTitle", "livePage.ctaSub",
+    ]),
+    ("Footer", [
+        "footer.manyFlagsTitle", "footer.manyFlagsSub",
+        "footer.tagline", "footer.getSupportNow", "footer.copyright",
+    ]),
+    ("Holding Page", [
+        "workingProgress.label", "workingProgress.heading1",
+        "workingProgress.heading2", "workingProgress.typed",
+    ]),
+]
+
+
+def resolve_key(locale, dotted):
+    cur = locale
+    for part in dotted.split("."):
+        if isinstance(cur, dict) and part in cur:
+            cur = cur[part]
+        else:
+            return ""
+    return str(cur) if not isinstance(cur, (dict, list)) else ""
+
+
+def build_summary_xlsx():
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Summary"
+
+    title_font = Font(bold=True, size=16, color="FFFFFF")
+    title_fill = PatternFill("solid", fgColor="0A7B77")
+    intro_font = Font(italic=True, size=10, color="6E6E73")
+    section_font = Font(bold=True, size=12, color="FFFFFF")
+    section_fill = PatternFill("solid", fgColor="0A7B77")
+    header_font = Font(bold=True, size=11, color="1D1D1F")
+    header_fill = PatternFill("solid", fgColor="E8F5F3")
+    thin = Side(border_style="thin", color="D2D2D7")
+    border = Border(left=thin, right=thin, top=thin, bottom=thin)
+    wrap = Alignment(wrap_text=True, vertical="top", horizontal="left")
+    center = Alignment(wrap_text=True, vertical="center", horizontal="center")
+
+    ws.merge_cells("A1:D1")
+    ws["A1"] = "Butterfly Challenge — Spanish at a Glance"
+    ws["A1"].font = title_font
+    ws["A1"].fill = title_fill
+    ws["A1"].alignment = Alignment(horizontal="center", vertical="center")
+    ws.row_dimensions[1].height = 36
+
+    ws.merge_cells("A2:D2")
+    ws["A2"] = "The main strings only — what a visitor sees first on every page."
+    ws["A2"].font = intro_font
+    ws["A2"].alignment = Alignment(horizontal="center", vertical="center")
+    ws.row_dimensions[2].height = 20
+
+    row = 4
+
+    for section_title, keys in SUMMARY:
+        ws.merge_cells(start_row=row, start_column=1, end_row=row, end_column=4)
+        c = ws.cell(row=row, column=1, value=section_title)
+        c.font = section_font
+        c.fill = section_fill
+        c.alignment = Alignment(horizontal="left", vertical="center", indent=1)
+        ws.row_dimensions[row].height = 26
+        row += 1
+
+        for col, h in enumerate(["English", "Español", "Status", "Notes"], start=1):
+            cc = ws.cell(row=row, column=col, value=h)
+            cc.font = header_font
+            cc.fill = header_fill
+            cc.alignment = Alignment(horizontal="left", vertical="center", indent=1)
+            cc.border = border
+        ws.row_dimensions[row].height = 22
+        row += 1
+
+        for dotted in keys:
+            en_val = resolve_key(EN, dotted)
+            es_val = resolve_key(ES, dotted)
+            ws.cell(row=row, column=1, value=en_val).alignment = wrap
+            ws.cell(row=row, column=2, value=es_val).alignment = wrap
+            ws.cell(row=row, column=3, value="").alignment = center
+            ws.cell(row=row, column=4, value="").alignment = wrap
+            for col in range(1, 5):
+                ws.cell(row=row, column=col).border = border
+            row += 1
+
+        row += 1
+
+    widths = {1: 58, 2: 58, 3: 14, 4: 32}
+    for col, w in widths.items():
+        ws.column_dimensions[get_column_letter(col)].width = w
+
+    dv = DataValidation(
+        type="list", formula1='"✓ OK,Revise,-"', allow_blank=True, showDropDown=False,
+    )
+    dv.prompt = "✓ OK / Revise / -"
+    dv.promptTitle = "Status"
+    ws.add_data_validation(dv)
+    dv.add(f"C4:C{row}")
+    ws.freeze_panes = "A4"
+
+    path = OUT / "butterfly-challenge-spanish-summary.xlsx"
+    wb.save(path)
+    return path
+
+
 if __name__ == "__main__":
     docx_path = build_docx()
     xlsx_path = build_xlsx()
+    summary_path = build_summary_xlsx()
     print(f"Wrote {docx_path}  ({os.path.getsize(docx_path)//1024} KB)")
     print(f"Wrote {xlsx_path}  ({os.path.getsize(xlsx_path)//1024} KB)")
+    print(f"Wrote {summary_path}  ({os.path.getsize(summary_path)//1024} KB)")
