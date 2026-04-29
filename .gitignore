@@ -4,7 +4,11 @@ dist
 .env.local
 .env.*.local
 DOCUMENTATION.md
+supabase/
 supabase/.temp/
+supabase/.functions/
+supabase/.migrations/
 supabase.exe
 Butterfly Deck  .pdf
 deliverables/
+scripts/
