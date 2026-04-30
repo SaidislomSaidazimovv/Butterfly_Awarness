@@ -1,14 +1,6 @@
 {
   "rewrites": [
-    {
-      "source": "/",
-      "destination": "https://butterflychallenge.net/"
-    },
-    {
-      "source": "/:path*",
-      "destination": "https://butterflychallenge.net/:path*"
-    },
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/((?!api/).*)", "destination": "/api/proxy?vercelPath=$1" }
   ],
   "headers": [
     {
