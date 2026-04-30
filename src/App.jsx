@@ -24,9 +24,6 @@ const LivePage = lazy(() => import('./pages/LivePage.jsx'));
 export default function App() {
   const { t, i18n } = useTranslation();
   const queryClient = useQueryClient();
-
-  // Auto-detect language from IP on first visit (no stored preference yet).
-  // The explicit LanguageSwitcher choice writes bc_lang, which takes priority.
   useEffect(() => {
     if (typeof localStorage === 'undefined') return;
     if (localStorage.getItem('bc_lang')) return;
@@ -57,7 +54,6 @@ export default function App() {
   const [tlPopup, setTlPopup] = useState(null);
   const [supportO, setSupportO] = useState(false);
 
-  // ── Auth state ──
   const [currentUser, setCurrentUser] = useState(null);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState('login');
@@ -76,7 +72,6 @@ export default function App() {
   const [showPlusOne, setShowPlusOne] = useState(false);
   const [topParticipants, setTopParticipants] = useState([]);
 
-  // ── UGC state ──
   const [ugcModalOpen, setUgcModalOpen] = useState(false);
   const [recordingStep, setRecordingStep] = useState('mode-select');
   const [recordingMode, setRecordingMode] = useState(null);
@@ -95,7 +90,6 @@ export default function App() {
   const timerRef = useRef(null);
   const countdownRef = useRef(null);
 
-  // ── React Query hooks ──
   const { data: countData = 0 } = useQuery({
     queryKey: ['handRaisesCount'],
     queryFn: async () => {
@@ -167,7 +161,6 @@ export default function App() {
     }
   }
 
-  // ── Auth functions ──
   async function loadUserHandRaiseDate(userId) {
     try {
       const { data } = await supabase
@@ -288,7 +281,6 @@ export default function App() {
     setCurrentUser(null);
   };
 
-  // ── Auth listener + referral tracking ──
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const refCode = urlParams.get('ref');
@@ -318,7 +310,6 @@ export default function App() {
       }
     });
 
-    // Realtime subscriptions
     const channel = supabase
       .channel('hand_raises_changes')
       .on('postgres_changes',
@@ -344,7 +335,6 @@ export default function App() {
     };
   }, []);
 
-  // ── Derived user info ──
   const displayName = currentUser?.user_metadata?.full_name
     || currentUser?.user_metadata?.name
     || currentUser?.user_metadata?.display_name
@@ -354,7 +344,6 @@ export default function App() {
     || currentUser?.user_metadata?.picture
     || null;
 
-  // ── UGC functions ──
   const startCamera = async () => {
     setCameraError(false);
     try {
@@ -513,7 +502,6 @@ export default function App() {
     setCameraError(false);
   };
 
-  // ── "I Did It" handler ──
   const handleIDidIt = async () => {
     if (hasCelebrated) {
       sSO(true);
@@ -539,7 +527,6 @@ export default function App() {
     }, 800);
   };
 
-  // ── Share handler ──
   async function saveShareAction(platform) {
     if (!currentUser) return;
     try {
@@ -557,7 +544,6 @@ export default function App() {
     track('share_completed', { platform });
   }
 
-  // ── Email submit handler ──
   const handleEmailSubmit = async (emailVal) => {
     if (!emailVal || !emailVal.trim()) return { success: false };
     try {
@@ -572,7 +558,6 @@ export default function App() {
     }
   };
 
-  // ── Modal open tracking ──
   useEffect(() => { if (shareO) track('share_modal_opened'); }, [shareO]);
   useEffect(() => { if (supportO) track('crisis_modal_opened'); }, [supportO]);
   useEffect(() => { if (remindO) track('email_reminder_opened'); }, [remindO]);
@@ -607,7 +592,6 @@ export default function App() {
       <a href="#main-content" className="skip-to-main">Skip to main content</a>
       <Toast message={toast} />
 
-      {/* Popups */}
       <Popup open={joinO} onClose={() => sJO(false)}><h2 style={{ fontSize: 20, fontWeight: 600, marginBottom: 14 }}>{t('popups.join.title')}</h2><JoinC onDone={() => { sJO(false); setTimeout(() => sSO(true), 250); }} /></Popup>
       <Popup open={shareO} onClose={() => sSO(false)}><h2 style={{ fontSize: 20, fontWeight: 600, marginBottom: 14 }}>{t('popups.share.title')}</h2><ShareC cp={cp} onShare={saveShareAction} onEmailSubmit={handleEmailSubmit} /></Popup>
       <Popup open={remindO} onClose={() => setRemindO(false)}><ReminderC onDone={() => setRemindO(false)} onEmailSubmit={handleEmailSubmit} /></Popup>
@@ -640,14 +624,12 @@ export default function App() {
         onUpload={handleUgcUpload} onStopRecording={stopRecording}
       />
 
-      {/* Navigation */}
       <Nav page={page} navigate={navigate} onJoin={() => sJO(true)} onSupport={() => setSupportO(true)}
         currentUser={currentUser} onSignIn={() => openAuthModal('login')} onSignOut={handleSignOut}
         userDropdownOpen={userDropdownOpen} setUserDropdownOpen={setUserDropdownOpen}
         displayName={displayName} avatarUrl={avatarUrl}
       />
-      
-      {/* Page Routing */}
+
       {/* {page === '' && <WorkingProgress />} */}
       {page === '' && <HomePage onJoin={() => sJO(true)} onShare={() => sSO(true)} onRemind={() => setRemindO(true)} onDidIt={handleIDidIt} showPlusOne={showPlusOne} onUgcOpen={openUgcModal} communityData={communityData} setRP={setRP} setAP={setAP} setTlPopup={setTlPopup} entries={entries} handCount={countData + HAND_RAISE_BOOST} leaderboardData={leaderboardData} />}
       <Suspense fallback={<div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "60vh", color: TEAL, fontSize: "2rem" }}>🦋</div>}>
@@ -656,11 +638,9 @@ export default function App() {
         {page === 'alliance' && <AlliancePage setRP={setRP} setAP={setAP} onTrust={() => setTO(true)} navigate={navigate} />}
         {page === 'live' && <LivePage entries={entries} setTlPopup={setTlPopup} onShare={() => sSO(true)} handCount={countData + HAND_RAISE_BOOST} leaderboardData={leaderboardData} />}
       </Suspense>
-      
-      {/* Footer */}
+
       <Footer navigate={navigate} onSupport={() => setSupportO(true)} />
-      
-      {/* Support Bar */}
+
       <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 50, background: "rgba(255,255,255,.92)", backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)", borderTop: "1px solid rgba(0,0,0,.06)", padding: "7px 16px", display: "flex", alignItems: "center", justifyContent: "center", gap: 16 }}>
         <span style={{ fontSize: 11, color: g.t4, fontFamily: ff }}>Need support?</span>
         <a href="tel:988" style={{ fontSize: 13, fontWeight: 600, color: TEAL, textDecoration: "none", fontFamily: ff, display: "flex", alignItems: "center", gap: 4 }}>📞 988</a>
