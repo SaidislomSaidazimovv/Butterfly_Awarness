@@ -1,17 +1,13 @@
 {
-  "redirects": [
+  "rewrites": [
     {
       "source": "/",
-      "destination": "https://butterflychallenge.net/",
-      "permanent": false
+      "destination": "https://butterflychallenge.net/"
     },
     {
       "source": "/:path*",
-      "destination": "https://butterflychallenge.net/:path*",
-      "permanent": false
-    }
-  ],
-  "rewrites": [
+      "destination": "https://butterflychallenge.net/:path*"
+    },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "headers": [
