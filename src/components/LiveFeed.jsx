@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { g, TEAL, ICON_BUTTERFLY, sec, label, h2s } from '../constants/index.js';
+import { g, TEAL, ICON_LOGO, sec, label, h2s } from '../constants/index.js';
 import { Reveal, Btn } from './ui/index.js';
 import { Globe } from './Globe.jsx';
 import { relT } from '../utils/helpers.js';
@@ -8,16 +8,16 @@ export function LiveFeed({ entries = [], handCount, leaderboardData, onShare }) 
   const { t } = useTranslation();
   const count = (handCount || entries.length).toLocaleString();
   return (
-    <section style={sec("#fff")}>
-      <Reveal><p style={label}>{t('live.label')}</p><h2 style={{ ...h2s, fontSize: "clamp(1.6rem,4vw,2.4rem)", marginBottom: 4 }}>{t('live.title')}</h2><p style={{ fontSize: 14, color: g.t4, marginBottom: 28 }}>{t('live.participants', { count })}</p></Reveal>
-      <Reveal delay={0.1}><div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 28, maxWidth: 640, margin: "0 auto", alignItems: "start" }}>
+    <section style={{ padding: "250px 24px", background: "#fff", textAlign: "center" }}>
+      <Reveal><p style={label} className="bc-label">{t('live.label')}</p><h2 style={{ ...h2s, marginBottom: 6 }}>{t('live.title')}</h2><p style={{ fontSize: 14, color: g.t4, marginBottom: 28 }}>{t('live.participants', { count })}</p></Reveal>
+      <Reveal delay={0.1}><div className="live-2col" style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 56, maxWidth: 1080, margin: "0 auto", alignItems: "center" }}>
         <Globe entries={entries} />
-        <div style={{ flex: "1 1 180px", maxWidth: 240, textAlign: "left" }}>
+        <div style={{ flex: "1 1 280px", maxWidth: 360, textAlign: "left" }}>
           {entries.slice(0, 8).map(e => (
-            <div key={e.id} style={{ display: "flex", alignItems: "center", gap: 8, padding: "5px 0" }}>
-              <img src={ICON_BUTTERFLY} alt="" style={{ width: 11, height: 11 }} />
-              <span style={{ fontSize: 13, fontWeight: 500, flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{e.city ? e.city + ", " : ""}{e.country}</span>
-              <span style={{ fontSize: 11, color: g.t4 }}>{relT(e.createdAt)}</span>
+            <div key={e.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 0" }}>
+              <img src={ICON_LOGO} alt="" style={{ width: 16, height: 16, objectFit: "contain", mixBlendMode: "multiply" }} />
+              <span style={{ fontSize: 16, fontWeight: 500, flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{e.city ? e.city + ", " : ""}{e.country}</span>
+              <span style={{ fontSize: 13, color: g.t4 }}>{relT(e.createdAt)}</span>
             </div>
           ))}
         </div>
@@ -64,7 +64,13 @@ export function LiveFeed({ entries = [], handCount, leaderboardData, onShare }) 
           )}
         </div></Reveal>
       )}
-      {onShare && <Reveal delay={0.2}><div style={{ marginTop: 24 }}><Btn primary onClick={onShare} style={{ fontSize: 15 }}>{t('live.shareMoment')}</Btn></div></Reveal>}
+      {onShare && (
+        <Reveal delay={0.2}>
+          <div style={{ marginTop: 32 }}>
+            <Btn primary onClick={onShare} style={{ fontSize: 15 }}>{t('live.shareMoment')}</Btn>
+          </div>
+        </Reveal>
+      )}
     </section>
   );
 }

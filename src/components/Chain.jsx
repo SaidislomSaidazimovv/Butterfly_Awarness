@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { g, ff, TEAL, ICON_BUTTERFLY } from '../constants/index.js';
+import { g, ff, TEAL, ICON_LOGO } from '../constants/index.js';
 import { Btn } from './ui/index.js';
 
 export function Chain({ onJoin }) {
@@ -61,7 +61,7 @@ export function Chain({ onJoin }) {
   if (done) {
     return (
       <div style={{ textAlign: "center", animation: "fadeUp .5s cubic-bezier(.16,1,.3,1)" }}>
-        <img src={ICON_BUTTERFLY} alt="" width="56" height="56" loading="lazy" decoding="async" style={{ width: 56, height: 56, marginBottom: 8, display: "block", marginLeft: "auto", marginRight: "auto" }} />
+        <img src={ICON_LOGO} alt="" width="56" height="56" loading="lazy" decoding="async" style={{ width: 56, height: 56, marginBottom: 8, display: "block", marginLeft: "auto", marginRight: "auto", mixBlendMode: "multiply" }} />
         <p style={{
           fontSize: "clamp(2rem,6vw,3rem)", fontWeight: 700, letterSpacing: "-.04em", lineHeight: 1,
           background: "linear-gradient(90deg," + TEAL + ",#2ecc71,#06b6d4)", WebkitBackgroundClip: "text",
@@ -83,7 +83,7 @@ export function Chain({ onJoin }) {
   if (counting) {
     return (
       <div style={{ textAlign: "center" }}>
-        <div style={{ display: "flex", justifyContent: "center", gap: 2, marginBottom: 4 }}>{Array.from({length:10}).map((_,i)=><img key={i} src={ICON_BUTTERFLY} alt="" width="12" height="12" loading="lazy" decoding="async" style={{ width: 12, height: 12 }} />)}</div>
+        <div style={{ display: "flex", justifyContent: "center", gap: 2, marginBottom: 4 }}>{Array.from({length:10}).map((_,i)=><img key={i} src={ICON_LOGO} alt="" width="12" height="12" loading="lazy" decoding="async" style={{ width: 12, height: 12, mixBlendMode: "multiply" }} />)}</div>
         <p style={{
           fontSize: 44, fontWeight: 700, color: TEAL, letterSpacing: "-.03em",
           fontVariantNumeric: "tabular-nums", transition: "all .1s", fontFamily: "monospace, " + ff
@@ -100,10 +100,9 @@ export function Chain({ onJoin }) {
   return (
     <div style={{ textAlign: "center" }}>
       <div style={{ display: "flex", justifyContent: "center", gap: 3, flexWrap: "wrap", minHeight: 48, alignItems: "center", padding: "8px 0" }}>
-        {Array.from({ length: Math.min(s.emoji, 40) }).map((_, i) => (
-          <img key={i} src={ICON_BUTTERFLY} alt="" width={s.emoji > 27 ? 11 : 20} height={s.emoji > 27 ? 11 : 20} loading="lazy" decoding="async" style={{ width: s.emoji > 27 ? 11 : 20, height: s.emoji > 27 ? 11 : 20, animation: `popIn .3s cubic-bezier(.16,1,.3,1) ${i * 15}ms both` }} />
+        {Array.from({ length: s.n }).map((_, i) => (
+          <img key={i} src={ICON_LOGO} alt="" width={s.n > 27 ? 11 : 20} height={s.n > 27 ? 11 : 20} loading="lazy" decoding="async" style={{ width: s.n > 27 ? 11 : 20, height: s.n > 27 ? 11 : 20, mixBlendMode: "multiply", animation: i < 40 ? `popIn .3s cubic-bezier(.16,1,.3,1) ${i * 15}ms both` : 'none' }} />
         ))}
-        {s.emoji > 40 && <span style={{ fontSize: 11, color: g.t3, marginLeft: 4 }}>+{s.n - 40}</span>}
       </div>
       <p style={{ fontSize: 36, fontWeight: 600, color: g.t1, letterSpacing: "-.03em" }}>{s.label}</p>
       <p style={{ fontSize: 14, color: g.t3, marginBottom: 16 }}>{s.msg}</p>

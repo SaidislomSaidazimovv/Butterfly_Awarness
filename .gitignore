@@ -12,3 +12,7 @@ supabase.exe
 Butterfly Deck  .pdf
 deliverables/
 scripts/
+
+# Design reference HTML files (not part of the deployed site)
+butterfly-challenge.html
+butterfly-challenge-merged.html

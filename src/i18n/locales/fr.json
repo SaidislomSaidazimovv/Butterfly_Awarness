@@ -5,7 +5,7 @@
     "alliance": "Alliance",
     "live": "Direct",
     "safeExit": "Sortie rapide",
-    "getSupport": "Obtenir de l'aide",
+    "getSupport": "Besoin d'aide ?",
     "takeTheChallenge": "Relevez le défi",
     "join": "Rejoindre",
     "signIn": "Se connecter",
@@ -15,7 +15,8 @@
     "closeMenu": "Fermer le menu"
   },
   "home": {
-    "heroAlt": "Deux personnes faisant le Signe du Papillon",
+    "heroAlt": "Des personnes faisant le Signe du Papillon",
+    "heroPill": "Mouvement mondial pour la santé mentale",
     "label": "Défi Papillon",
     "headline": "Levez un milliard de mains.",
     "subheadPart1": "Un geste de 60 secondes pour la santé mentale.",
@@ -33,6 +34,7 @@
     "signLabel": "Le Signe",
     "signTitle": "Deux mains. Un signal.",
     "signSub": "Le premier geste universel pour la santé mentale. Essayez-le.",
+    "watchTutorial": "Voir le tutoriel",
     "howLabel": "Comment ça marche",
     "howTitle": "Trois étapes. Une minute.",
     "effectLabel": "L'effet papillon",

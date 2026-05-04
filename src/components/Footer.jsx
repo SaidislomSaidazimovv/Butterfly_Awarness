@@ -32,12 +32,6 @@ export function Footer({ navigate, onSupport }) {
     { l: t('nav.alliance'), p: 'alliance' },
     { l: t('nav.live'), p: 'live' },
   ];
-  const orgLinks = [
-    t('footer.forSchools'),
-    t('footer.forTeams'),
-    t('footer.forBrands'),
-    t('footer.butterflyProtocol'),
-  ];
   const legalLinks = [
     t('footer.privacy'),
     t('footer.terms'),
@@ -45,7 +39,7 @@ export function Footer({ navigate, onSupport }) {
     t('footer.about'),
   ];
   return (
-    <footer style={{ background: g.bg, padding: "60px 24px 28px", fontFamily: ff }}>
+    <footer style={{ background: "#f5f5f7", padding: "60px 24px 28px", fontFamily: ff }}>
       <div style={{ maxWidth: 1100, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: 48, paddingBottom: 40, borderBottom: "1px solid " + g.bdr }}>
           <h3 style={{ fontSize: "clamp(1.4rem,3vw,1.8rem)", fontWeight: 600, color: g.t1, letterSpacing: "-.02em", marginBottom: 8 }}>
@@ -75,12 +69,6 @@ export function Footer({ navigate, onSupport }) {
             <p style={{ fontSize: 14, fontWeight: 600, color: g.t1, marginBottom: 14 }}>{t('footer.resources')}</p>
             {resourceLinks.map(link => (
               <p key={link.p} style={{ marginBottom: 10 }}><button onClick={() => navigate(link.p)} style={{ background: "none", border: "none", fontFamily: ff, fontSize: 13, color: g.t2, cursor: "pointer", padding: 0 }}>{link.l}</button></p>
-            ))}
-          </div>
-          <div>
-            <p style={{ fontSize: 14, fontWeight: 600, color: g.t1, marginBottom: 14 }}>{t('footer.forOrgs')}</p>
-            {orgLinks.map(label => (
-              <p key={label} style={{ marginBottom: 10 }}><button onClick={() => navigate('alliance')} style={{ background: "none", border: "none", fontFamily: ff, fontSize: 13, color: g.t2, cursor: "pointer", padding: 0 }}>{label}</button></p>
             ))}
           </div>
           <div>

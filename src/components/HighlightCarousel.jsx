@@ -1,16 +1,22 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { g, ff } from '../constants/index.js';
-import { HL_CARDS } from '../data/index.js';
+import { g, ff, HL_NEW_1, HL_NEW_2, HL_NEW_3, HL_NEW_4 } from '../constants/index.js';
 import { Reveal } from './ui/index.js';
+
+const HL_DATA = [
+  { id: 'card1', img: HL_NEW_1, bg: '#ffffff',         textColor: '#fff', layout: 'fullbg' },
+  { id: 'card2', img: HL_NEW_2, bg: '#f5f5f7',         textColor: '#000', layout: 'imgleft' },
+  { id: 'card3', img: HL_NEW_3, bg: '#DFF9E7',         textColor: '#000', layout: 'imgright' },
+  { id: 'card4', img: HL_NEW_4, bg: '#FAF1DA',         textColor: '#000', layout: 'imgleft' },
+];
 
 export function HighlightCarousel() {
   const { t } = useTranslation();
   const trackRef = useRef(null);
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(true);
-  const CARD_W = 430;
-  const CARD_H = 420;
+  const CARD_W = 1200;
+  const CARD_H = 680;
   const GAP = 20;
   const GRID_MAX = 980;
 
@@ -41,11 +47,11 @@ export function HighlightCarousel() {
   };
 
   return (
-    <section style={{ background: g.bg, paddingTop: 120, paddingBottom: 120, overflow: "hidden" }}>
+    <section style={{ background: "#ffffff", paddingTop: 120, paddingBottom: 120, overflow: "hidden" }}>
       {/* Title + arrows on same row — constrained to grid */}
       <div style={{ maxWidth: GRID_MAX, margin: "0 auto", padding: "0 24px", display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 28 }}>
         <Reveal>
-          <h2 style={{ fontSize: "clamp(2rem,5vw,3.2rem)", fontWeight: 600, letterSpacing: "-.04em", color: g.t1, lineHeight: 1.1 }}>
+          <h2 style={{ fontSize: "clamp(2rem,5.5vw,4.2rem)", fontWeight: 600, letterSpacing: "-.04em", color: "#000", lineHeight: 1.1 }}>
             Get the highlights.
           </h2>
         </Reveal>
@@ -80,23 +86,68 @@ export function HighlightCarousel() {
           scrollPaddingLeft: "max(1.25rem, calc(50vw - 490px))",
         }}
       >
-        {HL_CARDS.map((c, i) => (
-          <div key={i} style={{
-            width: "min(430px, 85vw)", minWidth: "min(430px, 85vw)", maxWidth: "min(430px, 85vw)",
-            height: CARD_H,
-            flexShrink: 0, flexGrow: 0,
-            background: "#fff", borderRadius: 24, padding: "28px 28px 24px",
-            textAlign: "left", scrollSnapAlign: "start",
-            display: "flex", flexDirection: "column",
-            boxShadow: "0 1px 4px rgba(0,0,0,.04)",
-          }}>
-            <p style={{ fontSize: 18, fontWeight: 600, color: g.t1, lineHeight: 1.35, letterSpacing: "-.01em" }}>{t(`highlights.${c.id}.title`)}</p>
-            <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "8px 0" }}>
-              <img src={c.img} alt="" loading={i === 0 ? "eager" : "lazy"} decoding="async" style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }} />
+        {HL_DATA.map((c, i) => {
+          const title = t(`highlights.${c.id}.title`);
+          const sub = t(`highlights.${c.id}.sub`);
+          if (c.layout === 'fullbg') {
+            return (
+              <div key={c.id} className="hl-card" style={{
+                width: "min(1200px, 92vw)", minWidth: "min(560px, 92vw)",
+                height: CARD_H,
+                flexShrink: 0, flexGrow: 0,
+                backgroundImage: `url(${c.img})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat",
+                borderRadius: 24, padding: "48px 48px 24px",
+                textAlign: "left", scrollSnapAlign: "start",
+                display: "flex", flexDirection: "column", justifyContent: "space-between",
+                color: c.textColor,
+                boxShadow: "0 1px 4px rgba(0,0,0,.04)",
+                position: "relative",
+              }}>
+                <p style={{ fontSize: "2rem", fontWeight: 600, color: c.textColor, lineHeight: 1.2, letterSpacing: "-.01em", width: "50%", margin: 0 }}>{title}</p>
+                <p style={{ fontSize: 14, color: c.textColor, opacity: .8, fontWeight: 500, margin: 0 }}>{sub}</p>
+              </div>
+            );
+          }
+          // 2-col card
+          const imgRight = c.layout === 'imgright';
+          return (
+            <div key={c.id} className="hl-card" style={{
+              width: "min(1200px, 92vw)", minWidth: "min(560px, 92vw)",
+              height: CARD_H,
+              flexShrink: 0, flexGrow: 0,
+              background: c.bg, borderRadius: 24,
+              scrollSnapAlign: "start",
+              display: "grid",
+              gridTemplateColumns: imgRight ? "minmax(0, 1fr) minmax(0, 1.4fr)" : "minmax(0, 1.4fr) minmax(0, 1fr)",
+              gridTemplateRows: "1fr auto auto 1fr",
+              padding: 0,
+              textAlign: "left",
+              boxShadow: "0 1px 4px rgba(0,0,0,.04)",
+            }}>
+              <div style={{
+                gridColumn: imgRight ? 2 : 1,
+                gridRow: "1 / -1",
+                backgroundImage: `url(${c.img})`,
+                backgroundSize: "contain",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                width: "100%", height: "100%",
+              }} />
+              <p style={{
+                gridColumn: imgRight ? 1 : 2,
+                gridRow: 2,
+                fontSize: "2rem", fontWeight: 600, color: c.textColor, lineHeight: 1.2, letterSpacing: "-.01em",
+                margin: 0, padding: "28px 70px 0 70px", alignSelf: "end",
+              }}>{title}</p>
+              <p style={{
+                gridColumn: imgRight ? 1 : 2,
+                gridRow: 3,
+                fontSize: 14, color: c.textColor, opacity: .5, fontWeight: 500,
+                margin: "8px 0 0", padding: "0 70px", alignSelf: "start",
+              }}>{sub}</p>
             </div>
-            <p style={{ fontSize: 14, color: g.t1, opacity: .5, fontWeight: 500 }}>{t(`highlights.${c.id}.sub`)}</p>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </section>
   );

@@ -1,5 +1,6 @@
 import { Check } from 'lucide-react';
-import { g, ff, TEAL } from '../constants/index.js';
+import { g, ff, TEAL, ORANGE } from '../constants/index.js';
+// TEAL retained for non-button accents (e.g., reset-link confirmation text).
 import { Popup, Btn } from './ui/index.js';
 
 export function AuthPopup({ open, onClose, mode, setMode, email, setEmail, password, setPassword, name, setName, error, errorColor, loading, resetEmailSent, showEmailVerification, verificationEmail, onGoogleSignIn, onSubmit, onPasswordReset }) {
@@ -66,7 +67,7 @@ export function AuthPopup({ open, onClose, mode, setMode, email, setEmail, passw
         {error && <p style={{ fontSize: 13, color: errorColor, marginBottom: 12, textAlign: "center" }}>{error}</p>}
 
         {/* Submit */}
-        <button onClick={onSubmit} disabled={loading} style={{ ...btnBase, background: TEAL, color: "#fff", opacity: loading ? 0.6 : 1, marginTop: mode === 'register' ? 12 : 4 }}>
+        <button onClick={onSubmit} disabled={loading} style={{ ...btnBase, background: ORANGE, color: "#fff", opacity: loading ? 0.6 : 1, marginTop: mode === 'register' ? 12 : 4 }}>
           {loading ? 'Please wait...' : mode === 'register' ? 'Create account' : 'Sign in'}
         </button>
 

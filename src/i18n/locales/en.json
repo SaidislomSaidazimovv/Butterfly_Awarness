@@ -5,7 +5,7 @@
     "alliance": "Alliance",
     "live": "Live",
     "safeExit": "Safe Exit",
-    "getSupport": "Get Support",
+    "getSupport": "Need Help?",
     "takeTheChallenge": "Take the Challenge",
     "join": "Join",
     "signIn": "Sign in",
@@ -15,7 +15,8 @@
     "closeMenu": "Close navigation menu"
   },
   "home": {
-    "heroAlt": "Two people making the Butterfly Sign",
+    "heroAlt": "People making the Butterfly Sign",
+    "heroPill": "Global Mental Health Movement",
     "label": "Butterfly Challenge",
     "headline": "Lift a billion hands.",
     "subheadPart1": "A 60-second gesture for mental health.",
@@ -35,6 +36,7 @@
     "signSub": "The first universal gesture for mental health. Try it.",
     "howLabel": "How It Works",
     "howTitle": "Three steps. One minute.",
+    "watchTutorial": "Watch the tutorial",
     "effectLabel": "The Butterfly Effect",
     "effectTitle": "See how 1 becomes 1 billion.",
     "eventLabel": "Already in Motion",

@@ -18,3 +18,4 @@ export { Globe } from './Globe.jsx';
 export { LiveFeed } from './LiveFeed.jsx';
 export { WorkingProgress } from './WorkingProgress.jsx';
 export { LanguageSwitcher } from './LanguageSwitcher.jsx';
+export { TutorialModal } from './TutorialModal.jsx';

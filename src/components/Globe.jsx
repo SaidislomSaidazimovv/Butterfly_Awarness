@@ -1,328 +1,423 @@
-import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
-import { g, TEAL } from '../constants/index.js';
+import { useEffect, useRef } from 'react';
+import createGlobe from 'cobe';
+import { relT } from '../utils/helpers.js';
 
-export function Globe({ entries }) {
+// ══ NEW GLOBE — ported 1:1 from butterfly-challenge-merged.html ══
+// Polaroid cards float over each marker; teal markers; auto-rotate with
+// momentum drag (horizontal only — theta is fixed at 0.3); no animated arcs.
+
+const TEAL = [0, 0.694, 0.553]; // #00B18D normalized RGB
+
+// Seed entries with the same eight portraits as the merged HTML reference.
+// These photos are the polaroid avatars sitting on top of each marker.
+const POLAROID_SEED = [
+  { id: "p1", country: "United States",  city: "New York",  lat:  40.71, lng:  -74.01, person: "Mark",     img: "/people/mark.webp" },
+  { id: "p2", country: "United Kingdom", city: "London",    lat:  51.51, lng:   -0.13, person: "Erica",    img: "/people/erica.webp" },
+  { id: "p3", country: "Brazil",         city: "São Paulo", lat: -23.55, lng:  -46.63, person: "Marcel",   img: "/people/marcel.webp" },
+  { id: "p4", country: "Japan",          city: "Tokyo",     lat:  35.68, lng:  139.69, person: "Keila",    img: "/people/keila.webp" },
+  { id: "p5", country: "India",          city: "Mumbai",    lat:  19.08, lng:   72.88, person: "Gina",     img: "/people/gina.webp" },
+  { id: "p6", country: "Kenya",          city: "Nairobi",   lat:  -1.29, lng:   36.82, person: "Adam",     img: "/people/adam.webp" },
+  { id: "p7", country: "Australia",      city: "Sydney",    lat: -33.87, lng:  151.21, person: "Brian",    img: "/people/brian.webp" },
+  { id: "p8", country: "Germany",        city: "Berlin",    lat:  52.52, lng:   13.41, person: "Kristine", img: "/people/kristine.webp" },
+];
+
+// Project (lat, lng) to 2D canvas coords given cobe's (phi, theta).
+// Same math as the merged-HTML reference.
+function project(lat, lng, phi, theta) {
+  const lambda = lng * Math.PI / 180;
+  const phiR = lat * Math.PI / 180;
+  let x = Math.cos(phiR) * Math.sin(lambda);
+  let y = Math.sin(phiR);
+  let z = Math.cos(phiR) * Math.cos(lambda);
+  // Rotate around Y axis by -phi.
+  const cP = Math.cos(phi), sP = Math.sin(phi);
+  const x1 = x * cP + z * sP;
+  const z1 = -x * sP + z * cP;
+  x = x1; z = z1;
+  // Rotate around X axis by theta (positive theta tilts top toward viewer).
+  const cT = Math.cos(theta), sT = Math.sin(theta);
+  const y1 = y * cT - z * sT;
+  const z2 = y * sT + z * cT;
+  y = y1; z = z2;
+  return { x, y, z, visible: z > 0 };
+}
+
+export function Globe({ entries: liveEntries }) {
+  const wrapRef = useRef(null);
   const canvasRef = useRef(null);
-  const pointerRef = useRef(null);
+  const polaroidHostRef = useRef(null);
   const phiRef = useRef(0);
   const thetaRef = useRef(0.3);
-  const dragRef = useRef(null);
-  const velRef = useRef(0);
-  const SIZE = 600;
-  const R = 240;
-
-  // Accurate land mask — longitude ranges per latitude band (every 4°)
-  const LAND_BANDS = useMemo(() => {
-    const raw = [
-      [72,[[-170,-140],[-130,-60],[15,180]]],
-      [68,[[-168,-142],[-136,-58],[14,180]]],
-      [64,[[-168,-140],[-140,-55],[-24,-13],[6,180]]],
-      [60,[[-165,-140],[-140,-54],[-24,-13],[4,180]]],
-      [56,[[-162,-148],[-136,-52],[-8,-1],[6,180]]],
-      [52,[[-132,-52],[-11,2],[4,180]]],
-      [48,[[-126,-52],[-6,145]]],
-      [44,[[-124,-66],[-10,148]]],
-      [40,[[-124,-74],[-10,80],[84,145]]],
-      [36,[[-122,-75],[-10,45],[48,78],[96,146]]],
-      [32,[[-120,-78],[-8,36],[38,70],[72,88],[98,135]]],
-      [28,[[-118,-80],[-16,56],[68,95],[98,122],[128,142]]],
-      [24,[[-114,-86],[-18,56],[70,94],[98,122]]],
-      [20,[[-106,-86],[-18,52],[72,92],[96,122]]],
-      [16,[[-92,-82],[-18,52],[74,85],[96,126]]],
-      [12,[[-86,-82],[-16,52],[75,81],[98,128]]],
-      [8,[[-80,-60],[-14,50],[98,132]]],
-      [4,[[-80,-50],[-10,46],[98,142]]],
-      [0,[[-80,-48],[-10,42],[100,142]]],
-      [-4,[[-80,-38],[8,42],[104,142]]],
-      [-8,[[-78,-34],[12,42],[106,142]]],
-      [-12,[[-76,-36],[16,50],[118,140]]],
-      [-16,[[-74,-38],[20,50],[122,148]]],
-      [-20,[[-72,-40],[24,48],[116,152]]],
-      [-24,[[-70,-40],[26,50],[114,154]]],
-      [-28,[[-68,-48],[18,34],[114,154]]],
-      [-32,[[-72,-52],[-66,-56],[18,32],[115,153]]],
-      [-36,[[-74,-70],[-65,-56],[18,30],[116,152]]],
-      [-40,[[-74,-72],[-68,-62],[140,148],[172,178]]],
-      [-44,[[-76,-72],[-70,-64],[144,148],[168,178]]],
-      [-48,[[-76,-72]]],
-      [-52,[[-72,-68]]],
-    ];
-    return raw;
-  }, []);
-
-  const isLand = useCallback((lat, lng) => {
-    // Find the two closest bands and interpolate
-    let best = null, bestDist = 999;
-    for (const band of LAND_BANDS) {
-      const d = Math.abs(lat - band[0]);
-      if (d < bestDist) { bestDist = d; best = band; }
-    }
-    if (!best || bestDist > 6) return false;
-    const ranges = best[1];
-    for (const [lo, hi] of ranges) {
-      if (lng >= lo && lng <= hi) return true;
-    }
-    return false;
-  }, [LAND_BANDS]);
-
-  // Pre-generate sphere dots
-  const sphereDots = useMemo(() => {
-    const dots = [];
-    const N = 8000;
-    const goldenRatio = (1 + Math.sqrt(5)) / 2;
-    for (let i = 0; i < N; i++) {
-      const theta = Math.acos(1 - 2 * (i + 0.5) / N);
-      const phi = 2 * Math.PI * i / goldenRatio;
-      const lat = 90 - (theta * 180 / Math.PI);
-      const lng = (phi * 180 / Math.PI) % 360 - 180;
-      const land = isLand(lat, lng);
-      dots.push({ lat, lng, theta, phi, land });
-    }
-    return dots;
-  }, [isLand]);
+  const pointerRef = useRef(null);
+  const pointerStartRef = useRef(0);
+  const velocityRef = useRef(0);
+  // Use the polaroid seed (with photos) for the floating cards. The live
+  // `entries` prop is still accepted so other places can keep passing it.
+  const ENTRIES = POLAROID_SEED;
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    canvas.width = SIZE;
-    canvas.height = SIZE;
+    const polaroidHost = polaroidHostRef.current;
+    const wrap = wrapRef.current;
+    if (!canvas || !polaroidHost || !wrap) return;
 
-    let reduced = false;
-    try { reduced = window.matchMedia("(prefers-reduced-motion:reduce)").matches; } catch (e) {}
+    let reducedMotion = false;
+    try { reducedMotion = window.matchMedia('(prefers-reduced-motion:reduce)').matches; } catch {}
 
-    let animId;
-    const cx = SIZE / 2, cy = SIZE / 2;
-    const toR = d => d * Math.PI / 180;
+    // Build polaroid DOM nodes — one per entry — with the matching tilt class.
+    polaroidHost.innerHTML = '';
+    ENTRIES.forEach((e, i) => {
+      const p = document.createElement('div');
+      p.className = 'bfy-polaroid';
+      p.dataset.id = e.id;
+      const tilt = ((i % 5) - 2) * 1.8;
+      p.style.setProperty('--tilt', tilt + 'deg');
+      p.innerHTML =
+        '<div class="bfy-polaroid-photo"><img src="' + e.img + '" alt="' + e.person + '" loading="lazy" /></div>' +
+        '<p class="bfy-polaroid-name">' + e.person + '</p>' +
+        '<p class="bfy-polaroid-time">' + relT(Date.now() - (i + 1) * 120000) + '</p>';
+      polaroidHost.appendChild(p);
+    });
 
-    const draw = () => {
-      // Auto-rotate
-      if (!dragRef.current) {
-        phiRef.current += reduced ? 0 : 0.003;
-        phiRef.current += velRef.current;
-        velRef.current *= 0.95;
-      }
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const initialSize = Math.min(canvas.clientWidth, 800) || 680;
 
-      const phi = phiRef.current;
-      const theta = thetaRef.current;
-
-      ctx.clearRect(0, 0, SIZE, SIZE);
-
-      // Globe glow
-      const glow = ctx.createRadialGradient(cx, cy, R * 0.9, cx, cy, R * 1.4);
-      glow.addColorStop(0, "rgba(14,165,160,0.04)");
-      glow.addColorStop(1, "rgba(14,165,160,0)");
-      ctx.fillStyle = glow;
-      ctx.fillRect(0, 0, SIZE, SIZE);
-
-      // Globe background
-      const bg = ctx.createRadialGradient(cx - R * 0.2, cy - R * 0.2, 0, cx, cy, R);
-      bg.addColorStop(0, "#fafafa");
-      bg.addColorStop(1, "#e8e8ed");
-      ctx.beginPath();
-      ctx.arc(cx, cy, R, 0, Math.PI * 2);
-      ctx.fillStyle = bg;
-      ctx.fill();
-
-      // Project and draw dots
-      const sinPhi = Math.sin(phi);
-      const cosPhi = Math.cos(phi);
-      const sinTheta = Math.sin(theta);
-      const cosTheta = Math.cos(theta);
-
-      for (const dot of sphereDots) {
-        const la = toR(dot.lat);
-        const lo = toR(dot.lng);
-
-        const x0 = Math.cos(la) * Math.cos(lo);
-        const y0 = Math.cos(la) * Math.sin(lo);
-        const z0 = Math.sin(la);
-
-        const x1 = x0 * cosPhi + y0 * sinPhi;
-        const y1 = -x0 * sinPhi + y0 * cosPhi;
-        const z1 = z0;
-
-        const x2 = x1;
-        const y2 = y1 * cosTheta - z1 * sinTheta;
-        const z2 = y1 * sinTheta + z1 * cosTheta;
-
-        if (z2 < 0.02) continue;
-
-        const px = cx + x2 * R;
-        const py = cy - y2 * R;
-
-        if (dot.land) {
-          const size = 0.6 + z2 * 1.0;
-          const alpha = 0.15 + z2 * 0.65;
-          ctx.beginPath();
-          ctx.arc(px, py, size, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(14,165,160,${alpha.toFixed(2)})`;
-          ctx.fill();
-        }
-      }
-
-      // Draw entry markers
-      const projected = [];
-      for (const entry of entries) {
-        const la = toR(entry.lat);
-        const lo = toR(entry.lng);
-
-        const x0 = Math.cos(la) * Math.cos(lo);
-        const y0 = Math.cos(la) * Math.sin(lo);
-        const z0 = Math.sin(la);
-
-        const x1 = x0 * cosPhi + y0 * sinPhi;
-        const y1 = -x0 * sinPhi + y0 * cosPhi;
-        const x2 = x1;
-        const y2 = y1 * cosTheta - z0 * sinTheta;
-        const z2 = y1 * sinTheta + z0 * cosTheta;
-
-        projected.push({ px: cx + x2 * R, py: cy - y2 * R, z2, x0, y0, z0: z0 });
-
-        if (z2 < 0.1) continue;
-
-        const px = cx + x2 * R;
-        const py = cy - y2 * R;
-
-        // Glow
-        const mg = ctx.createRadialGradient(px, py, 0, px, py, 12);
-        mg.addColorStop(0, `rgba(14,165,160,${0.4 * z2})`);
-        mg.addColorStop(1, "rgba(14,165,160,0)");
-        ctx.fillStyle = mg;
-        ctx.beginPath();
-        ctx.arc(px, py, 12, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Dot
-        ctx.beginPath();
-        ctx.arc(px, py, 3, 0, Math.PI * 2);
-        ctx.fillStyle = TEAL;
-        ctx.fill();
-        ctx.strokeStyle = "#fff";
-        ctx.lineWidth = 1;
-        ctx.stroke();
-      }
-
-      // Animated arcs between entry pairs
-      const now = Date.now();
-      const arcPairs = [];
-      for (let i = 0; i < entries.length - 1 && i < 6; i++) {
-        arcPairs.push([i, i + 1]);
-      }
-      // Also connect last to first for a loop
-      if (entries.length > 2) arcPairs.push([entries.length - 1, 0]);
-
-      for (const [ai, bi] of arcPairs) {
-        const a = entries[ai], b = entries[bi];
-        const la1 = toR(a.lat), lo1 = toR(a.lng);
-        const la2 = toR(b.lat), lo2 = toR(b.lng);
-
-        // Cartesian positions on unit sphere
-        const ax = Math.cos(la1) * Math.cos(lo1), ay = Math.cos(la1) * Math.sin(lo1), az = Math.sin(la1);
-        const bx = Math.cos(la2) * Math.cos(lo2), by = Math.cos(la2) * Math.sin(lo2), bz = Math.sin(la2);
-
-        // Great circle interpolation with height
-        const dot = ax * bx + ay * by + az * bz;
-        const angle = Math.acos(Math.max(-1, Math.min(1, dot)));
-        const arcHeight = 0.15 + angle * 0.25; // higher arcs for longer distances
-
-        // Pulse animation: progress cycles 0→1 over 3 seconds per arc, offset by pair index
-        const pulse = ((now + ai * 700) % 3000) / 3000;
-        const pulseWidth = 0.25;
-
-        const STEPS = 32;
-        let prevPt = null;
-        for (let s = 0; s <= STEPS; s++) {
-          const t = s / STEPS;
-
-          // Slerp between the two points
-          const sinA = Math.sin(angle);
-          let ix, iy, iz;
-          if (sinA < 0.001) {
-            ix = ax + (bx - ax) * t;
-            iy = ay + (by - ay) * t;
-            iz = az + (bz - az) * t;
-          } else {
-            const w1 = Math.sin((1 - t) * angle) / sinA;
-            const w2 = Math.sin(t * angle) / sinA;
-            ix = ax * w1 + bx * w2;
-            iy = ay * w1 + by * w2;
-            iz = az * w1 + bz * w2;
+    let cobe;
+    try {
+      cobe = createGlobe(canvas, {
+        devicePixelRatio: dpr,
+        width: initialSize * 2,
+        height: initialSize * 2,
+        phi: 0,
+        theta: 0.3,
+        dark: 0,
+        diffuse: 1.15,
+        scale: 1,
+        mapSamples: 16000,
+        mapBrightness: 4.5,
+        baseColor: [1, 1, 1],
+        markerColor: TEAL,
+        glowColor: [1, 1, 1],
+        markers: ENTRIES.map(e => ({ location: [e.lat, e.lng], size: 0.06 })),
+        onRender: (s) => {
+          if (pointerRef.current === null && !reducedMotion) {
+            phiRef.current += 0.004;
           }
+          phiRef.current += velocityRef.current;
+          velocityRef.current *= 0.94;
 
-          // Normalize and add height (parabolic)
-          const len = Math.sqrt(ix * ix + iy * iy + iz * iz);
-          const h = 1 + arcHeight * 4 * t * (1 - t); // parabolic rise
-          ix = ix / len * h;
-          iy = iy / len * h;
-          iz = iz / len * h;
+          s.phi = phiRef.current;
+          s.theta = thetaRef.current;
+          const sz = canvas.clientWidth || initialSize;
+          s.width = sz * 2;
+          s.height = sz * 2;
 
-          // Rotate same as globe
-          const rx1 = ix * cosPhi + iy * sinPhi;
-          const ry1 = -ix * sinPhi + iy * cosPhi;
-          const rx2 = rx1;
-          const ry2 = ry1 * cosTheta - iz * sinTheta;
-          const rz2 = ry1 * sinTheta + iz * cosTheta;
-
-          if (rz2 < 0.05) { prevPt = null; continue; }
-
-          const px = cx + rx2 * R;
-          const py = cy - ry2 * R;
-
-          if (prevPt) {
-            // Pulse brightness — brighter near the pulse position
-            const dist = Math.abs(t - pulse);
-            const wrap = Math.min(dist, 1 - dist);
-            const brightness = Math.max(0, 1 - wrap / pulseWidth);
-            const alpha = (0.06 + brightness * 0.35) * rz2;
-
-            ctx.beginPath();
-            ctx.moveTo(prevPt.x, prevPt.y);
-            ctx.lineTo(px, py);
-            ctx.strokeStyle = `rgba(14,165,160,${alpha.toFixed(2)})`;
-            ctx.lineWidth = 0.8 + brightness * 1.5;
-            ctx.stroke();
+          // Position each polaroid card over its marker.
+          const rect = canvas.getBoundingClientRect();
+          const cx = rect.width / 2;
+          const cy = rect.height / 2;
+          const radius = rect.width * 0.48;
+          for (let i = 0; i < ENTRIES.length; i++) {
+            const e = ENTRIES[i];
+            const p = polaroidHost.children[i];
+            if (!p) continue;
+            const proj = project(e.lat, e.lng, phiRef.current, thetaRef.current);
+            if (!proj.visible) {
+              p.style.opacity = '0';
+              p.style.pointerEvents = 'none';
+              continue;
+            }
+            const px = cx + proj.x * radius;
+            const py = cy - proj.y * radius;
+            const depthOpacity = Math.min(1, Math.max(0.25, proj.z * 1.3));
+            p.style.opacity = depthOpacity.toFixed(2);
+            p.style.pointerEvents = proj.z > 0.3 ? 'auto' : 'none';
+            p.style.transform = 'translate(' + px + 'px, ' + py + 'px) translate(-50%, -110%) rotate(var(--tilt,0deg))';
+            p.style.zIndex = String(Math.round(100 + proj.z * 100));
           }
-          prevPt = { x: px, y: py };
-        }
-      }
+        },
+      });
+    } catch {
+      // cobe failed to init; bail silently.
+    }
 
-      animId = requestAnimationFrame(draw);
+    // Drag-to-rotate (horizontal only, with momentum).
+    const onDown = (ev) => {
+      pointerRef.current = ev.clientX - phiRef.current / 0.005;
+      pointerStartRef.current = ev.clientX;
+      velocityRef.current = 0;
+      canvas.style.cursor = 'grabbing';
+      try { canvas.setPointerCapture(ev.pointerId); } catch {}
     };
+    const onMove = (ev) => {
+      if (pointerRef.current === null) return;
+      const delta = ev.clientX - pointerRef.current;
+      phiRef.current = delta * 0.005;
+      velocityRef.current = (ev.clientX - pointerStartRef.current) * 0.00008;
+      pointerStartRef.current = ev.clientX;
+    };
+    const onUp = () => {
+      pointerRef.current = null;
+      canvas.style.cursor = 'grab';
+    };
+    canvas.addEventListener('pointerdown', onDown);
+    canvas.addEventListener('pointermove', onMove);
+    canvas.addEventListener('pointerup', onUp);
+    canvas.addEventListener('pointerleave', onUp);
+    canvas.addEventListener('pointercancel', onUp);
 
-    draw();
-    return () => cancelAnimationFrame(animId);
-  }, [entries, sphereDots]);
+    // Resize handling.
+    let ro;
+    try {
+      ro = new ResizeObserver(() => {
+        if (!cobe) return;
+        const s = canvas.clientWidth;
+        try {
+          cobe.resize({ width: s * 2, height: s * 2, devicePixelRatio: dpr });
+        } catch {}
+      });
+      ro.observe(canvas);
+    } catch {}
 
-  // Pointer interaction
-  const onPointerDown = (e) => {
-    dragRef.current = { x: e.clientX, y: e.clientY, phi: phiRef.current, theta: thetaRef.current };
-    velRef.current = 0;
-    e.currentTarget.setPointerCapture(e.pointerId);
-  };
-  const onPointerMove = (e) => {
-    if (!dragRef.current) return;
-    const dx = e.clientX - dragRef.current.x;
-    const dy = e.clientY - dragRef.current.y;
-    phiRef.current = dragRef.current.phi + dx * 0.005;
-    thetaRef.current = dragRef.current.theta + dy * 0.005;
-    velRef.current = dx * 0.0001;
-  };
-  const onPointerUp = () => { dragRef.current = null; };
+    return () => {
+      try { cobe && cobe.destroy(); } catch {}
+      try { ro && ro.disconnect(); } catch {}
+      canvas.removeEventListener('pointerdown', onDown);
+      canvas.removeEventListener('pointermove', onMove);
+      canvas.removeEventListener('pointerup', onUp);
+      canvas.removeEventListener('pointerleave', onUp);
+      canvas.removeEventListener('pointercancel', onUp);
+    };
+  }, []);
 
   return (
-    <canvas
-      ref={canvasRef}
-      onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={onPointerUp}
-      onPointerLeave={onPointerUp}
+    <div
+      ref={wrapRef}
+      className="bfy-globe-frame"
+      data-globe-cobe="1"
+      role="img"
+      aria-label="Rotating globe of participants"
+      style={{ position: 'relative', flex: '2 1 520px', width: '100%', maxWidth: 680, aspectRatio: '1' }}
+    >
+      <canvas
+        ref={canvasRef}
+        className="bfy-globe"
+        aria-label="Rotating globe of participants"
+        style={{ width: '100%', height: '100%', display: 'block', cursor: 'grab', touchAction: 'none' }}
+      />
+      <div
+        ref={polaroidHostRef}
+        className="bfy-polaroid-host"
+        aria-hidden="true"
+        style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
+      />
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════════ *
+ * PREVIOUS GLOBE — kept for reference / rollback.
+ * Originally rendered cobe markers from the live `entries` feed plus a
+ * separate canvas overlay drawing animated great-circle arcs between them.
+ *
+ * To restore: comment out the new `Globe` export above and uncomment the
+ * block below (renaming `GlobeOld` → `Globe`).
+ * ══════════════════════════════════════════════════════════════════════ */
+/*
+const ARC_COLOR = "rgba(14,165,160,";
+const MARKER_COLOR = [255 / 255, 139 / 255, 51 / 255]; // #FF8B33 orange
+
+function drawArcPulse(ctx, a, b, phi, theta, R, cx, cy, pulse, pulseWidth) {
+  const sinP = Math.sin(phi), cosP = Math.cos(phi);
+  const sinT = Math.sin(theta), cosT = Math.cos(theta);
+  const toR = d => d * Math.PI / 180;
+  const la1 = toR(a.lat), lo1 = toR(a.lng);
+  const la2 = toR(b.lat), lo2 = toR(b.lng);
+  const ax = Math.cos(la1) * Math.sin(lo1);
+  const ay = Math.sin(la1);
+  const az = Math.cos(la1) * Math.cos(lo1);
+  const bx = Math.cos(la2) * Math.sin(lo2);
+  const by = Math.sin(la2);
+  const bz = Math.cos(la2) * Math.cos(lo2);
+  const dot = ax * bx + ay * by + az * bz;
+  const omega = Math.acos(Math.max(-1, Math.min(1, dot)));
+  if (omega < 0.01) return;
+  const sinO = Math.sin(omega);
+  const steps = 60;
+  let prev = null;
+  for (let i = 0; i <= steps; i++) {
+    const t = i / steps;
+    const ka = Math.sin((1 - t) * omega) / sinO;
+    const kb = Math.sin(t * omega) / sinO;
+    let x = ka * ax + kb * bx;
+    let y = ka * ay + kb * by;
+    let z = ka * az + kb * bz;
+    const lift = 1 + 0.15 * Math.sin(t * Math.PI);
+    const len = Math.sqrt(x * x + y * y + z * z);
+    x = x * lift / len; y = y * lift / len; z = z * lift / len;
+    const x1 = x * cosP + z * sinP;
+    const y1 = y;
+    const z1 = -x * sinP + z * cosP;
+    const x2 = x1;
+    const y2 = y1 * cosT - z1 * sinT;
+    const z2 = y1 * sinT + z1 * cosT;
+    const px = cx + x2 * R;
+    const py = cy - y2 * R;
+    if (prev && z2 > -0.2) {
+      const distFromPulse = Math.abs(t - pulse);
+      const wrapD = Math.min(distFromPulse, 1 - distFromPulse);
+      const brightness = Math.max(0, 1 - wrapD / pulseWidth);
+      const alpha = (0.05 + brightness * 0.55) * Math.max(0.05, z2 + 0.2);
+      ctx.beginPath();
+      ctx.moveTo(prev.x, prev.y);
+      ctx.lineTo(px, py);
+      ctx.strokeStyle = ARC_COLOR + alpha.toFixed(2) + ")";
+      ctx.lineWidth = 0.8 + brightness * 1.5;
+      ctx.stroke();
+    }
+    prev = { x: px, y: py };
+  }
+}
+
+export function GlobeOld({ entries }) {
+  const wrapRef = useRef(null);
+  const globeCanvasRef = useRef(null);
+  const arcsCanvasRef = useRef(null);
+  const phiRef = useRef(0);
+  const thetaRef = useRef(0.32);
+  const dragRef = useRef(null);
+  const entriesRef = useRef(entries);
+  const arcsAnimRef = useRef(null);
+
+  useEffect(() => { entriesRef.current = entries; }, [entries]);
+
+  useEffect(() => {
+    const wrap = wrapRef.current;
+    const globeCanvas = globeCanvasRef.current;
+    const arcsCanvas = arcsCanvasRef.current;
+    if (!wrap || !globeCanvas || !arcsCanvas) return;
+
+    const dpr = window.devicePixelRatio || 1;
+    const rect = wrap.getBoundingClientRect();
+    const size = Math.round(rect.width || 520);
+
+    const buildMarkers = () => {
+      const list = entriesRef.current || [];
+      const out = [];
+      for (let i = 0; i < list.length; i++) {
+        const e = list[i];
+        if (e.lat == null || e.lng == null) continue;
+        const seed = (e.id || '' + i).split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+        const jLat = ((seed * 37) % 100 - 50) / 100;
+        const jLng = ((seed * 71) % 100 - 50) / 100;
+        out.push({ location: [e.lat + jLat, e.lng + jLng], size: 0.04 });
+      }
+      return out;
+    };
+
+    let cobe;
+    try {
+      cobe = createGlobe(globeCanvas, {
+        devicePixelRatio: dpr,
+        width: size * dpr,
+        height: size * dpr,
+        phi: 0,
+        theta: thetaRef.current,
+        dark: 0,
+        diffuse: 1.2,
+        mapSamples: 16000,
+        mapBrightness: 6,
+        baseColor: [0.96, 0.96, 0.97],
+        markerColor: MARKER_COLOR,
+        glowColor: [1, 1, 1],
+        markers: buildMarkers(),
+        onRender: (state) => {
+          if (!dragRef.current) phiRef.current += 0.003;
+          state.phi = phiRef.current;
+          state.theta = thetaRef.current;
+          state.markers = buildMarkers();
+        },
+      });
+    } catch {}
+
+    arcsCanvas.width = size * dpr;
+    arcsCanvas.height = size * dpr;
+    arcsCanvas.style.width = size + 'px';
+    arcsCanvas.style.height = size + 'px';
+    const ctx = arcsCanvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    const cx = size / 2, cy = size / 2;
+    const R = size * 0.45;
+
+    const drawArcs = () => {
+      ctx.clearRect(0, 0, size, size);
+      const all = entriesRef.current || [];
+      const arcCount = Math.min(40, Math.max(0, all.length - 1));
+      const step = all.length > arcCount + 1 ? Math.floor(all.length / (arcCount + 1)) : 1;
+      const pts = [];
+      for (let i = 0; i < all.length && pts.length < arcCount + 1; i += step) {
+        if (all[i].lat != null && all[i].lng != null) pts.push(all[i]);
+      }
+      const pairs = [];
+      for (let i = 0; i < pts.length - 1; i++) pairs.push([i, i + 1]);
+      if (pts.length > 2) pairs.push([pts.length - 1, 0]);
+      const now = Date.now();
+      const period = 4000;
+      const pulse = (now % period) / period;
+      const pulseWidth = 0.18;
+      for (const [ai, bi] of pairs) {
+        drawArcPulse(ctx, pts[ai], pts[bi], phiRef.current, thetaRef.current, R, cx, cy, pulse, pulseWidth);
+      }
+      arcsAnimRef.current = requestAnimationFrame(drawArcs);
+    };
+    drawArcs();
+
+    const onPointerDown = (e) => {
+      dragRef.current = { x: e.clientX, y: e.clientY, phi: phiRef.current, theta: thetaRef.current };
+      wrap.style.cursor = 'grabbing';
+      try { wrap.setPointerCapture(e.pointerId); } catch {}
+    };
+    const onPointerMove = (e) => {
+      if (!dragRef.current) return;
+      phiRef.current = dragRef.current.phi + (e.clientX - dragRef.current.x) * 0.005;
+      thetaRef.current = dragRef.current.theta + (e.clientY - dragRef.current.y) * 0.005;
+    };
+    const onPointerUp = () => { dragRef.current = null; wrap.style.cursor = 'grab'; };
+
+    wrap.addEventListener('pointerdown', onPointerDown);
+    wrap.addEventListener('pointermove', onPointerMove);
+    wrap.addEventListener('pointerup', onPointerUp);
+    wrap.addEventListener('pointerleave', onPointerUp);
+    wrap.addEventListener('pointercancel', onPointerUp);
+
+    return () => {
+      try { cobe && cobe.destroy(); } catch {}
+      if (arcsAnimRef.current) cancelAnimationFrame(arcsAnimRef.current);
+      wrap.removeEventListener('pointerdown', onPointerDown);
+      wrap.removeEventListener('pointermove', onPointerMove);
+      wrap.removeEventListener('pointerup', onPointerUp);
+      wrap.removeEventListener('pointerleave', onPointerUp);
+      wrap.removeEventListener('pointercancel', onPointerUp);
+    };
+  }, []);
+
+  return (
+    <div
+      ref={wrapRef}
+      data-globe-cobe="1"
       aria-label="Interactive globe showing participant locations"
       role="img"
       style={{
-        width: "100%", maxWidth: 320, aspectRatio: "1", cursor: "grab",
-        touchAction: "none",
+        position: "relative",
+        width: "100%", maxWidth: 520,
+        aspectRatio: "1",
+        cursor: "grab", touchAction: "none",
+        margin: "0 auto",
       }}
-    />
+    >
+      <canvas ref={globeCanvasRef} style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", display: "block" }} />
+      <canvas ref={arcsCanvasRef} style={{ position: "absolute", top: 0, left: 0, pointerEvents: "none" }} />
+    </div>
   );
 }
+*/

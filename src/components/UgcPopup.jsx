@@ -1,7 +1,7 @@
-import { g, ff, TEAL } from '../constants/index.js';
+import { g, ff, TEAL, ORANGE } from '../constants/index.js';
 import { Popup, Btn } from './ui/index.js';
 
-export function UgcPopup({ open, onClose, recordingStep, countdownValue, isRecording, recordingSeconds, recordedPreviewUrl, ugcConsent, setUgcConsent, cameraError, ugcUploading, liveVideoRef, onSelectMode, onRetake, onUseVideo, onFileSelect, onUpload, onStopRecording }) {
+export function UgcPopup({ open, onClose, recordingStep, countdownValue, isRecording, recordingSeconds, recordedPreviewUrl, ugcConsent, setUgcConsent, cameraError, ugcUploading, liveVideoRef, onSelectMode, onStartRecording, onRetake, onUseVideo, onFileSelect, onUpload, onStopRecording }) {
   const ease = "cubic-bezier(.16,1,.3,1)";
   const btnStyle = { display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "12px 24px", borderRadius: 12, fontSize: 15, fontWeight: 600, fontFamily: ff, cursor: "pointer", border: "none", transition: `all .25s ${ease}` };
 
@@ -14,7 +14,7 @@ export function UgcPopup({ open, onClose, recordingStep, countdownValue, isRecor
         {/* MODE SELECT */}
         {recordingStep === 'mode-select' && (
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            <button onClick={() => onSelectMode('auto')} style={{ ...btnStyle, background: TEAL, color: "#fff", width: "100%" }}>
+            <button onClick={() => onSelectMode('auto')} style={{ ...btnStyle, background: ORANGE, color: "#fff", width: "100%" }}>
               Auto (3s countdown)
             </button>
             <button onClick={() => onSelectMode('manual')} style={{ ...btnStyle, background: g.bg, color: g.t1, width: "100%", border: "1px solid #e8e8ed" }}>
@@ -53,7 +53,7 @@ export function UgcPopup({ open, onClose, recordingStep, countdownValue, isRecor
                   <div style={{ width: 20, height: 20, borderRadius: 3, background: "#fff" }} />
                 </button>
               ) : countdownValue === 0 && (
-                <button onClick={onSelectMode} style={{ ...btnStyle, background: TEAL, color: "#fff", borderRadius: 28 }}>
+                <button onClick={onStartRecording} style={{ ...btnStyle, background: ORANGE, color: "#fff", borderRadius: 28 }}>
                   Tap to record
                 </button>
               )}
@@ -63,7 +63,7 @@ export function UgcPopup({ open, onClose, recordingStep, countdownValue, isRecor
               <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "rgba(0,0,0,.8)", color: "#fff", padding: 24, textAlign: "center" }}>
                 <p style={{ fontSize: 16, fontWeight: 600, marginBottom: 8 }}>Camera unavailable</p>
                 <p style={{ fontSize: 13, color: "rgba(255,255,255,.6)", marginBottom: 16 }}>Please allow camera access or upload a file instead.</p>
-                <label style={{ ...btnStyle, background: TEAL, color: "#fff", cursor: "pointer" }}>
+                <label style={{ ...btnStyle, background: ORANGE, color: "#fff", cursor: "pointer" }}>
                   Upload file
                   <input type="file" accept="video/*,image/*" onChange={onFileSelect} style={{ display: "none" }} />
                 </label>
@@ -80,7 +80,7 @@ export function UgcPopup({ open, onClose, recordingStep, countdownValue, isRecor
             </div>
             <div style={{ display: "flex", gap: 8 }}>
               <button onClick={onRetake} style={{ ...btnStyle, flex: 1, background: g.bg, color: g.t1, border: "1px solid #e8e8ed" }}>Retake</button>
-              <button onClick={onUseVideo} style={{ ...btnStyle, flex: 1, background: TEAL, color: "#fff" }}>Use this</button>
+              <button onClick={onUseVideo} style={{ ...btnStyle, flex: 1, background: ORANGE, color: "#fff" }}>Use this</button>
             </div>
           </div>
         )}

@@ -5,7 +5,7 @@
     "alliance": "Alianza",
     "live": "En Vivo",
     "safeExit": "Salida Segura",
-    "getSupport": "Obtener Ayuda",
+    "getSupport": "¿Necesitas ayuda?",
     "takeTheChallenge": "Acepta el Reto",
     "join": "Unirse",
     "signIn": "Iniciar sesión",
@@ -15,7 +15,8 @@
     "closeMenu": "Cerrar menú de navegación"
   },
   "home": {
-    "heroAlt": "Dos personas haciendo el Signo Mariposa",
+    "heroAlt": "Personas haciendo el Signo Mariposa",
+    "heroPill": "Movimiento Global de Salud Mental",
     "label": "Reto Mariposa",
     "headline": "Levanta mil millones de manos.",
     "subheadPart1": "Un gesto de 60 segundos por la salud mental.",
@@ -33,6 +34,7 @@
     "signLabel": "El Signo",
     "signTitle": "Dos manos. Una señal.",
     "signSub": "El primer gesto universal por la salud mental. Pruébalo.",
+    "watchTutorial": "Ver el tutorial",
     "howLabel": "Cómo Funciona",
     "howTitle": "Tres pasos. Un minuto.",
     "effectLabel": "El Efecto Mariposa",

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { g, ff, TEAL, sec, label, h2s, gradH, EVENT_BG, SHOW_APR30_EVENT } from '../constants/index.js';
+import { g, ff, TEAL, sec, label, h2s, gradH, EVENT_BG, SHOW_APR30_EVENT, LIVE_HERO_BG } from '../constants/index.js';
 import { Reveal, Btn } from '../components/ui/index.js';
 import { CountdownTimer, TimelineViz, LiveFeed } from '../components/index.js';
 import { track } from '../utils/track.js';
@@ -10,18 +10,15 @@ export default function LivePage({ entries, setTlPopup, onShare, handCount, lead
   useEffect(() => { track('leaderboard_viewed'); }, []);
   return (
     <div>
-      {SHOW_APR30_EVENT && (
-      <section style={{ minHeight: "70dvh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", background: "linear-gradient(180deg, #C3FFEF 0%, #ffffff 50%)" }}>
-        <Reveal><h1 style={{ ...gradH, fontSize: "clamp(2.4rem,7vw,4.2rem)", marginBottom: 14 }}>{t('livePage.heroTitle')}</h1></Reveal>
-        <Reveal delay={0.1}><p style={{ fontSize: 20, color: g.t2, maxWidth: 520, margin: "0 auto 32px", lineHeight: 1.5 }}>{t('livePage.heroSub')}</p></Reveal>
-        <Reveal delay={0.15}><CountdownTimer /></Reveal>
+      <section data-page="live" style={{ minHeight: "70dvh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", backgroundImage: `url(${LIVE_HERO_BG})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat", padding: 20, position: "relative" }}>
+        <Reveal><h1 style={{ ...h2s, fontSize: "clamp(3.4rem,7vw,6.2rem)", marginBottom: 14, color: "#fff" }}>{t('livePage.heroTitle')}</h1></Reveal>
+        <Reveal delay={0.1}><p style={{ fontSize: 20, color: "#fff", maxWidth: 520, margin: "0 auto 32px", lineHeight: 1.5 }}>{t('livePage.heroSub')}</p></Reveal>
+        {SHOW_APR30_EVENT && <Reveal delay={0.15}><CountdownTimer /></Reveal>}
       </section>
-      )}
 
-      {SHOW_APR30_EVENT && (
       <section style={sec(g.bg)}><div style={{ maxWidth: 560, margin: "0 auto" }}>
-        <Reveal><p style={label}>{t('livePage.scheduleLabel')}</p>
-        <h2 style={{ ...h2s, fontSize: "clamp(1.6rem,4vw,2.4rem)", marginBottom: 28 }}>{t('livePage.scheduleTitle')}</h2></Reveal>
+        <Reveal><p style={label} className="bc-label">{t('livePage.scheduleLabel')}</p>
+        <h2 style={{ ...h2s, marginBottom: 28 }}>{t('livePage.scheduleTitle')}</h2></Reveal>
 
         <Reveal delay={0.1}><div style={{
           background: "#0D1117", borderRadius: 20, padding: "36px 32px", marginBottom: 32, position: "relative", overflow: "hidden"
@@ -44,15 +41,17 @@ export default function LivePage({ entries, setTlPopup, onShare, handCount, lead
 
         <Reveal delay={0.2}><TimelineViz onEventClick={setTlPopup} /></Reveal>
       </div></section>
-      )}
 
-      <LiveFeed entries={entries} handCount={handCount} leaderboardData={leaderboardData} onShare={onShare} />
+      <LiveFeed entries={entries} handCount={handCount} leaderboardData={leaderboardData} />
 
-      <section style={sec("#f5f5f7")}><Reveal><div style={{ maxWidth: 520, margin: "0 auto" }}>
-        <h2 style={{ ...gradH, fontSize: "clamp(1.8rem,4vw,2.6rem)", marginBottom: 14 }}>{t('livePage.ctaTitle')}</h2>
-        <p style={{ fontSize: 18, color: g.t2, marginBottom: 28 }}>{t('livePage.ctaSub')}</p>
-        <Btn primary onClick={onShare} style={{ fontSize: 16, padding: "12px 28px" }}>{t('livePage.ctaBtn')}</Btn>
-      </div></Reveal></section>
+      <section data-live-cta="1" style={{ background: "#f5f5f7", textAlign: "center", padding: "0 0 180px 0" }}>
+        <img src="/han.webp" alt="" style={{ display: "block", width: "100%", height: "auto", margin: 0 }} />
+        <Reveal style={{ padding: "80px 24px 0" }}><div style={{ maxWidth: 520, margin: "0 auto" }}>
+          <h2 style={{ ...gradH, fontSize: "clamp(1.8rem,5.5vw,4.2rem)", marginBottom: 14 }}>{t('livePage.ctaTitle')}</h2>
+          <p style={{ fontSize: 18, color: g.t2, marginBottom: 28 }}>{t('livePage.ctaSub')}</p>
+          <Btn primary onClick={onShare} style={{ fontSize: 16, padding: "12px 28px" }}>{t('livePage.ctaBtn')}</Btn>
+        </div></Reveal>
+      </section>
     </div>
   );
 }

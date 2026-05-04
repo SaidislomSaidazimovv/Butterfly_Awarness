@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   g,
@@ -13,6 +13,13 @@ import {
   EVENT_BG,
   CTA_IMG,
   SHOW_APR30_EVENT,
+  BE_DECOR_BG,
+  FAQ_TOP_IMG,
+  HOME_CTA_NEW,
+  HERO_NEW,
+  HERO_NEW_MOBILE,
+  ORANGE,
+  HAND_RAISE_BOOST,
 } from "../constants/index.js";
 import { Reveal, Btn } from "../components/ui/index.js";
 import {
@@ -23,6 +30,7 @@ import {
   FAQ,
   CountdownTimer,
   LiveFeed,
+  TutorialModal,
 } from "../components/index.js";
 import { track } from "../utils/track.js";
 
@@ -42,99 +50,87 @@ export default function HomePage({
   leaderboardData,
 }) {
   const { t } = useTranslation();
+  const [tutorialOpen, setTutorialOpen] = useState(false);
   const formattedCount = (handCount || 0).toLocaleString();
   return (
     <main id="main-content">
-      {/* HERO */}
+      <TutorialModal open={tutorialOpen} onClose={() => setTutorialOpen(false)} />
+      {/* HERO — rebuilt per design skin */}
       <section
+        data-hero-rebuilt="1"
         style={{
+          position: "relative",
           minHeight: "90dvh",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          justifyContent: "center",
+          justifyContent: "flex-start",
           textAlign: "center",
-          background: "linear-gradient(180deg, #C3FFEF 0%, #ffffff 30%)",
+          background: "#fff",
+          overflow: "visible",
+          paddingTop: 72,
+          paddingBottom: 48,
         }}
       >
-        <Reveal style={{ width: "100%" }}>
-          <img
-            src={HERO_IMG}
-            alt={t('home.heroAlt')}
-            width="1900"
-            height="1060"
-            loading="eager"
-            fetchpriority="high"
-            decoding="async"
-            style={{
-              width: "100%",
-              maxWidth: 920,
-              height: "auto",
-              display: "block",
-              margin: "0 auto",
-              marginBottom: -70,
-            }}
-          />
-        </Reveal>
-        <div
-          style={{
-            padding: "0 24px 24px",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Reveal delay={0.1}>
-            <p style={{ ...label, marginTop: 0 }}>{t('home.label')}</p>
+        <div data-hero-content="1" style={{ padding: "0 24px", display: "flex", flexDirection: "column", alignItems: "center", maxWidth: 1100, margin: "0 auto" }}>
+          <Reveal>
+            <span data-hero-pill="1" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "8px 18px", borderRadius: 999, color: "rgb(81,81,81)", fontWeight: 600, fontSize: 28, letterSpacing: "-0.01em" }}>
+              {t('home.heroPill')}
+            </span>
           </Reveal>
-          <Reveal delay={0.15}>
-            <h1
-              style={{
-                ...gradH,
-                fontSize: "clamp(2.6rem,8vw,4.8rem)",
-                marginBottom: 14,
-              }}
-            >
+          <Reveal delay={0.1}>
+            <h1 data-hero-h1="1" style={{ color: "#000", fontSize: "clamp(3rem,9vw,6.5rem)", fontWeight: 550, lineHeight: 1, letterSpacing: "-0.055em", margin: "6px 0 22px" }}>
               {t('home.headline')}
             </h1>
           </Reveal>
-          <Reveal delay={0.2}>
-            <p
-              style={{
-                fontSize: 21,
-                color: g.t2,
-                maxWidth: 440,
-                margin: "0 auto 36px",
-                lineHeight: 1.45,
-              }}
-            >
+          <Reveal delay={0.15}>
+            <p data-hero-sub="1" style={{ fontSize: "clamp(18px,1.5vw,22px)", color: "rgb(134,134,139)", fontWeight: 500, margin: "0 0 6px", lineHeight: 1.4 }}>
               {t('home.subheadPart1')}
-              <br />
-              <em style={{ fontStyle: "normal", color: g.t1 }}>
-                {t('home.subheadPart2')}
-              </em>
             </p>
           </Reveal>
+          <Reveal delay={0.2}>
+            <p data-hero-sub="1" style={{ fontSize: "clamp(18px,1.5vw,22px)", color: "#000", fontWeight: 600, margin: "0 0 34px", lineHeight: 1.4 }}>
+              {t('home.subheadPart2')}
+            </p>
+          </Reveal>
+        </div>
+
+        <div data-hero-bottom="1" style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", gap: 22, opacity: 1 }}>
           <Reveal delay={0.25}>
-            <div style={{ display: "flex", justifyContent: "center", gap: 12 }}>
-              <Btn primary onClick={onJoin} style={{ fontSize: 17 }}>
+            <div style={{ display: "flex", justifyContent: "center", gap: 12, flexWrap: "wrap" }}>
+              <button
+                data-hero-action="join"
+                onClick={onJoin}
+                style={{
+                  display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 7,
+                  padding: "15px 32px", borderRadius: 980, fontSize: 17, fontWeight: 600,
+                  fontFamily: ff, border: "none",
+                  background: "rgb(255,139,51)", color: "#fff",
+                  cursor: "pointer", transition: ".25s cubic-bezier(.16,1,.3,1)", outline: "none",
+                }}
+              >
                 {t('home.joinCTA')}
-              </Btn>
+              </button>
               <div style={{ position: "relative", display: "inline-flex" }}>
-                <Btn onClick={onDidIt} style={{ fontSize: 17 }}>
+                <button
+                  data-hero-action="didit"
+                  onClick={onDidIt}
+                  style={{
+                    display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 7,
+                    padding: "15px 32px", borderRadius: 980, fontSize: 17, fontWeight: 600,
+                    fontFamily: ff, border: "1px solid " + g.bdr,
+                    background: "#fff", color: g.t1,
+                    cursor: "pointer", transition: ".25s cubic-bezier(.16,1,.3,1)", outline: "none",
+                  }}
+                >
                   {t('home.iDidIt')}
-                </Btn>
+                </button>
                 {showPlusOne && (
                   <span
                     style={{
-                      position: "absolute",
-                      top: -18,
-                      right: -8,
-                      color: "#32C189",
-                      fontWeight: 700,
-                      fontSize: 18,
-                      animation: "fadeUp 0.8s ease forwards",
-                      pointerEvents: "none",
+                      position: "absolute", top: -18, right: -8,
+                      color: "#32C189", fontWeight: 700, fontSize: 18,
+                      animation: "fadeUp 0.8s ease forwards", pointerEvents: "none",
                     }}
                   >
                     +1
@@ -145,37 +141,41 @@ export default function HomePage({
           </Reveal>
           {handCount > 0 && (
             <Reveal delay={0.3}>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 8,
-                  marginTop: 24,
-                  padding: "8px 18px",
-                  borderRadius: 980,
-                  background: "rgba(14,165,160,.08)",
-                  border: "1px solid rgba(14,165,160,.15)",
-                }}
+              <span
+                data-hero-counter="1"
                 aria-live="polite"
                 aria-atomic="true"
                 aria-label={t('home.handsRaisedAria', { count: formattedCount })}
+                style={{
+                  display: "inline-flex", alignItems: "center", gap: 8,
+                  padding: "7px 16px", borderRadius: 999,
+                  background: "transparent", color: "#000",
+                  fontWeight: 600, fontSize: 14,
+                }}
               >
-                <span
-                  style={{
-                    width: 8,
-                    height: 8,
-                    borderRadius: 4,
-                    background: TEAL,
-                    animation: "pulse 2s ease infinite",
-                  }}
-                />
-                <span style={{ fontSize: 14, fontWeight: 600, color: g.t1 }}>
-                  {t('home.handsRaised', { count: formattedCount })}
-                </span>
-              </div>
+                <span style={{ width: 7, height: 7, borderRadius: 4, background: ORANGE, display: "inline-block" }} />
+                {t('home.handsRaised', { count: formattedCount })}
+              </span>
             </Reveal>
           )}
         </div>
+
+        <Reveal delay={0.35} style={{ width: "100%" }}>
+          <div data-hero-img-wrap="1" style={{ width: "100%" }}>
+            <picture>
+              <source media="(max-width: 768px)" srcSet={HERO_NEW_MOBILE} />
+              <img
+                src={HERO_NEW}
+                alt={t('home.heroAlt')}
+                data-hero-swap="1"
+                loading="eager"
+                fetchpriority="high"
+                decoding="async"
+                style={{ width: "100%", display: "block", marginTop: -50, pointerEvents: "none" }}
+              />
+            </picture>
+          </div>
+        </Reveal>
       </section>
 
       {/* HIGHLIGHTS */}
@@ -281,7 +281,7 @@ export default function HomePage({
 
       {/* THE SIGN */}
       <section style={sec("#fff")}>
-        <div style={{ maxWidth: 600, margin: "0 auto" }}>
+        <div style={{ maxWidth: 920, margin: "0 auto" }}>
           <Reveal>
             <p style={label}>{t('home.signLabel')}</p>
             <h2 style={{ ...gradH, marginBottom: 8 }}>
@@ -298,13 +298,30 @@ export default function HomePage({
       </section>
 
       {/* HOW IT WORKS */}
-      <section id="how-it-works" style={sec(g.bg)}>
-        <div style={{ maxWidth: 680, margin: "0 auto" }}>
+      <section id="how-it-works" style={{ ...sec(g.bg), background: g.bg }}>
+        <div style={{ maxWidth: 920, margin: "0 auto" }}>
           <Reveal>
-            <p style={label}>{t('home.howLabel')}</p>
-            <h2 style={{ ...h2s, marginBottom: 36 }}>
+            <p style={label} className="bc-label">{t('home.howLabel')}</p>
+            <h2 style={{ ...h2s, marginBottom: 18 }}>
               {t('home.howTitle')}
             </h2>
+            <button
+              type="button"
+              onClick={() => setTutorialOpen(true)}
+              style={{
+                display: "inline-flex", alignItems: "center", gap: 8,
+                background: "transparent", border: "none", padding: 0,
+                color: "#0EA5A0", fontFamily: ff, fontSize: 16, fontWeight: 600,
+                cursor: "pointer", marginBottom: 36,
+              }}
+            >
+              <span style={{ textDecoration: "underline", textUnderlineOffset: 4, textDecorationThickness: 1.5 }}>
+                {t('home.watchTutorial')}
+              </span>
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                <path d="M5 3l8 5-8 5V3z" />
+              </svg>
+            </button>
           </Reveal>
           <Reveal delay={0.1}>
             <StepTabs onJoin={onJoin} />
@@ -313,26 +330,15 @@ export default function HomePage({
       </section>
 
       {/* BUTTERFLY EFFECT */}
-      <section style={sec("#fff")}>
-        <Reveal>
-          <div style={{ maxWidth: 420, margin: "0 auto" }}>
-            <p style={label}>{t('home.effectLabel')}</p>
-            <h2
-              style={{
-                ...h2s,
-                fontSize: "clamp(1.6rem,4vw,2.4rem)",
-                marginBottom: 28,
-              }}
-            >
+      <section style={{ position: "relative", overflow: "hidden", padding: "250px 24px", textAlign: "center", background: "#fff" }}>
+        <img src={BE_DECOR_BG} alt="" aria-hidden="true" className="be-decor" style={{ position: "absolute", top: "30%", left: 0, right: 0, width: "100%", height: "auto", pointerEvents: "none", zIndex: 0, display: "block", objectFit: "contain" }} />
+        <Reveal style={{ position: "relative", zIndex: 2 }}>
+          <div style={{ maxWidth: 520, margin: "0 auto" }}>
+            <p style={label} className="bc-label">{t('home.effectLabel')}</p>
+            <h2 style={{ ...h2s, marginBottom: 28 }}>
               {t('home.effectTitle')}
             </h2>
-            <div
-              style={{
-                background: g.bg,
-                borderRadius: 20,
-                padding: "28px 24px",
-              }}
-            >
+            <div style={{ background: "#f5f5f7", borderRadius: 20, padding: "28px 24px", height: 300, display: "flex", flexDirection: "column", justifyContent: "center" }}>
               <Chain onJoin={onJoin} />
             </div>
           </div>
@@ -499,16 +505,11 @@ export default function HomePage({
       />
 
       {/* FAQ */}
-      <section id="faq" style={sec("#fff")}>
-        <Reveal>
-          <div style={{ maxWidth: 560, margin: "0 auto" }}>
-            <h2
-              style={{
-                ...h2s,
-                fontSize: "clamp(1.6rem,4vw,2.4rem)",
-                marginBottom: 20,
-              }}
-            >
+      <section id="faq" style={{ background: "linear-gradient(to top, #f5f5f7 0%, #ffffff 100%)", padding: "0 0 250px 0", textAlign: "center" }}>
+        <img src={FAQ_TOP_IMG} alt="" aria-hidden="true" style={{ display: "block", width: "100%", height: "auto", margin: 0 }} />
+        <Reveal style={{ padding: "0 24px" }}>
+          <div style={{ maxWidth: 800, margin: "0 auto" }}>
+            <h2 style={{ ...h2s, marginBottom: 20 }}>
               {t('home.faqTitle')}
             </h2>
             <FAQ />
@@ -520,7 +521,7 @@ export default function HomePage({
       <section style={{ ...sec("#f5f5f7"), paddingBottom: 80 }}>
         <Reveal>
           <img
-            src={CTA_IMG}
+            src={HOME_CTA_NEW}
             alt={t('home.ctaAlt')}
             width="2000"
             height="852"
@@ -538,7 +539,7 @@ export default function HomePage({
           <h2
             style={{
               ...gradH,
-              fontSize: "clamp(2rem,6vw,3.4rem)",
+              fontSize: "clamp(2rem,5.5vw,4.2rem)",
               marginTop: 12,
               marginBottom: 6,
             }}

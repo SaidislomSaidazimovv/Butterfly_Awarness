@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ExternalLink } from 'lucide-react';
-import { g, ff, TEAL, LOGO_DARK } from '../constants/index.js';
+import { g, ff, TEAL, ORANGE, LOGO_DARK } from '../constants/index.js';
 import { Btn } from './ui/index.js';
 import { LanguageSwitcher } from './LanguageSwitcher.jsx';
 
@@ -52,7 +52,7 @@ export function Nav({ page, navigate, onJoin, onSupport, currentUser, onSignIn, 
             <button onClick={onSupport} style={{ background: "none", border: "1px solid " + g.bdr, borderRadius: 980, fontFamily: ff, fontSize: 13, fontWeight: 500, color: g.t1, cursor: "pointer", padding: "7px 14px", display: "flex", alignItems: "center", gap: 5 }}>
               <span style={{ color: TEAL }}>♡</span> {t('nav.getSupport')}
             </button>
-            <Btn primary onClick={onJoin} style={{ padding: "8px 18px", fontSize: 13, borderRadius: 980 }}>{t('nav.takeTheChallenge')}</Btn>
+            <Btn primary onClick={onJoin} style={{ padding: "8px 18px", fontSize: 13, borderRadius: 980, background: TEAL }}>{t('nav.takeTheChallenge')}</Btn>
             <LanguageSwitcher />
             {/* Auth: Sign In or User Menu */}
             {!currentUser ? (
@@ -80,7 +80,7 @@ export function Nav({ page, navigate, onJoin, onSupport, currentUser, onSignIn, 
           {/* Mobile right: Join + Hamburger */}
           <div className="nav-mobile" style={{ display: "none", alignItems: "center", gap: 8 }}>
             <LanguageSwitcher />
-            <Btn primary onClick={onJoin} style={{ padding: "7px 14px", fontSize: 12, borderRadius: 980 }}>{t('nav.join')}</Btn>
+            <Btn primary onClick={onJoin} style={{ padding: "7px 14px", fontSize: 12, borderRadius: 980, background: TEAL }}>{t('nav.join')}</Btn>
             {currentUser && (
               <div style={{ position: "relative" }}>
                 <button aria-label={t('nav.userMenu')} onClick={() => setUserDropdownOpen(v => !v)} style={{ background: "none", border: "none", padding: 0, cursor: "pointer", display: "flex", alignItems: "center" }}>
@@ -139,7 +139,7 @@ export function Nav({ page, navigate, onJoin, onSupport, currentUser, onSignIn, 
           opacity: menuOpen ? 1 : 0, transform: menuOpen ? "translateY(0)" : "translateY(20px)",
           transition: `opacity .4s ${ease} 320ms, transform .5s ${ease} 320ms`,
         }}>
-          <Btn primary onClick={() => { onJoin(); setMenuOpen(false); }} style={{ width: "100%", fontSize: 16, padding: "14px 20px", borderRadius: 14 }}>{t('nav.takeTheChallenge')}</Btn>
+          <Btn primary onClick={() => { onJoin(); setMenuOpen(false); }} style={{ width: "100%", fontSize: 16, padding: "14px 20px", borderRadius: 14, background: TEAL }}>{t('nav.takeTheChallenge')}</Btn>
           <button onClick={() => { onSupport(); setMenuOpen(false); }} style={{ width: "100%", background: "none", border: "1px solid " + g.bdr, borderRadius: 14, fontFamily: ff, fontSize: 15, fontWeight: 500, color: g.t1, cursor: "pointer", padding: "13px 20px", display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
             <span style={{ color: TEAL }}>♡</span> {t('nav.getSupport')}
           </button>
@@ -158,7 +158,7 @@ export function Nav({ page, navigate, onJoin, onSupport, currentUser, onSignIn, 
                 </button>
               </div>
             ) : (
-              <button onClick={() => { onSignIn(); setMenuOpen(false); }} aria-label={t('nav.signIn')} style={{ background: TEAL, border: "none", borderRadius: 14, color: "#fff", padding: "13px 20px", fontSize: 15, fontWeight: 600, cursor: "pointer", width: "100%", fontFamily: ff }}>
+              <button onClick={() => { onSignIn(); setMenuOpen(false); }} aria-label={t('nav.signIn')} style={{ background: ORANGE, border: "none", borderRadius: 14, color: "#fff", padding: "13px 20px", fontSize: 15, fontWeight: 600, cursor: "pointer", width: "100%", fontFamily: ff }}>
                 {t('nav.signIn')}
               </button>
             )}

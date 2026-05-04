@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { g, ff, TEAL, SCI_IMG_BRAIN, SCI_IMG_HANDS, SCI_IMG_SCAN, ICON_BUTTERFLY } from '../constants/index.js';
+import { g, ff, TEAL, ICON_BUTTERFLY, SCI_BRAIN_NEW, SCI_HANDS_NEW, SCI_SCAN_NEW } from '../constants/index.js';
 import { Reveal, Btn } from '../components/ui/index.js';
 
 export default function SciencePage({ navigate }) {
@@ -17,8 +17,8 @@ export default function SciencePage({ navigate }) {
 
   return (
     <div>
-      <section style={{ minHeight: "70dvh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", background: "linear-gradient(180deg, #E0F7FF 0%, #ffffff 50%)" }}>
-        <Reveal><h1 style={{ ...gradH, fontSize: "clamp(2.4rem,7vw,4.2rem)", marginBottom: 14 }}>{t('science.heroTitle')}</h1></Reveal>
+      <section data-page="science" style={{ minHeight: "70dvh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", background: "#fff", padding: 20 }}>
+        <Reveal><h1 style={{ ...gradH, fontSize: "clamp(3.4rem,7vw,6.2rem)", marginBottom: 14 }}>{t('science.heroTitle')}</h1></Reveal>
         <Reveal delay={0.1}><p style={{ fontSize: 20, color: g.t2, maxWidth: 520, margin: "0 auto 40px", lineHeight: 1.5 }}>{t('science.heroSub')}</p></Reveal>
         <Reveal delay={0.2}><div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", maxWidth: 600, margin: "0 auto" }}>
           {stats.map((s, i) => (
@@ -30,34 +30,37 @@ export default function SciencePage({ navigate }) {
         </div></Reveal>
       </section>
 
-      <section style={sec("#fff")}><div style={{ maxWidth: 680, margin: "0 auto" }}>
-        <Reveal><img src={SCI_IMG_BRAIN} alt={t('science.brain.imgAlt')} width="1024" height="1024" loading="lazy" decoding="async" style={{ width: "100%", maxWidth: 420, height: "auto", display: "block", margin: "0 auto 40px", borderRadius: 24 }} /></Reveal>
+      {/* Brain — 2-column on desktop, image LEFT */}
+      <section style={{ padding: "180px 24px", background: "#fff", textAlign: "center" }}><div className="sci-2col" style={{ maxWidth: 1400, margin: "0 auto", display: "grid", gridTemplateColumns: "minmax(0, 1.1fr) minmax(0, 1fr)", alignItems: "center", columnGap: 48 }}>
+        <Reveal><img src={SCI_BRAIN_NEW} alt={t('science.brain.imgAlt')} width="1024" height="1024" loading="lazy" decoding="async" style={{ width: "100%", height: "auto", display: "block", margin: 0 }} /></Reveal>
         <div style={{ textAlign: "left" }}>
-        <Reveal delay={0.1}><p style={label}>{t('science.brain.label')}</p>
+        <Reveal delay={0.1}><p style={label} className="bc-label">{t('science.brain.label')}</p>
         <h2 style={{ ...h2s, marginBottom: 18 }}>{t('science.brain.title')}</h2>
         <p style={{ fontSize: 18, color: g.t2, lineHeight: 1.8, marginBottom: 24 }}>{t('science.brain.p1')}</p>
         <p style={{ fontSize: 18, color: g.t2, lineHeight: 1.8 }}>{t('science.brain.p2')}</p></Reveal>
         </div>
       </div></section>
 
-      <section style={sec(g.bg)}><div style={{ maxWidth: 680, margin: "0 auto" }}>
-        <Reveal><img src={SCI_IMG_HANDS} alt={t('science.emdr.imgAlt')} width="1024" height="1024" loading="lazy" decoding="async" style={{ width: "100%", maxWidth: 420, height: "auto", display: "block", margin: "0 auto 40px", borderRadius: 24 }} /></Reveal>
-        <div style={{ textAlign: "left" }}>
-        <Reveal delay={0.1}><p style={label}>{t('science.emdr.label')}</p>
+      {/* Clinical Foundation — full-bleed image at top, centered text */}
+      <section style={{ padding: "0 24px 180px", background: g.bg, textAlign: "center" }}>
+        <Reveal><img src={SCI_HANDS_NEW} alt={t('science.emdr.imgAlt')} width="1024" height="1024" loading="lazy" decoding="async" style={{ width: "100vw", maxWidth: "100vw", marginLeft: "calc(50% - 50vw)", marginRight: "calc(50% - 50vw)", marginTop: 0, marginBottom: 40, borderRadius: 0, height: "auto", display: "block" }} /></Reveal>
+        <div style={{ maxWidth: 680, margin: "0 auto" }}>
+        <Reveal delay={0.1}><p style={label} className="bc-label">{t('science.emdr.label')}</p>
         <h2 style={{ ...h2s, marginBottom: 18 }}>{t('science.emdr.title')}</h2>
         <p style={{ fontSize: 18, color: g.t2, lineHeight: 1.8, marginBottom: 24 }}>{t('science.emdr.p1')}</p>
         <p style={{ fontSize: 18, color: g.t2, lineHeight: 1.8 }}>{t('science.emdr.p2')}</p></Reveal>
         </div>
-      </div></section>
+      </section>
 
-      <section style={sec("#fff")}><div style={{ maxWidth: 680, margin: "0 auto" }}>
-        <Reveal><img src={SCI_IMG_SCAN} alt={t('science.neuro.imgAlt')} width="1024" height="1024" loading="lazy" decoding="async" style={{ width: "100%", maxWidth: 420, height: "auto", display: "block", margin: "0 auto 40px", borderRadius: 24 }} /></Reveal>
-        <div style={{ textAlign: "left" }}>
-        <Reveal delay={0.1}><p style={label}>{t('science.neuro.label')}</p>
+      {/* Evidence — 2-column on desktop, text LEFT (col 1), image RIGHT (col 2) */}
+      <section data-section="evidence" style={{ padding: "180px 24px", background: "#fff", textAlign: "center" }}><div className="sci-2col-mirror" style={{ maxWidth: 1400, margin: "0 auto", display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1.1fr)", alignItems: "center", columnGap: 48 }}>
+        <div style={{ textAlign: "left", gridColumn: 1 }}>
+        <Reveal delay={0.1}><p style={label} className="bc-label">{t('science.neuro.label')}</p>
         <h2 style={{ ...h2s, marginBottom: 18 }}>{t('science.neuro.title')}</h2>
         <p style={{ fontSize: 18, color: g.t2, lineHeight: 1.8, marginBottom: 24 }}>{t('science.neuro.p1')}</p>
         <p style={{ fontSize: 18, color: g.t2, lineHeight: 1.8 }}>{t('science.neuro.p2')}</p></Reveal>
         </div>
+        <Reveal style={{ gridColumn: 2 }}><img src={SCI_SCAN_NEW} alt={t('science.neuro.imgAlt')} width="1024" height="1024" loading="lazy" decoding="async" style={{ width: "100%", height: "auto", display: "block", margin: 0 }} /></Reveal>
       </div></section>
 
       <section style={sec(g.bg)}><Reveal><div style={{ maxWidth: 640, margin: "0 auto", textAlign: "center" }}>

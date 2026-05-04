@@ -619,7 +619,7 @@ export default function App() {
         ugcConsent={ugcConsent} setUgcConsent={setUgcConsent}
         cameraError={cameraError} ugcUploading={ugcUploading}
         liveVideoRef={liveVideoRef}
-        onSelectMode={selectMode} onRetake={handleRetake}
+        onSelectMode={selectMode} onStartRecording={startRecording} onRetake={handleRetake}
         onUseVideo={handleUseVideo} onFileSelect={handleUgcFileSelect}
         onUpload={handleUgcUpload} onStopRecording={stopRecording}
       />

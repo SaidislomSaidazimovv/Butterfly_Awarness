@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { g, ff, TEAL, sec, label, h2s, gradH, TRUST_IMG, CULTURE_BG, STAT_LEADERS, STAT_REACH, STAT_RAISED, ORG_SCHOOL, ORG_TEAMS, ORG_BRANDS } from '../constants/index.js';
+import { g, ff, TEAL, sec, label, h2s, gradH, TRUST_IMG, CULTURE_BG, STAT_LEADERS, STAT_REACH, STAT_RAISED, ORG_SCHOOL, ORG_TEAMS, ORG_BRANDS, ALLIANCE_TOP } from '../constants/index.js';
 import { ROLES, ALLIANCES, TRUST } from '../data/index.js';
 import { Reveal, Btn, Link } from '../components/ui/index.js';
 import { ArrowRight } from 'lucide-react';
@@ -9,8 +9,9 @@ export default function AlliancePage({ setRP, setAP, onTrust, navigate }) {
   return (
     <div>
       {/* HERO */}
-      <section style={{ minHeight: "70dvh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", background: "linear-gradient(180deg, #C3FFEF 0%, #ffffff 50%)" }}>
-        <Reveal><h1 style={{ ...gradH, fontSize: "clamp(2.4rem,7vw,4.2rem)", marginBottom: 14 }}>{t('alliancePage.heroTitle')}</h1></Reveal>
+      <section data-page="alliance" style={{ minHeight: "70dvh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", background: "#fff", paddingTop: 0, paddingBottom: 20 }}>
+        <img src={ALLIANCE_TOP} alt="" style={{ display: "block", width: "100%", height: "auto", margin: 0 }} />
+        <Reveal><h1 style={{ ...gradH, fontSize: "clamp(3.4rem,7vw,6.2rem)", marginBottom: 14, maxWidth: 1000, marginLeft: "auto", marginRight: "auto" }}>{t('alliancePage.heroTitle')}</h1></Reveal>
         <Reveal delay={0.1}><p style={{ fontSize: 20, color: g.t2, maxWidth: 520, margin: "0 auto", lineHeight: 1.5 }}>{t('alliancePage.heroSub')}</p></Reveal>
       </section>
 
@@ -52,7 +53,7 @@ export default function AlliancePage({ setRP, setAP, onTrust, navigate }) {
       </Reveal></section>
 
       {/* CULTURE — Dark bg section */}
-      <section style={{ position: "relative", overflow: "hidden", padding: "80px 24px", textAlign: "center" }}>
+      <section data-section="culture-dark" style={{ position: "relative", overflow: "hidden", padding: "80px 24px", textAlign: "center" }}>
         <div style={{ position: "absolute", inset: 0, backgroundImage: `url(${CULTURE_BG})`, backgroundSize: "cover", backgroundPosition: "center top" }} />
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(0,0,0,0.44) 0%, rgba(0,0,0,0.85) 100%)" }} />
         <div style={{ position: "relative", maxWidth: 900, margin: "0 auto", paddingTop: "10rem" }}>

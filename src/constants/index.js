@@ -1,7 +1,8 @@
 // Design constants and image paths
 
 export const TEAL = "#0A7B77";
-export const ff = "system-ui,-apple-system,'Segoe UI',sans-serif";
+export const ORANGE = "#FF8B33";
+export const ff = '-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","SF Pro","Helvetica Neue",Helvetica,Arial,sans-serif';
 export const URL_ = "https://thebutterflychallenge.com";
 export const STXT = "I'm doing the #ButterflyChallenge. I see you. I care. You're not alone.";
 export const SCRIPT = "I see you. I care. You're not alone.";
@@ -9,7 +10,7 @@ export const HAND_RAISE_BOOST = 350;
 // Toggle off to hide every April 30 founding-event UI (countdown, hero,
 // event card, timeline sections). Flip to true to bring them back.
 export const SHOW_APR30_EVENT = false;
-export const g = { bg: "#f5f5f7", t1: "#1d1d1f", t2: "#6e6e73", t3: "#6b6b70", t4: "#7c7c82", bdr: "#d2d2d7", link: "#007D65" };
+export const g = { bg: "#f5f5f7", t1: "#000000", t2: "#6e6e73", t3: "#6b6b70", t4: "#7c7c82", bdr: "#d2d2d7", link: "#007D65" };
 
 // Image paths
 export const HERO_IMG = "/images/extracted/hero.webp";
@@ -39,6 +40,7 @@ export const AL_BUSINESS = "/images/extracted/al-business.svg";
 export const AL_EDUCATION = "/images/extracted/al-education.svg";
 export const AL_CONNECTIVITY = "/images/extracted/al-connectivity.svg";
 export const ICON_BUTTERFLY = "/Butterfly_Challenge_logo_symbol.svg";
+export const ICON_LOGO = "/image.png";
 export const EVENT_BG = "/images/extracted/event-bg.webp";
 export const TRUST_IMG = "/images/extracted/trust.webp";
 export const CTA_IMG = "/images/extracted/cta.webp";
@@ -46,7 +48,7 @@ export const JOIN_STEP1 = "/images/extracted/join-step-1.webp";
 export const JOIN_STEP2 = "/images/extracted/join-step-2.webp";
 export const JOIN_STEP3 = "/images/extracted/join-step-3.webp";
 export const CULTURE_BG = "/images/extracted/culture-bg.webp";
-export const LOGO_DARK = "/Butterfly_Challenge_logo_main.svg";
+export const LOGO_DARK = "/logo3.svg";
 export const STAT_LEADERS = "/images/extracted/stat-leaders.svg";
 export const STAT_REACH = "/images/extracted/stat-reach.svg";
 export const STAT_RAISED = "/images/extracted/stat-raised.svg";
@@ -63,9 +65,41 @@ export const SCI_IMG_SCAN = "/images/extracted/sci-scan.webp";
 export const STORY_IMG_ORIGIN = "/images/extracted/story-origin.webp";
 export const STORY_IMG_STAGE = "/images/extracted/story-stage.webp";
 
+// Skin design assets (added during the butterfly-challenge.html migration)
+export const HERO_NEW = "/exw.webp";
+export const HERO_NEW_MOBILE = "/cer.webp";
+export const SB_STILL = "/ece.webp";
+export const SB_VIDEO_1 = "/Video 1.mp4";
+export const SB_VIDEO_2 = "/Video 1_1.mp4";
+export const SB_VIDEO_3 = "/Video 1_2.mp4";
+export const HOW_IMG_1 = "/how1.webp";
+export const HOW_IMG_2 = "/how2.webp";
+export const HOW_IMG_3 = "/how3.webp";
+export const TUTORIAL_VIDEO = "/rrt.mp4";
+export const HL_NEW_1 = "/gett11.webp";
+export const HL_NEW_2 = "/gett222.webp";
+export const HL_NEW_3 = "/gett33.webp";
+export const HL_NEW_4 = "/gett44.webp";
+export const ALLIANCE_TOP = "/allia.webp";
+export const LIVE_HERO_BG = "/dsd.webp";
+export const BE_DECOR_BG = "/crecr.webp";
+export const FAQ_TOP_IMG = "/han.webp";
+export const STORY_CTA_TOP = "/han.webp";
+export const LIVE_CTA_TOP = "/han.webp";
+export const HOME_CTA_NEW = "/wcd.webp";
+export const STORY_ORIGIN_NEW = "/story.webp";
+export const STORY_TIPPING_NEW = "/prince-harry-therapy-56.webp";
+export const SCI_BRAIN_NEW = "/brai.webp";
+export const SCI_HANDS_NEW = "/white_background.webp";
+export const SCI_SCAN_NEW = "/head.webp";
+export const JOIN_STEP1_NEW = "/step-1.webp";
+export const JOIN_STEP2_NEW = "/step-2.webp";
+export const JOIN_STEP3_NEW = "/step-3.webp";
+
 // Shared page styles
 export const sec = (bg) => ({ padding: "100px 24px", background: bg || "#fff", textAlign: "center" });
 export const wrap = { maxWidth: 680, margin: "0 auto" };
-export const label = { fontSize: 14, fontWeight: 400, color: g.t3, marginBottom: 6 };
-export const h2s = { fontSize: "clamp(2rem,5.5vw,3.2rem)", fontWeight: 600, letterSpacing: "-0.04em", lineHeight: 1.08, color: g.t1 };
-export const gradH = { ...h2s, background: "linear-gradient(90deg, #00B18D, #0EA5A0, #06b6d4, #2ecc71)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" };
+export const label = { fontSize: 24, fontWeight: 600, color: "#000", marginBottom: 6 };
+export const h2s = { fontSize: "clamp(2rem,5.5vw,4.2rem)", fontWeight: 600, letterSpacing: "-0.04em", lineHeight: 1.08, color: "#000" };
+// Page-hero h1s use gradH; skin design intent is solid black, matching h2s.
+export const gradH = { ...h2s };
