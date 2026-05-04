@@ -16,3 +16,7 @@ scripts/
 # Design reference HTML files (not part of the deployed site)
 butterfly-challenge.html
 butterfly-challenge-merged.html
+
+# Internal migration audit (not for public repo)
+DESIGN_MIGRATION_AUDIT.md
+design-migration.md
