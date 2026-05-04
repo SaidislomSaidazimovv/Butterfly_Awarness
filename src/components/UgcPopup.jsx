@@ -95,7 +95,7 @@ export function UgcPopup({ open, onClose, recordingStep, countdownValue, isRecor
             )}
             <label style={{ display: "flex", gap: 10, alignItems: "flex-start", cursor: "pointer", marginBottom: 16 }}>
               <input type="checkbox" checked={ugcConsent} onChange={e => setUgcConsent(e.target.checked)} style={{ marginTop: 3, width: 18, height: 18, accentColor: TEAL }} />
-              <span style={{ fontSize: 13, color: g.t2, lineHeight: 1.5 }}>I consent to sharing this publicly as part of the Butterfly Challenge community. I understand it will be reviewed before appearing.</span>
+              <span style={{ fontSize: 13, color: g.t2, lineHeight: 1.5 }}>I consent to sharing this publicly as part of the Butterfly Challenge culture. I understand it will be reviewed before appearing.</span>
             </label>
             <button onClick={onUpload} disabled={!ugcConsent || ugcUploading} style={{ ...btnStyle, width: "100%", background: ugcConsent ? TEAL : g.bdr, color: "#fff", opacity: ugcConsent && !ugcUploading ? 1 : 0.5 }}>
               {ugcUploading ? 'Uploading...' : 'Share it'}

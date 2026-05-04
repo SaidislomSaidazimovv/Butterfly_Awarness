@@ -63,7 +63,7 @@ export default function StoryPage({ navigate }) {
       <section data-story-cta="1" style={{ background: "#f5f5f7", textAlign: "center", padding: "0 0 180px 0" }}>
         <img src={STORY_CTA_TOP} alt="" style={{ display: "block", width: "100%", height: "auto", margin: 0 }} />
         <Reveal style={{ padding: "80px 24px 0" }}><div style={{ maxWidth: 520, margin: "0 auto" }}>
-          <h2 style={{ ...gradH, fontSize: "clamp(1.8rem,5.5vw,4.2rem)", marginBottom: 14 }}>{t('story.cta.title')}</h2>
+          <h2 style={{ ...gradH, fontSize: "clamp(1.8rem,4vw,2.6rem)", marginBottom: 14, background: "linear-gradient(90deg, #00B18D, #0EA5A0, #06b6d4, #2ecc71)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>{t('story.cta.title')}</h2>
           <p style={{ fontSize: 18, color: g.t2, marginBottom: 28 }}>{t('story.cta.sub')}</p>
           <div style={{ display: "flex", justifyContent: "center", gap: 12 }}>
             <Btn primary onClick={() => navigate('')} style={{ fontSize: 16 }}>{t('story.cta.join')}</Btn>

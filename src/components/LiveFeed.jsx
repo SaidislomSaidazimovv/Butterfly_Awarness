@@ -15,7 +15,7 @@ export function LiveFeed({ entries = [], handCount, leaderboardData, onShare }) 
         <div style={{ flex: "1 1 280px", maxWidth: 360, textAlign: "left" }}>
           {entries.slice(0, 8).map(e => (
             <div key={e.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 0" }}>
-              <img src={ICON_LOGO} alt="" style={{ width: 16, height: 16, objectFit: "contain", mixBlendMode: "multiply" }} />
+              <img src={ICON_LOGO} alt="" style={{ width: 16, height: 16, objectFit: "contain" }} />
               <span style={{ fontSize: 16, fontWeight: 500, flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{e.city ? e.city + ", " : ""}{e.country}</span>
               <span style={{ fontSize: 13, color: g.t4 }}>{relT(e.createdAt)}</span>
             </div>

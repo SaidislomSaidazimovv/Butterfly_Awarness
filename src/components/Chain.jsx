@@ -61,7 +61,7 @@ export function Chain({ onJoin }) {
   if (done) {
     return (
       <div style={{ textAlign: "center", animation: "fadeUp .5s cubic-bezier(.16,1,.3,1)" }}>
-        <img src={ICON_LOGO} alt="" width="56" height="56" loading="lazy" decoding="async" style={{ width: 56, height: 56, marginBottom: 8, display: "block", marginLeft: "auto", marginRight: "auto", mixBlendMode: "multiply" }} />
+        <img src={ICON_LOGO} alt="" width="56" height="56" loading="lazy" decoding="async" style={{ width: 56, height: 56, marginBottom: 8, display: "block", marginLeft: "auto", marginRight: "auto" }} />
         <p style={{
           fontSize: "clamp(2rem,6vw,3rem)", fontWeight: 700, letterSpacing: "-.04em", lineHeight: 1,
           background: "linear-gradient(90deg," + TEAL + ",#2ecc71,#06b6d4)", WebkitBackgroundClip: "text",
@@ -83,7 +83,7 @@ export function Chain({ onJoin }) {
   if (counting) {
     return (
       <div style={{ textAlign: "center" }}>
-        <div style={{ display: "flex", justifyContent: "center", gap: 2, marginBottom: 4 }}>{Array.from({length:10}).map((_,i)=><img key={i} src={ICON_LOGO} alt="" width="12" height="12" loading="lazy" decoding="async" style={{ width: 12, height: 12, mixBlendMode: "multiply" }} />)}</div>
+        <div style={{ display: "flex", justifyContent: "center", gap: 2, marginBottom: 4 }}>{Array.from({length:10}).map((_,i)=><img key={i} src={ICON_LOGO} alt="" width="12" height="12" loading="lazy" decoding="async" style={{ width: 12, height: 12 }} />)}</div>
         <p style={{
           fontSize: 44, fontWeight: 700, color: TEAL, letterSpacing: "-.03em",
           fontVariantNumeric: "tabular-nums", transition: "all .1s", fontFamily: "monospace, " + ff
@@ -101,7 +101,7 @@ export function Chain({ onJoin }) {
     <div style={{ textAlign: "center" }}>
       <div style={{ display: "flex", justifyContent: "center", gap: 3, flexWrap: "wrap", minHeight: 48, alignItems: "center", padding: "8px 0" }}>
         {Array.from({ length: s.n }).map((_, i) => (
-          <img key={i} src={ICON_LOGO} alt="" width={s.n > 27 ? 11 : 20} height={s.n > 27 ? 11 : 20} loading="lazy" decoding="async" style={{ width: s.n > 27 ? 11 : 20, height: s.n > 27 ? 11 : 20, mixBlendMode: "multiply", animation: i < 40 ? `popIn .3s cubic-bezier(.16,1,.3,1) ${i * 15}ms both` : 'none' }} />
+          <img key={i} src={ICON_LOGO} alt="" width={s.n > 27 ? 11 : 20} height={s.n > 27 ? 11 : 20} loading="lazy" decoding="async" style={{ width: s.n > 27 ? 11 : 20, height: s.n > 27 ? 11 : 20, animation: i < 40 ? `popIn .3s cubic-bezier(.16,1,.3,1) ${i * 15}ms both` : 'none' }} />
         ))}
       </div>
       <p style={{ fontSize: 36, fontWeight: 600, color: g.t1, letterSpacing: "-.03em" }}>{s.label}</p>

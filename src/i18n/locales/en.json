@@ -20,17 +20,17 @@
     "label": "Butterfly Challenge",
     "headline": "Lift a billion hands.",
     "subheadPart1": "A 60-second gesture for mental health.",
-    "subheadPart2": "Feel it. Do it. Share it.",
-    "joinCTA": "Join the Challenge",
+    "subheadPart2": "60 seconds. 3 names. 24 hours.",
+    "joinCTA": "Take the Challenge",
     "iDidIt": "I did it",
     "handsRaised": "{{count}} hands raised",
     "handsRaisedAria": "{{count}} hands raised worldwide",
     "highlightsTitle": "Get the highlights.",
-    "communityLabel": "From The Community",
-    "communityTitle": "Doing it together.",
-    "communitySub": "Real people. Real stories.",
+    "communityLabel": "From The Culture",
+    "communityTitle": "Show up for each other.",
+    "communitySub": "Show up for someone you care about.",
     "communityEmpty": "Be the first to share your butterfly moment.",
-    "shareStory": "Share Your Story",
+    "shareStory": "Show the Love",
     "signLabel": "The Sign",
     "signTitle": "Two hands. One signal.",
     "signSub": "The first universal gesture for mental health. Try it.",
@@ -38,7 +38,7 @@
     "howTitle": "Three steps. One minute.",
     "watchTutorial": "Watch the tutorial",
     "effectLabel": "The Butterfly Effect",
-    "effectTitle": "See how 1 becomes 1 billion.",
+    "effectTitle": "See how 1 becomes nearly 1 billion.",
     "eventLabel": "Already in Motion",
     "eventTitle": "April 30. Miami.",
     "eventSub": "Where it all begins.",
@@ -52,7 +52,7 @@
     "faqTitle": "Questions.",
     "ctaAlt": "Hundreds of people doing the Butterfly Sign",
     "ctaHeadline": "60 seconds.",
-    "ctaSub": "Be the person who showed up.",
+    "ctaSub": "Be the person who shows up.",
     "remindMe": "Remind Me May 1"
   },
   "live": {
@@ -62,7 +62,7 @@
     "topCountries": "Top Countries",
     "topCities": "Top Cities",
     "topParticipants": "Top Participants",
-    "shareMoment": "Share Your Moment"
+    "shareMoment": "Show the Love"
   },
   "footer": {
     "tagline": "An initiative of One Humanity Foundation · 501(c)(3).",
@@ -118,7 +118,7 @@
     "card1": { "title": "Nearly 1 billion people live with a mental health condition.", "sub": "WHO, 2025" },
     "card2": { "title": "There's never been a universal gesture that says: I see you and I care.", "sub": "Until now." },
     "card3": { "title": "May is Butterfly Month. The globally recognized month for mental health.", "sub": "Starting 2026." },
-    "card4": { "title": "One becomes three becomes nine becomes a billion.", "sub": "Lift 3 More." }
+    "card4": { "title": "One becomes three becomes nine becomes nearly 1 billion.", "sub": "Lift 3 More." }
   },
   "stepTabs": {
     "step1": {
@@ -130,13 +130,13 @@
     "step2": {
       "num": "02", "title": "Show the Love",
       "heading": "Say their name.",
-      "body": "Look into the camera and say: \"I see you. I care. You're not alone.\" Or: \"I got you, [name].\" Say their name out loud. That's what makes it real.",
+      "body": "Look into the camera and say: \"I see you. I care. You are not alone.\" Or: \"I got you, [name].\" Say their name out loud. That's what makes it real.",
       "tip": "This isn't a script. Say whatever is true."
     },
     "step3": {
       "num": "03", "title": "Lift 3 More",
       "heading": "Tag 3 people. Pass it forward.",
-      "body": "Nominate 3 people you care about. Give them 24 hours. One becomes three becomes nine becomes a billion. That's the butterfly effect.",
+      "body": "Nominate 3 people you care about. Give them 24 hours. One becomes three becomes nine becomes nearly 1 billion. That's the butterfly effect.",
       "tip": "They don't need followers. They need one person to think of."
     },
     "nextStep": "Next step ›",
@@ -158,7 +158,7 @@
       "label": "The Butterfly Sign",
       "line1": "I see you.",
       "line2": "I care.",
-      "line3": "You're not alone.",
+      "line3": "You are not alone.",
       "caption": "No language. No diagnosis. No barrier. Just two hands.",
       "got": "Got it",
       "again": "Try again"
@@ -179,7 +179,7 @@
     "almostThere": "Almost there...",
     "done": {
       "number": "1,000,000,000",
-      "title": "One billion hands.",
+      "title": "A billion hands.",
       "subLine1": "20 generations. Starting with one person.",
       "subLine2": "Starting with you.",
       "cta": "Be that person",
@@ -191,16 +191,16 @@
       "creators": { "name": "Creators", "word": "Ignition", "line": "You have the reach.", "detail": "When a creator makes the sign, their audience doesn't see a campaign. They see someone they trust showing up. We're inviting a founding group to help ignite this into culture. One video. Three nominations. Forever." },
       "celebrities": { "name": "Celebrities", "word": "Consequence", "line": "A voice the world trusts.", "detail": "When a celebrity makes the sign, the world doesn't see a promotion. It sees a person saying something true. Not ambassadors — people who chose to show up when it mattered." },
       "athletes": { "name": "Athletes", "word": "Strength", "line": "Showing up is strength.", "detail": "When an athlete makes the sign, people see courage. Sport is where humanity processes its hardest emotions. The stadium is where people feel together." },
-      "music": { "name": "Music", "word": "Sound", "line": "Before language, there's sound.", "detail": "Music reaches where words stop. 1 billion people carry something in silence. That silence has never had a sound. Until now." },
+      "music": { "name": "Music", "word": "Sound", "line": "Before language, there's sound.", "detail": "Music reaches where words stop. Nearly 1 billion people carry something in silence. That silence has never had a sound. Until now." },
       "dance": { "name": "Dance", "word": "Motion", "line": "A body before a word.", "detail": "Dance turns emotion into motion. Every movement that lived in the body outlasted every movement that lived only in the mind." },
       "film": { "name": "Film", "word": "Story", "line": "A story before memory.", "detail": "Film shapes how the world sees culture. April 30. Miami. The story begins there. One story told honestly." },
       "fashion": { "name": "Fashion", "word": "Statement", "line": "A statement before a speech.", "detail": "What people wear is what people mean. When fashion carries the butterfly, the movement is being worn into the world." },
       "art": { "name": "Art", "word": "Image", "line": "An image before explanation.", "detail": "Art makes the invisible impossible to ignore. The first works don't decorate the movement — they define how the world remembers it." },
-      "faith": { "name": "Faith", "word": "Trust", "line": "Trust before reach.", "detail": "Faith and community go where no campaign can — into homes, families, grief, ordinary life. A signal anyone can make." },
+      "faith": { "name": "Faith", "word": "Trust", "line": "Trust before reach.", "detail": "Faith and culture go where no campaign can — into homes, families, grief, ordinary life. A signal anyone can make." },
       "gaming": { "name": "Gaming", "word": "World", "line": "3.6 billion players.", "detail": "Gaming is belonging. Teams, squads, shared missions. The butterfly is a signal waiting to become a mission." },
       "podcast": { "name": "Podcast", "word": "Voice", "line": "Too personal for the feed.", "detail": "The most powerful thing a host can do is not explain the movement — it's to say: I made the sign. I thought of someone I love." },
       "everyone": { "name": "Everyone", "word": "Humanity", "line": "You need one person.", "detail": "You don't need followers or a camera. You need one name in your mind and sixty seconds of courage." },
-      "join": "Join the Challenge"
+      "join": "Take the Challenge"
     },
     "alliance": {
       "platforms": { "name": "Platforms", "line": "How a movement travels.", "brief": "TikTok, YouTube, Meta, Instagram, X. Feature the challenge, enable sign filters, nomination mechanics. BOS Help Button before launch." },
@@ -233,7 +233,7 @@
       "sep2026": { "t": "UN General Assembly", "s": "Butterfly Week · Institutional mandate", "detail": "The movement goes institutional. Butterfly Week at the United Nations. The ask: formally recognize May as Global Mental Health Awareness Month with the butterfly as the international symbol." }
     },
     "join": {
-      "title": "Join the Challenge"
+      "title": "Take the Challenge"
     },
     "share": {
       "title": "Share your Butterfly"
@@ -265,7 +265,7 @@
   },
   "support": {
     "title": "Get Support",
-    "sub": "You're not alone. Help is available 24/7.",
+    "sub": "You are not alone. Help is available 24/7.",
     "unitedStates": "United States",
     "lifeline": {
       "name": "988 Suicide & Crisis Lifeline",
@@ -299,9 +299,9 @@
     "email": "Email",
     "captionHint": "Copy a caption for Instagram & TikTok.",
     "captions": {
-      "a": "I'm doing the #ButterflyChallenge. [Name], I see you. I care. You're not alone. Lifting 3 more: @__ @__ @__",
+      "a": "I'm doing the #ButterflyChallenge. [Name], I see you. I care. You are not alone. Lifting 3 more: @__ @__ @__",
       "b": "A 60‑second check‑in. [Name], I got you. #ButterflyChallenge Lifting 3: @__ @__ @__",
-      "c": "If you're carrying something in silence: I see you. I care. You're not alone. #ButterflyChallenge"
+      "c": "If you're carrying something in silence: I see you. I care. You are not alone. #ButterflyChallenge"
     },
     "copy": "Copy",
     "copied": "Copied",
@@ -321,8 +321,8 @@
     "eventDate": "April 30, 2026",
     "eventCity": "Miami, FL",
     "ctaTitle": "Be part of this moment.",
-    "ctaSub": "Join the founding event. Share your butterfly.",
-    "ctaBtn": "Share Your Moment"
+    "ctaSub": "Take part in the founding event. Share your butterfly.",
+    "ctaBtn": "Show the Love"
   },
   "story": {
     "heroTitle": "Where it came from.",
@@ -358,7 +358,7 @@
     "cta": {
       "title": "You're part of this story.",
       "sub": "It started with one person helping another. Join the next chapter.",
-      "join": "Join the Challenge",
+      "join": "Take the Challenge",
       "science": "See the Science"
     }
   },
@@ -404,8 +404,8 @@
       "p2": "But for the everyday moments when you're stressed, overwhelmed, or need to ground yourself? The science says: try it. Your brain will thank you."
     },
     "cta": {
-      "title": "Ready to try it?",
-      "sub": "Learn the gesture. Do the challenge. Share it with the world.",
+      "title": "Show up for mental health.",
+      "sub": "Take the Challenge. Show the Love. Lift 3 More.",
       "learn": "Learn the Sign",
       "fullStory": "Full Story"
     }
@@ -434,7 +434,7 @@
     "cultureRouted": "Routed to 988 — Suicide & Crisis Lifeline",
     "ourFoundation": "Our Foundation",
     "orgsLabel": "For Workplaces, Schools & Organizations",
-    "orgsTitle": "Bring this to your community",
+    "orgsTitle": "Bring this to your culture",
     "orgs": {
       "schools": { "title": "For Schools", "desc": "Classroom guides, assembly slides, and parent resources. COPPA compliant." },
       "teams": { "title": "For Teams", "desc": "Manager briefings, all-hands templates, and EAP integration." },

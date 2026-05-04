@@ -20,17 +20,17 @@
     "label": "Défi Papillon",
     "headline": "Levez un milliard de mains.",
     "subheadPart1": "Un geste de 60 secondes pour la santé mentale.",
-    "subheadPart2": "Ressentez-le. Faites-le. Partagez-le.",
+    "subheadPart2": "60 secondes. 3 noms. 24 heures.",
     "joinCTA": "Relevez le défi",
     "iDidIt": "Je l'ai fait",
     "handsRaised": "{{count}} mains levées",
     "handsRaisedAria": "{{count}} mains levées dans le monde",
     "highlightsTitle": "Les points forts.",
-    "communityLabel": "De la communauté",
-    "communityTitle": "Ensemble.",
-    "communitySub": "Vraies personnes. Vraies histoires.",
+    "communityLabel": "De la culture",
+    "communityTitle": "Soyez là les uns pour les autres.",
+    "communitySub": "Soyez là pour quelqu'un qui compte pour vous.",
     "communityEmpty": "Soyez le premier à partager votre moment papillon.",
-    "shareStory": "Partagez votre histoire",
+    "shareStory": "Montrez votre amour",
     "signLabel": "Le Signe",
     "signTitle": "Deux mains. Un signal.",
     "signSub": "Le premier geste universel pour la santé mentale. Essayez-le.",
@@ -38,7 +38,7 @@
     "howLabel": "Comment ça marche",
     "howTitle": "Trois étapes. Une minute.",
     "effectLabel": "L'effet papillon",
-    "effectTitle": "Voyez comment 1 devient 1 milliard.",
+    "effectTitle": "Voyez comment 1 devient près d'un milliard.",
     "eventLabel": "Déjà en mouvement",
     "eventTitle": "30 avril. Miami.",
     "eventSub": "Là où tout commence.",
@@ -52,7 +52,7 @@
     "faqTitle": "Questions.",
     "ctaAlt": "Des centaines de personnes faisant le Signe du Papillon",
     "ctaHeadline": "60 secondes.",
-    "ctaSub": "Soyez la personne qui s'est présentée.",
+    "ctaSub": "Soyez la personne qui se présente.",
     "remindMe": "Rappelez-moi le 1er mai"
   },
   "live": {
@@ -62,7 +62,7 @@
     "topCountries": "Meilleurs pays",
     "topCities": "Meilleures villes",
     "topParticipants": "Meilleurs participants",
-    "shareMoment": "Partagez votre moment"
+    "shareMoment": "Montrez votre amour"
   },
   "footer": {
     "tagline": "Une initiative de One Humanity Foundation · 501(c)(3).",
@@ -118,7 +118,7 @@
     "card1": { "title": "Près d'un milliard de personnes vivent avec un trouble de santé mentale.", "sub": "OMS, 2025" },
     "card2": { "title": "Il n'a jamais existé de geste universel qui dise : Je te vois et je me soucie.", "sub": "Jusqu'à maintenant." },
     "card3": { "title": "Mai est le Mois du Papillon. Le mois mondialement reconnu pour la santé mentale.", "sub": "À partir de 2026." },
-    "card4": { "title": "Un devient trois, devient neuf, devient un milliard.", "sub": "Levez 3 de plus." }
+    "card4": { "title": "Un devient trois, devient neuf, devient près d'un milliard.", "sub": "Levez 3 de plus." }
   },
   "stepTabs": {
     "step1": {
@@ -136,7 +136,7 @@
     "step3": {
       "num": "03", "title": "Levez 3 de plus",
       "heading": "Identifiez 3 personnes. Transmettez.",
-      "body": "Nominez 3 personnes qui comptent pour vous. Donnez-leur 24 heures. Un devient trois, devient neuf, devient un milliard. C'est l'effet papillon.",
+      "body": "Nominez 3 personnes qui comptent pour vous. Donnez-leur 24 heures. Un devient trois, devient neuf, devient près d'un milliard. C'est l'effet papillon.",
       "tip": "Ils n'ont pas besoin d'abonnés. Ils ont besoin de penser à une personne."
     },
     "nextStep": "Étape suivante ›",
@@ -191,12 +191,12 @@
       "creators": { "name": "Créateurs", "word": "Ignition", "line": "Vous avez la portée.", "detail": "Quand un créateur fait le signe, son audience ne voit pas une campagne. Elle voit quelqu'un en qui elle a confiance se montrer présent. Nous invitons un groupe fondateur à allumer la culture. Une vidéo. Trois nominations. Pour toujours." },
       "celebrities": { "name": "Célébrités", "word": "Conséquence", "line": "Une voix en laquelle le monde a confiance.", "detail": "Quand une célébrité fait le signe, le monde ne voit pas une promotion. Il voit une personne disant quelque chose de vrai. Pas des ambassadeurs — des personnes qui ont choisi d'être présentes quand c'était important." },
       "athletes": { "name": "Athlètes", "word": "Force", "line": "Être présent, c'est la force.", "detail": "Quand un athlète fait le signe, les gens voient le courage. Le sport est là où l'humanité traite ses émotions les plus difficiles. Le stade est là où les gens ressentent ensemble." },
-      "music": { "name": "Musique", "word": "Son", "line": "Avant le langage, il y a le son.", "detail": "La musique atteint là où les mots s'arrêtent. Un milliard de personnes portent quelque chose en silence. Ce silence n'a jamais eu de son. Jusqu'à maintenant." },
+      "music": { "name": "Musique", "word": "Son", "line": "Avant le langage, il y a le son.", "detail": "La musique atteint là où les mots s'arrêtent. Près d'un milliard de personnes portent quelque chose en silence. Ce silence n'a jamais eu de son. Jusqu'à maintenant." },
       "dance": { "name": "Danse", "word": "Mouvement", "line": "Un corps avant un mot.", "detail": "La danse transforme l'émotion en mouvement. Chaque mouvement qui a vécu dans le corps a duré plus longtemps que chaque mouvement qui n'a vécu que dans l'esprit." },
       "film": { "name": "Cinéma", "word": "Histoire", "line": "Une histoire avant la mémoire.", "detail": "Le cinéma façonne la façon dont le monde voit la culture. 30 avril. Miami. L'histoire commence là. Une histoire racontée honnêtement." },
       "fashion": { "name": "Mode", "word": "Déclaration", "line": "Une déclaration avant un discours.", "detail": "Ce que les gens portent est ce qu'ils signifient. Quand la mode porte le papillon, le mouvement se porte dans le monde." },
       "art": { "name": "Art", "word": "Image", "line": "Une image avant l'explication.", "detail": "L'art rend l'invisible impossible à ignorer. Les premières œuvres ne décorent pas le mouvement — elles définissent la façon dont le monde s'en souviendra." },
-      "faith": { "name": "Foi", "word": "Confiance", "line": "La confiance avant la portée.", "detail": "La foi et la communauté vont là où aucune campagne ne peut aller — dans les foyers, les familles, le deuil, la vie ordinaire. Un signal que chacun peut faire." },
+      "faith": { "name": "Foi", "word": "Confiance", "line": "La confiance avant la portée.", "detail": "La foi et la culture vont là où aucune campagne ne peut aller — dans les foyers, les familles, le deuil, la vie ordinaire. Un signal que chacun peut faire." },
       "gaming": { "name": "Jeu vidéo", "word": "Monde", "line": "3,6 milliards de joueurs.", "detail": "Le jeu vidéo, c'est l'appartenance. Équipes, escouades, missions partagées. Le papillon est un signal qui attend de devenir une mission." },
       "podcast": { "name": "Podcast", "word": "Voix", "line": "Trop personnel pour le fil.", "detail": "La chose la plus puissante qu'un animateur puisse faire n'est pas d'expliquer le mouvement — c'est de dire : j'ai fait le signe. J'ai pensé à quelqu'un que j'aime." },
       "everyone": { "name": "Tout le monde", "word": "Humanité", "line": "Il vous faut une personne.", "detail": "Vous n'avez pas besoin d'abonnés ni d'une caméra. Vous avez besoin d'un nom dans votre esprit et de soixante secondes de courage." },
@@ -321,8 +321,8 @@
     "eventDate": "30 avril 2026",
     "eventCity": "Miami, FL",
     "ctaTitle": "Faites partie de ce moment.",
-    "ctaSub": "Rejoignez l'événement fondateur. Partagez votre papillon.",
-    "ctaBtn": "Partagez votre moment"
+    "ctaSub": "Participez à l'événement fondateur. Partagez votre papillon.",
+    "ctaBtn": "Montrez votre amour"
   },
   "story": {
     "heroTitle": "D'où cela vient.",
@@ -404,8 +404,8 @@
       "p2": "Mais pour les moments quotidiens où vous êtes stressé, submergé ou avez besoin de vous ancrer ? La science dit : essayez-le. Votre cerveau vous remerciera."
     },
     "cta": {
-      "title": "Prêt à l'essayer ?",
-      "sub": "Apprenez le geste. Relevez le défi. Partagez-le avec le monde.",
+      "title": "Soyez là pour la santé mentale.",
+      "sub": "Relevez le défi. Montrez votre amour. Levez 3 de plus.",
       "learn": "Apprendre le signe",
       "fullStory": "Histoire complète"
     }
@@ -434,7 +434,7 @@
     "cultureRouted": "Dirigé vers le 988 — Ligne de suicide et crise",
     "ourFoundation": "Notre fondation",
     "orgsLabel": "Pour les lieux de travail, écoles et organisations",
-    "orgsTitle": "Apportez cela à votre communauté",
+    "orgsTitle": "Apportez cela à votre culture",
     "orgs": {
       "schools": { "title": "Pour les écoles", "desc": "Guides de classe, diapositives d'assemblée et ressources pour les parents. Conforme à COPPA." },
       "teams": { "title": "Pour les équipes", "desc": "Briefings pour managers, modèles pour réunions générales et intégration EAP." },

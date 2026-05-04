@@ -47,7 +47,7 @@ export default function LivePage({ entries, setTlPopup, onShare, handCount, lead
       <section data-live-cta="1" style={{ background: "#f5f5f7", textAlign: "center", padding: "0 0 180px 0" }}>
         <img src="/han.webp" alt="" style={{ display: "block", width: "100%", height: "auto", margin: 0 }} />
         <Reveal style={{ padding: "80px 24px 0" }}><div style={{ maxWidth: 520, margin: "0 auto" }}>
-          <h2 style={{ ...gradH, fontSize: "clamp(1.8rem,5.5vw,4.2rem)", marginBottom: 14 }}>{t('livePage.ctaTitle')}</h2>
+          <h2 style={{ ...gradH, fontSize: "clamp(1.8rem,4vw,2.6rem)", marginBottom: 14, background: "linear-gradient(90deg, #00B18D, #0EA5A0, #06b6d4, #2ecc71)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>{t('livePage.ctaTitle')}</h2>
           <p style={{ fontSize: 18, color: g.t2, marginBottom: 28 }}>{t('livePage.ctaSub')}</p>
           <Btn primary onClick={onShare} style={{ fontSize: 16, padding: "12px 28px" }}>{t('livePage.ctaBtn')}</Btn>
         </div></Reveal>

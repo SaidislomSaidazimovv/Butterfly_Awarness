@@ -20,17 +20,17 @@
     "label": "Reto Mariposa",
     "headline": "Levanta mil millones de manos.",
     "subheadPart1": "Un gesto de 60 segundos por la salud mental.",
-    "subheadPart2": "Siéntelo. Hazlo. Compártelo.",
+    "subheadPart2": "60 segundos. 3 nombres. 24 horas.",
     "joinCTA": "Acepta el Reto",
     "iDidIt": "Lo hice",
     "handsRaised": "{{count}} manos levantadas",
     "handsRaisedAria": "{{count}} manos levantadas en todo el mundo",
     "highlightsTitle": "Lo más destacado.",
-    "communityLabel": "De La Comunidad",
-    "communityTitle": "Haciéndolo juntos.",
-    "communitySub": "Personas reales. Historias reales.",
+    "communityLabel": "De La Cultura",
+    "communityTitle": "Apóyense unos a otros.",
+    "communitySub": "Apoya a alguien que te importa.",
     "communityEmpty": "Sé el primero en compartir tu momento mariposa.",
-    "shareStory": "Comparte Tu Historia",
+    "shareStory": "Demuestra el Amor",
     "signLabel": "El Signo",
     "signTitle": "Dos manos. Una señal.",
     "signSub": "El primer gesto universal por la salud mental. Pruébalo.",
@@ -38,7 +38,7 @@
     "howLabel": "Cómo Funciona",
     "howTitle": "Tres pasos. Un minuto.",
     "effectLabel": "El Efecto Mariposa",
-    "effectTitle": "Mira cómo 1 se convierte en 1.000 millones.",
+    "effectTitle": "Mira cómo 1 se convierte en casi 1.000 millones.",
     "eventLabel": "Ya en Marcha",
     "eventTitle": "30 de abril. Miami.",
     "eventSub": "Donde todo comienza.",
@@ -52,7 +52,7 @@
     "faqTitle": "Preguntas.",
     "ctaAlt": "Cientos de personas haciendo el Signo Mariposa",
     "ctaHeadline": "60 segundos.",
-    "ctaSub": "Sé la persona que se presentó.",
+    "ctaSub": "Sé la persona que se presenta.",
     "remindMe": "Recuérdame el 1 de mayo"
   },
   "live": {
@@ -62,7 +62,7 @@
     "topCountries": "Países Destacados",
     "topCities": "Ciudades Destacadas",
     "topParticipants": "Participantes Destacados",
-    "shareMoment": "Comparte Tu Momento"
+    "shareMoment": "Demuestra el Amor"
   },
   "footer": {
     "tagline": "Una iniciativa de One Humanity Foundation · 501(c)(3).",
@@ -118,7 +118,7 @@
     "card1": { "title": "Casi mil millones de personas viven con una condición de salud mental.", "sub": "OMS, 2025" },
     "card2": { "title": "Nunca ha existido un gesto universal que diga: Te veo y me importa.", "sub": "Hasta ahora." },
     "card3": { "title": "Mayo es el Mes Mariposa. El mes reconocido mundialmente por la salud mental.", "sub": "A partir de 2026." },
-    "card4": { "title": "Uno se convierte en tres, en nueve, en mil millones.", "sub": "Levanta 3 Más." }
+    "card4": { "title": "Uno se convierte en tres, en nueve, en casi mil millones.", "sub": "Levanta 3 Más." }
   },
   "stepTabs": {
     "step1": {
@@ -136,7 +136,7 @@
     "step3": {
       "num": "03", "title": "Levanta a 3 Más",
       "heading": "Etiqueta a 3 personas. Pásalo adelante.",
-      "body": "Nomina a 3 personas que te importan. Dales 24 horas. Uno se convierte en tres, en nueve, en mil millones. Ese es el efecto mariposa.",
+      "body": "Nomina a 3 personas que te importan. Dales 24 horas. Uno se convierte en tres, en nueve, en casi mil millones. Ese es el efecto mariposa.",
       "tip": "No necesitan seguidores. Necesitan pensar en una persona."
     },
     "nextStep": "Siguiente paso ›",
@@ -191,12 +191,12 @@
       "creators": { "name": "Creadores", "word": "Ignición", "line": "Tienes el alcance.", "detail": "Cuando un creador hace el signo, su audiencia no ve una campaña. Ven a alguien en quien confían presentándose. Invitamos a un grupo fundador para ayudar a encender esto como cultura. Un video. Tres nominaciones. Para siempre." },
       "celebrities": { "name": "Celebridades", "word": "Consecuencia", "line": "Una voz en la que el mundo confía.", "detail": "Cuando una celebridad hace el signo, el mundo no ve una promoción. Ve a una persona diciendo algo verdadero. No embajadores — personas que eligieron presentarse cuando importaba." },
       "athletes": { "name": "Atletas", "word": "Fuerza", "line": "Presentarse es fuerza.", "detail": "Cuando un atleta hace el signo, la gente ve valor. El deporte es donde la humanidad procesa sus emociones más difíciles. El estadio es donde la gente se siente unida." },
-      "music": { "name": "Música", "word": "Sonido", "line": "Antes del lenguaje, hay sonido.", "detail": "La música llega donde las palabras se detienen. Mil millones de personas cargan algo en silencio. Ese silencio nunca ha tenido un sonido. Hasta ahora." },
+      "music": { "name": "Música", "word": "Sonido", "line": "Antes del lenguaje, hay sonido.", "detail": "La música llega donde las palabras se detienen. Casi mil millones de personas cargan algo en silencio. Ese silencio nunca ha tenido un sonido. Hasta ahora." },
       "dance": { "name": "Danza", "word": "Movimiento", "line": "Un cuerpo antes que una palabra.", "detail": "La danza convierte la emoción en movimiento. Cada movimiento que vivió en el cuerpo duró más que cada movimiento que vivió solo en la mente." },
       "film": { "name": "Cine", "word": "Historia", "line": "Una historia antes del recuerdo.", "detail": "El cine da forma a cómo el mundo ve la cultura. 30 de abril. Miami. La historia comienza ahí. Una historia contada honestamente." },
       "fashion": { "name": "Moda", "word": "Declaración", "line": "Una declaración antes del discurso.", "detail": "Lo que la gente viste es lo que la gente significa. Cuando la moda lleva la mariposa, el movimiento se lleva puesto al mundo." },
       "art": { "name": "Arte", "word": "Imagen", "line": "Una imagen antes de la explicación.", "detail": "El arte hace imposible ignorar lo invisible. Las primeras obras no decoran el movimiento — definen cómo el mundo lo recuerda." },
-      "faith": { "name": "Fe", "word": "Confianza", "line": "Confianza antes que alcance.", "detail": "La fe y la comunidad llegan donde ninguna campaña puede — a los hogares, familias, duelo, la vida cotidiana. Una señal que cualquiera puede hacer." },
+      "faith": { "name": "Fe", "word": "Confianza", "line": "Confianza antes que alcance.", "detail": "La fe y la cultura llegan donde ninguna campaña puede — a los hogares, familias, duelo, la vida cotidiana. Una señal que cualquiera puede hacer." },
       "gaming": { "name": "Videojuegos", "word": "Mundo", "line": "3.600 millones de jugadores.", "detail": "Los videojuegos son pertenencia. Equipos, escuadras, misiones compartidas. La mariposa es una señal esperando convertirse en una misión." },
       "podcast": { "name": "Podcast", "word": "Voz", "line": "Demasiado personal para el feed.", "detail": "Lo más poderoso que un anfitrión puede hacer no es explicar el movimiento — es decir: Hice el signo. Pensé en alguien que amo." },
       "everyone": { "name": "Todos", "word": "Humanidad", "line": "Necesitas una persona.", "detail": "No necesitas seguidores ni una cámara. Necesitas un nombre en tu mente y sesenta segundos de coraje." },
@@ -321,8 +321,8 @@
     "eventDate": "30 de abril de 2026",
     "eventCity": "Miami, FL",
     "ctaTitle": "Sé parte de este momento.",
-    "ctaSub": "Únete al evento fundacional. Comparte tu mariposa.",
-    "ctaBtn": "Comparte Tu Momento"
+    "ctaSub": "Participa en el evento fundacional. Comparte tu mariposa.",
+    "ctaBtn": "Demuestra el Amor"
   },
   "story": {
     "heroTitle": "De dónde viene.",
@@ -404,8 +404,8 @@
       "p2": "Pero para los momentos cotidianos en los que estás estresado, abrumado o necesitas calmarte? La ciencia dice: pruébalo. Tu cerebro te lo agradecerá."
     },
     "cta": {
-      "title": "¿Listo para probarlo?",
-      "sub": "Aprende el gesto. Haz el reto. Compártelo con el mundo.",
+      "title": "Apóyate en la salud mental.",
+      "sub": "Acepta el Reto. Demuestra el Amor. Levanta 3 Más.",
       "learn": "Aprende el Signo",
       "fullStory": "Historia Completa"
     }
@@ -434,7 +434,7 @@
     "cultureRouted": "Dirigido al 988 — Línea de Suicidio y Crisis",
     "ourFoundation": "Nuestra Fundación",
     "orgsLabel": "Para Empresas, Escuelas y Organizaciones",
-    "orgsTitle": "Lleva esto a tu comunidad",
+    "orgsTitle": "Lleva esto a tu cultura",
     "orgs": {
       "schools": { "title": "Para Escuelas", "desc": "Guías para el aula, diapositivas para asambleas y recursos para padres. Cumple con COPPA." },
       "teams": { "title": "Para Equipos", "desc": "Resúmenes para gerentes, plantillas para reuniones e integración con EAP." },

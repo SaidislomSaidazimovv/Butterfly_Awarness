@@ -32,12 +32,12 @@ export default function AlliancePage({ setRP, setAP, onTrust, navigate }) {
       {/* ALLIANCE PARTNERS */}
       <section style={sec(g.bg)}><div style={{ maxWidth: 720, margin: "0 auto" }}>
         <Reveal><p style={label}>{t('alliancePage.alliancesLabel')}</p><h2 style={{ ...h2s, marginBottom: 8 }}>{t('alliancePage.alliancesTitle')}</h2><p style={{ fontSize: 17, color: g.t2, marginBottom: 36 }}>{t('alliancePage.alliancesSub')}</p></Reveal>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(200px,1fr))", gap: 12 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(200px,1fr))", gap: 12, gridAutoRows: "1fr", alignItems: "stretch" }}>
           {ALLIANCES.map((a, i) => (
-            <Reveal key={a.id} delay={i * 0.05}><button onClick={() => setAP(a)} className="card-btn" style={{ background: "#fff", border: "none", borderRadius: 18, padding: "24px 18px", textAlign: "left", cursor: "pointer", fontFamily: ff, width: "100%" }}>
-              <img src={a.icon} alt={t(`popups.alliance.${a.id}.name`)} width="28" height="28" loading="lazy" decoding="async" style={{ width: 28, height: 28, filter: a.tint }} />
+            <Reveal key={a.id} delay={i * 0.05} style={{ height: "100%" }}><button onClick={() => setAP(a)} className="card-btn" style={{ background: "#fff", border: "none", borderRadius: 18, padding: "24px 18px", textAlign: "left", cursor: "pointer", fontFamily: ff, width: "100%", height: "100%", display: "flex", flexDirection: "column" }}>
+              <img src={a.icon} alt={t(`popups.alliance.${a.id}.name`)} width="28" height="28" loading="lazy" decoding="async" style={{ width: 28, height: 28, filter: a.tint, flexShrink: 0 }} />
               <p style={{ fontSize: 16, fontWeight: 600, color: g.t1, margin: "8px 0 3px" }}>{t(`popups.alliance.${a.id}.name`)}</p>
-              <p style={{ fontSize: 13, color: g.t3 }}>{t(`popups.alliance.${a.id}.line`)}</p>
+              <p style={{ fontSize: 13, color: g.t3, margin: 0 }}>{t(`popups.alliance.${a.id}.line`)}</p>
             </button></Reveal>
           ))}
         </div>
@@ -111,7 +111,7 @@ export default function AlliancePage({ setRP, setAP, onTrust, navigate }) {
 
       {/* CTA */}
       <section style={sec("#f5f5f7")}><Reveal><div style={{ maxWidth: 520, margin: "0 auto" }}>
-        <h2 style={{ ...gradH, fontSize: "clamp(1.8rem,4vw,2.6rem)", marginBottom: 14 }}>{t('alliancePage.ctaTitle')}</h2>
+        <h2 style={{ ...gradH, fontSize: "clamp(1.8rem,4vw,2.6rem)", marginBottom: 14, background: "linear-gradient(90deg, #00B18D, #0EA5A0, #06b6d4, #2ecc71)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>{t('alliancePage.ctaTitle')}</h2>
         <p style={{ fontSize: 18, color: g.t2, marginBottom: 28 }}>{t('alliancePage.ctaSub')}</p>
         <Btn primary onClick={() => window.open("mailto:partners@onehumanity.org?subject=Alliance Inquiry")} style={{ fontSize: 16, padding: "12px 28px" }}>{t('alliancePage.ctaBtn')}</Btn>
       </div></Reveal></section>
