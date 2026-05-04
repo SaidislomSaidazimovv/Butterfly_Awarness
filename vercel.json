@@ -1,5 +1,5 @@
 {
-  "redirects": [
+  "//redirects-disabled": [
     {
       "source": "/",
       "destination": "https://butterflychallenge.net/",
