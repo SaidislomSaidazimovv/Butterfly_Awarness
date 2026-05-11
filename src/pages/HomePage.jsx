@@ -553,12 +553,21 @@ export default function HomePage({
           </p>
         </Reveal>
         <Reveal delay={0.2}>
-          <div style={{ display: "flex", justifyContent: "center", gap: 12 }}>
+          <div style={{ display: "flex", justifyContent: "center", gap: 12, flexWrap: "wrap" }}>
             <Btn primary onClick={onJoin} style={{ fontSize: 17 }}>
               {t('home.joinCTA')}
             </Btn>
             <Btn onClick={onRemind} style={{ fontSize: 17 }}>
               {t('home.remindMe')}
+            </Btn>
+            <Btn
+              onClick={() => {
+                track('donate_clicked');
+                window.open('https://www.pledge.to/butterfly-challenge', '_blank', 'noopener,noreferrer');
+              }}
+              style={{ fontSize: 17 }}
+            >
+              {t('home.donate')}
             </Btn>
           </div>
         </Reveal>

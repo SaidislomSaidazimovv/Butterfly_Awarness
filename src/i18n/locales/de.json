@@ -1,0 +1,462 @@
+{
+  "nav": {
+    "story": "Geschichte",
+    "science": "Wissenschaft",
+    "alliance": "Allianz",
+    "live": "Live",
+    "safeExit": "Sicher beenden",
+    "getSupport": "Brauchst du Hilfe?",
+    "takeTheChallenge": "Mach die Challenge",
+    "join": "Mitmachen",
+    "signIn": "Anmelden",
+    "signOut": "Abmelden",
+    "userMenu": "Benutzermenü",
+    "openMenu": "Navigationsmenü öffnen",
+    "closeMenu": "Navigationsmenü schließen"
+  },
+  "home": {
+    "heroAlt": "Menschen, die das Schmetterlingszeichen machen",
+    "heroPill": "Globale Bewegung für psychische Gesundheit",
+    "label": "Butterfly Challenge",
+    "headline": "Hebe eine Milliarde Hände.",
+    "subheadPart1": "Eine 60-Sekunden-Geste für psychische Gesundheit.",
+    "subheadPart2": "60 Sekunden. 3 Namen. 24 Stunden.",
+    "joinCTA": "Mach die Challenge",
+    "iDidIt": "Ich hab's gemacht",
+    "handsRaised": "{{count}} erhobene Hände",
+    "handsRaisedAria": "{{count}} weltweit erhobene Hände",
+    "highlightsTitle": "Highlights ansehen.",
+    "communityLabel": "Aus der Kultur",
+    "communityTitle": "Seid füreinander da.",
+    "communitySub": "Sei für jemanden da, der dir wichtig ist.",
+    "communityEmpty": "Sei der oder die Erste, der seinen Schmetterlingsmoment teilt.",
+    "shareStory": "Zeig die Liebe",
+    "signLabel": "Das Zeichen",
+    "signTitle": "Zwei Hände. Ein Signal.",
+    "signSub": "Die erste universelle Geste für psychische Gesundheit. Probier sie aus.",
+    "howLabel": "So funktioniert es",
+    "howTitle": "Drei Schritte. Eine Minute.",
+    "watchTutorial": "Tutorial ansehen",
+    "effectLabel": "Der Schmetterlingseffekt",
+    "effectTitle": "Sieh, wie aus 1 fast 1 Milliarde wird.",
+    "eventLabel": "Schon in Bewegung",
+    "eventTitle": "30. April. Miami.",
+    "eventSub": "Wo alles beginnt.",
+    "eventFounding": "Gründungsveranstaltung",
+    "eventName": "One Night For One Humanity",
+    "eventVenue": "Queen Miami Beach · Miami Grand Prix Wochenende",
+    "eventReveal": "The Hero Act — live enthüllt.",
+    "eventDate": "30. April 2026",
+    "eventCity": "Miami, FL",
+    "viewSchedule": "Programm ansehen",
+    "faqTitle": "Fragen.",
+    "ctaAlt": "Hunderte Menschen machen das Schmetterlingszeichen",
+    "ctaHeadline": "60 Sekunden.",
+    "ctaSub": "Sei der Mensch, der da ist.",
+    "remindMe": "Erinnere mich am 1. Mai",
+    "donate": "Spenden"
+  },
+  "live": {
+    "label": "Live",
+    "title": "Weltweit erhobene Hände.",
+    "participants": "{{count}} Teilnehmende",
+    "topCountries": "Top-Länder",
+    "topCities": "Top-Städte",
+    "topParticipants": "Top-Teilnehmende",
+    "shareMoment": "Zeig die Liebe"
+  },
+  "footer": {
+    "tagline": "Eine Initiative der One Humanity Foundation · 501(c)(3).",
+    "manyFlagsTitle": "Eine Menschheit. Viele Flaggen. Ein Schmetterling.",
+    "manyFlagsSub": "Ein gemeinsames Symbol über Nationen, Kulturen und Gemeinschaften hinweg.",
+    "resources": "Ressourcen",
+    "forOrgs": "Für Organisationen",
+    "forSchools": "Für Schulen",
+    "forTeams": "Für Teams",
+    "forBrands": "Für Marken",
+    "butterflyProtocol": "Butterfly Protocol",
+    "needHelp": "Brauchst du Hilfe?",
+    "us988": "USA: Anrufen oder SMS an 988",
+    "us988Sub": "24/7 kostenlose und vertrauliche Unterstützung.",
+    "getSupportNow": "Hilfe holen",
+    "privacy": "Datenschutz",
+    "terms": "Nutzungsbedingungen",
+    "accessibility": "Barrierefreiheit",
+    "about": "Über uns",
+    "disclaimer": "Die Butterfly Challenge ist eine soziale Geste und kein Ersatz für professionelle Hilfe. Wenn jemand in Gefahr ist, ruf den Notruf 112 (oder 911 in den USA).",
+    "copyright": "© 2026 One Humanity Foundation. Alle Rechte vorbehalten."
+  },
+  "language": {
+    "label": "Sprache"
+  },
+  "faq": {
+    "what": {
+      "q": "Was ist die Butterfly Challenge?",
+      "a": "Ein 60-Sekunden-Akt der Verbindung. Mach das Zeichen, sag die Botschaft, fordere 3 andere heraus. Für immer kostenlos."
+    },
+    "why": {
+      "q": "Warum ein Schmetterling?",
+      "a": "Das universellste Symbol für Wandel. Bereits in der amerikanischen Gebärdensprache anerkannt. Keine Übersetzung nötig."
+    },
+    "donate": {
+      "q": "Muss ich spenden?",
+      "a": "Nein. Die Challenge ist für alle, überall, für immer kostenlos."
+    },
+    "therapy": {
+      "q": "Ist das Therapie?",
+      "a": "Nein. Es ist ein Signal. Krisenangebote findest du auf dieser Seite."
+    },
+    "month": {
+      "q": "Was ist der Butterfly Month?",
+      "a": "Jedes Jahr im Mai. Der weltweit anerkannte Monat für psychische Gesundheit."
+    },
+    "who": {
+      "q": "Wer steht dahinter?",
+      "a": "ONE HUMANITY Foundation — US-amerikanische 501(c)(3). 100 % für psychische Gesundheit."
+    }
+  },
+  "highlights": {
+    "card1": { "title": "Fast 1 Milliarde Menschen leben mit einer psychischen Erkrankung.", "sub": "WHO, 2025" },
+    "card2": { "title": "Es gab nie eine universelle Geste, die sagt: Ich sehe dich, und es ist mir nicht egal.", "sub": "Bis jetzt." },
+    "card3": { "title": "Der Mai ist der Butterfly Month. Der weltweit anerkannte Monat für psychische Gesundheit.", "sub": "Ab 2026." },
+    "card4": { "title": "Eins wird drei, wird neun, wird fast 1 Milliarde.", "sub": "Hebe 3 weitere." }
+  },
+  "stepTabs": {
+    "step1": {
+      "num": "01", "title": "Mach die Challenge",
+      "heading": "Mach das Zeichen. Filme dich dabei.",
+      "body": "Öffne deine Kamera. Richte sie auf dich. Mach das Schmetterlingszeichen — Hände aufs Herz, geöffnet wie Flügel. Kein Filter. Keine Produktion. Nur du, der für jemanden da ist.",
+      "tip": "Denk an einen Namen. Du musst ihn nicht laut aussprechen."
+    },
+    "step2": {
+      "num": "02", "title": "Zeig die Liebe",
+      "heading": "Sag den Namen.",
+      "body": "Schau in die Kamera und sag: „Ich sehe dich. Es ist mir nicht egal. Du bist nicht allein.\" Oder: „Ich bin für dich da, [Name].\" Sag den Namen laut. Das macht es echt.",
+      "tip": "Das ist kein Skript. Sag, was wahr ist."
+    },
+    "step3": {
+      "num": "03", "title": "Hebe 3 weitere",
+      "heading": "Markiere 3 Personen. Gib es weiter.",
+      "body": "Nominiere 3 Menschen, die dir wichtig sind. Gib ihnen 24 Stunden. Eins wird drei, wird neun, wird fast 1 Milliarde. Das ist der Schmetterlingseffekt.",
+      "tip": "Sie brauchen keine Follower. Sie brauchen einen Menschen, an den sie denken."
+    },
+    "nextStep": "Nächster Schritt ›",
+    "ready": "Ich bin bereit — mitmachen"
+  },
+  "signBuilder": {
+    "intro": {
+      "title": "Lerne das Schmetterlingszeichen",
+      "sub": "3 Schritte. 10 Sekunden. Keine Worte nötig.",
+      "start": "Selbst ausprobieren"
+    },
+    "step1": { "instruction": "Lege beide Hände auf dein Herz.", "detail": "Handflächen flach auf der Brust.", "alt": "Hände aufs Herz" },
+    "step2": { "instruction": "Kreuze deine Handgelenke.", "detail": "Rechts über links, Daumen ineinander gehakt.", "alt": "Gekreuzte Handgelenke" },
+    "step3": { "instruction": "Öffne wie Flügel.", "detail": "Spreize deine Finger weit. Das ist das Schmetterlingszeichen.", "alt": "Hände wie Flügel geöffnet" },
+    "progress": "Schritt {{n}} von 3",
+    "next": "Weiter",
+    "complete": "Fertig",
+    "done": {
+      "label": "Das Schmetterlingszeichen",
+      "line1": "Ich sehe dich.",
+      "line2": "Es ist mir nicht egal.",
+      "line3": "Du bist nicht allein.",
+      "caption": "Keine Sprache. Keine Diagnose. Keine Barriere. Nur zwei Hände.",
+      "got": "Verstanden",
+      "again": "Nochmal versuchen"
+    }
+  },
+  "chain": {
+    "level1": { "label": "Du", "msg": "Ein Mensch. Eine Geste." },
+    "level2": { "label": "3", "msg": "Du hebst 3 Menschen." },
+    "level3": { "label": "9", "msg": "Sie heben je 3 weitere." },
+    "level4": { "label": "27", "msg": "Es verbreitet sich schon." },
+    "level5": { "label": "81", "msg": "Vier Generationen tief." },
+    "level6": { "label": "243", "msg": "Fünf Generationen. Jetzt schau." },
+    "first": "Hebe 3",
+    "next": "Nächste Generation",
+    "keepGoing": "Weitermachen →",
+    "growing": "Es wächst...",
+    "stillGoing": "Es geht weiter...",
+    "almostThere": "Fast geschafft...",
+    "done": {
+      "number": "1.000.000.000",
+      "title": "Eine Milliarde Hände.",
+      "subLine1": "20 Generationen. Beginnend mit einem Menschen.",
+      "subLine2": "Beginnend mit dir.",
+      "cta": "Sei dieser Mensch",
+      "again": "Nochmal ansehen"
+    }
+  },
+  "popups": {
+    "role": {
+      "creators": { "name": "Creator", "word": "Zündung", "line": "Du hast die Reichweite.", "detail": "Wenn ein Creator das Zeichen macht, sieht das Publikum keine Kampagne. Es sieht jemanden, dem es vertraut und der da ist. Wir laden eine Gründungsgruppe ein, diese Bewegung in Kultur zu verwandeln. Ein Video. Drei Nominierungen. Für immer." },
+      "celebrities": { "name": "Prominente", "word": "Konsequenz", "line": "Eine Stimme, der die Welt vertraut.", "detail": "Wenn Prominente das Zeichen machen, sieht die Welt keine Promotion. Sie sieht einen Menschen, der etwas Wahres sagt. Keine Botschafter — Menschen, die zeigen, dass sie da sind, wenn es zählt." },
+      "athletes": { "name": "Sportler*innen", "word": "Stärke", "line": "Da sein ist Stärke.", "detail": "Wenn Sportler*innen das Zeichen machen, sehen die Menschen Mut. Der Sport ist der Ort, an dem die Menschheit ihre schwersten Emotionen verarbeitet. Im Stadion fühlen Menschen gemeinsam." },
+      "music": { "name": "Musik", "word": "Klang", "line": "Vor der Sprache war der Klang.", "detail": "Musik erreicht, wo Worte aufhören. Fast 1 Milliarde Menschen tragen etwas in Stille. Diese Stille hatte nie einen Klang. Bis jetzt." },
+      "dance": { "name": "Tanz", "word": "Bewegung", "line": "Ein Körper vor dem Wort.", "detail": "Tanz verwandelt Emotion in Bewegung. Jede Bewegung, die im Körper lebte, hat jede Bewegung überdauert, die nur im Kopf lebte." },
+      "film": { "name": "Film", "word": "Geschichte", "line": "Eine Geschichte vor der Erinnerung.", "detail": "Film prägt, wie die Welt Kultur sieht. 30. April. Miami. Dort beginnt die Geschichte. Eine Geschichte, ehrlich erzählt." },
+      "fashion": { "name": "Mode", "word": "Statement", "line": "Ein Statement vor der Rede.", "detail": "Was Menschen tragen, ist, was sie meinen. Wenn die Mode den Schmetterling trägt, wird die Bewegung in die Welt getragen." },
+      "art": { "name": "Kunst", "word": "Bild", "line": "Ein Bild vor der Erklärung.", "detail": "Kunst macht das Unsichtbare unübersehbar. Die ersten Werke dekorieren die Bewegung nicht — sie bestimmen, wie die Welt sich an sie erinnert." },
+      "faith": { "name": "Glaube", "word": "Vertrauen", "line": "Vertrauen vor Reichweite.", "detail": "Glaube und Kultur gehen dorthin, wo keine Kampagne hinkommt — in Häuser, Familien, Trauer, gelebten Alltag. Ein Signal, das jede*r geben kann." },
+      "gaming": { "name": "Gaming", "word": "Welt", "line": "3,6 Milliarden Spielende.", "detail": "Gaming ist Zugehörigkeit. Teams, Squads, gemeinsame Missionen. Der Schmetterling ist ein Signal, das darauf wartet, eine Mission zu werden." },
+      "podcast": { "name": "Podcast", "word": "Stimme", "line": "Zu persönlich für den Feed.", "detail": "Das Stärkste, was ein Host tun kann, ist nicht, die Bewegung zu erklären — sondern zu sagen: Ich habe das Zeichen gemacht. Ich habe an jemanden gedacht, den ich liebe." },
+      "everyone": { "name": "Alle", "word": "Menschlichkeit", "line": "Du brauchst eine Person.", "detail": "Du brauchst keine Follower und keine Kamera. Du brauchst einen Namen im Kopf und sechzig Sekunden Mut." },
+      "join": "Mach die Challenge"
+    },
+    "alliance": {
+      "platforms": { "name": "Plattformen", "line": "Wie eine Bewegung reist.", "brief": "TikTok, YouTube, Meta, Instagram, X. Featuret die Challenge, ermöglicht Sign-Filter, Nominierungsmechaniken. BOS Help Button vor dem Start." },
+      "care": { "name": "Hilfsangebote", "line": "Menschen, die schon da sind.", "brief": "Organisationen für psychische Gesundheit, NGOs, Stiftungen. Verifiziert auf der Human Routing Map. Die Bewegung verweist auf Hilfe — sie ersetzt sie nie." },
+      "media": { "name": "Medien", "line": "Wie eine Bewegung bezeugt wird.", "brief": "Sender, Verlage, Presse. IASP-konforme Berichterstattung in jedem Beitrag. Zugang am 30. April." },
+      "business": { "name": "Wirtschaft", "line": "Wie sie zur Kultur wird.", "brief": "Marken, Arbeitgeber, CSR-Teams. Butterfly Month in deinem Kalender. Kein Emotional-Washing." },
+      "education": { "name": "Bildung", "line": "Die nächste Generation.", "brief": "Schulen, Hochschulen, Jugendorganisationen. Keine Schülerin und kein Schüler begegnet der Challenge ohne Weg zu echter Hilfe." },
+      "connectivity": { "name": "Konnektivität", "line": "Jede Hand.", "brief": "Telekoms, SMS, Geräte-Ökosysteme. Wer kein Datenvolumen hat, findet trotzdem Hilfe. Immer." },
+      "nonNegotiable": "Nicht verhandelbar:",
+      "nonNegotiableText": "Sicherheit vor Skalierung.",
+      "becomePartner": "Gründungspartner werden"
+    },
+    "trust": {
+      "title": "Auf Vertrauen gebaut.",
+      "items": {
+        "nonprofit": { "t": "501(c)(3) Nonprofit", "d": "Unabhängige Aufsicht. Ab Tag 1 prüfbar." },
+        "safety": { "t": "Safety Officer", "d": "Einseitiges Veto. Kann nicht überstimmt werden." },
+        "transparency": { "t": "Radikale Transparenz", "d": "Wöchentlich: Geld rein → raus → Programme → Wirkung." },
+        "editorial": { "t": "Redaktionelle Unabhängigkeit", "d": "Kein Sponsor hat redaktionelle Kontrolle. Niemals." },
+        "dignity": { "t": "Würde zuerst", "d": "Nicht-diagnostisch. IASP-konforme Sprache." },
+        "free": { "t": "Für immer kostenlos", "d": "Offen für alle, überall." }
+      }
+    },
+    "timeline": {
+      "upNext": "Als nächstes",
+      "apr30": { "t": "One Night For One Humanity", "s": "Queen Miami Beach · Gründungsveranstaltung", "detail": "Die Nacht, in der alles beginnt. The Hero Act wird live enthüllt. Die Gründungspartner werden gewürdigt. Die Butterfly Challenge startet am nächsten Morgen. Miami-Grand-Prix-Wochenende — die Welt schaut bereits zu." },
+      "may1": { "t": "Butterfly Month beginnt", "s": "Die Challenge wird global", "detail": "Der 1. Mai ist Tag eins. Die Challenge startet weltweit. Creator werden aktiv. Jede Plattform, jede Sprache, jedes Land. Der Schmetterling beginnt zu fliegen." },
+      "mayJun": { "t": "Kulturflächen werden aktiv", "s": "Sport · Musik · Film · Mode", "detail": "Das Schmetterlingszeichen erreicht Stadien, Konzertbühnen, Laufstege, Filmsets. Jede Kulturfläche, die das Signal mittragen will, wird in diesem Fenster aktiv." },
+      "jul19": { "t": "FIFA-WM-Finale", "s": "MetLife Stadium · 5 Milliarden Zuschauer", "detail": "Der größte Einzelpublikumsmoment der Menschheitsgeschichte. Wenn das Schmetterlingszeichen hier sichtbar ist, sehen es 5 Milliarden Menschen in derselben Sekunde. Das ist das Ziel." },
+      "sep2026": { "t": "UN-Vollversammlung", "s": "Butterfly Week · Institutionelles Mandat", "detail": "Die Bewegung wird institutionell. Butterfly Week bei den Vereinten Nationen. Die Forderung: Mai offiziell als Global Mental Health Awareness Month anzuerkennen — mit dem Schmetterling als internationalem Symbol." }
+    },
+    "join": {
+      "title": "Mach die Challenge"
+    },
+    "share": {
+      "title": "Teile deinen Schmetterling"
+    }
+  },
+  "countdown": {
+    "days": "Tage",
+    "hours": "Std",
+    "minutes": "Min",
+    "seconds": "Sek",
+    "happening": "Es passiert gerade jetzt."
+  },
+  "joinC": {
+    "step": "Schritt {{n}}",
+    "step1": { "t": "Mach das Zeichen", "d": "Hände aufs Herz. Geöffnet wie Flügel." },
+    "step2": { "t": "Sag die Botschaft" },
+    "step3": { "t": "Hebe 3 weitere", "d": "Markiere 3 Menschen. 24 Stunden." },
+    "back": "Zurück",
+    "next": "Weiter",
+    "doneShare": "Fertig — teilen"
+  },
+  "reminderC": {
+    "heading": "Erinnerung für den 1. Mai",
+    "placeholder": "deine@email.de",
+    "button": "Erinnere mich am 1. Mai",
+    "disclaimer": "Kein Spam. Nur eine Erinnerung. Jederzeit abbestellbar.",
+    "success": "Du bist auf der Liste.",
+    "done": "Fertig"
+  },
+  "support": {
+    "title": "Hilfe holen",
+    "sub": "Du bist nicht allein. Hilfe ist rund um die Uhr verfügbar.",
+    "unitedStates": "USA",
+    "lifeline": {
+      "name": "988 Suicide & Crisis Lifeline",
+      "detail": "Anruf oder SMS an 988 · Kostenlos · 24/7"
+    },
+    "textLine": {
+      "name": "Crisis Text Line",
+      "detail": "HOME per SMS an 741741 · Kostenlos · 24/7"
+    },
+    "international": "Außerhalb der USA",
+    "selectCountry": "Land auswählen",
+    "choose": "Wählen...",
+    "visitWebsite": "Website besuchen →",
+    "findLocal": "Lokale Angebote finden",
+    "confidentialTitle": "Was du teilst, ist deine Entscheidung.",
+    "confidentialBody": "Alle Gespräche mit Krisenangeboten sind vertraulich."
+  },
+  "visualTimeline": {
+    "apr30": { "t": "One Night For One Humanity", "s": "Die Gründungsveranstaltung. The Hero Act live enthüllt. Queen Miami Beach." },
+    "may1": { "t": "Butterfly Month beginnt", "s": "Die Challenge wird global. Creator aktivieren weltweit." },
+    "mayJun": { "t": "Kulturflächen werden aktiv", "s": "Formel 1 · Musikfestivals · Film · Modewochen · Sport." },
+    "jul19": { "t": "FIFA-WM-Finale", "s": "MetLife Stadium. 5 Milliarden Menschen schauen zu. Das Zeichen geht überallhin." },
+    "sep": { "t": "UN-Vollversammlung", "s": "Butterfly Week. Institutionelles Mandat. Die Bewegung wird dauerhaft." }
+  },
+  "shareC": {
+    "sub": "In 10 Sekunden teilen.",
+    "copyLink": "Link kopieren",
+    "whatsapp": "WhatsApp",
+    "telegram": "Telegram",
+    "facebook": "Facebook",
+    "email": "E-Mail",
+    "captionHint": "Caption für Instagram & TikTok kopieren.",
+    "captions": {
+      "a": "Ich mache die #ButterflyChallenge. [Name], ich sehe dich. Es ist mir nicht egal. Du bist nicht allein. Hebe 3 weitere: @__ @__ @__",
+      "b": "Ein 60‑Sekunden‑Check‑in. [Name], ich bin für dich da. #ButterflyChallenge Ich hebe 3: @__ @__ @__",
+      "c": "Falls du etwas in Stille trägst: Ich sehe dich. Es ist mir nicht egal. Du bist nicht allein. #ButterflyChallenge"
+    },
+    "copy": "Kopieren",
+    "copied": "Kopiert",
+    "remindHeading": "Erinnerung für den 1. Mai",
+    "remindBtn": "Erinnere mich",
+    "remindSuccess": "Du bist auf der Liste!"
+  },
+  "livePage": {
+    "heroTitle": "30. April. Queen Miami Beach.",
+    "heroSub": "Die Gründungsveranstaltung. Der Moment, in dem alles beginnt.",
+    "scheduleLabel": "Was passiert",
+    "scheduleTitle": "Das ganze Programm.",
+    "foundingEvent": "Gründungsveranstaltung",
+    "eventName": "One Night For One Humanity",
+    "eventVenue": "Queen Miami Beach · Miami Grand Prix Wochenende",
+    "eventReveal": "The Hero Act — live enthüllt.",
+    "eventDate": "30. April 2026",
+    "eventCity": "Miami, FL",
+    "ctaTitle": "Sei Teil dieses Moments.",
+    "ctaSub": "Sei Teil der Gründungsveranstaltung. Teile deinen Schmetterling.",
+    "ctaBtn": "Zeig die Liebe"
+  },
+  "story": {
+    "heroTitle": "Wo es herkommt.",
+    "heroSub": "Von einem Krisenmoment 1998 zu einer globalen Bewegung 2026.",
+    "origin": {
+      "label": "Der Ursprung",
+      "title": "1998 · Hurrikan Pauline",
+      "imgAlt": "Lucina Artigas führt Überlebende nach Hurrikan Pauline durch die Schmetterlingsumarmung",
+      "p1": "Lucina Artigas war Therapeutin in Mexiko, als Hurrikan Pauline die Küste verwüstete. Im Anschluss befanden sich Tausende — viele davon Kinder — in schwerem psychischen Trauma, ohne Ort, an den sie sich wenden konnten.",
+      "p2": "Sie entwickelte eine einfache bilaterale Stimulationsgeste, die jede*r ohne therapeutische Begleitung ausführen kann. Zwei über der Brust gekreuzte Hände, abwechselndes Klopfen. Sie nannte sie die Schmetterlingsumarmung."
+    },
+    "spread": {
+      "label": "Weltweite Verbreitung",
+      "title": "2000–2024 · Die Verbreitung",
+      "imgAlt": "Die Schmetterlingsumarmung verbreitet sich weltweit",
+      "p": "Die Schmetterlingsumarmung wanderte durch Katastrophengebiete, Flüchtlingslager und Krisenzentren weltweit. Sie wurde Teil der EMDR-Therapie, von NGO-Protokollen und der Ausbildung von Ersthelfern. Sie funktionierte. Sie war einfach. Sie war kostenlos. Und sie brauchte keine Erlaubnis."
+    },
+    "tipping": {
+      "label": "Der Wendepunkt",
+      "title": "Mai 2024 · Der Moment",
+      "imgAlt": "Die Schmetterlingsumarmung auf einer Weltbühne demonstriert",
+      "p": "Prinz Harry zeigte die Schmetterlingsumarmung auf einer Bühne. Sie wurde von Millionen gesehen. Plötzlich war die Geste nicht mehr in Fachartikeln versteckt. Sie war sichtbar. Sie war real. Und sie gehörte allen."
+    },
+    "challenge": {
+      "label": "Dieser Moment",
+      "title": "April 2026 · Die Challenge",
+      "p": "Wir organisieren den ersten koordinierten globalen Moment. Eine Nacht. Eine Geste. Sichtbarer Beweis, dass die Versorgung psychischer Gesundheit ein Menschenrecht ist, kein Luxus. Dass du Wandel anführen kannst, ohne um Erlaubnis zu bitten."
+    },
+    "timeline": {
+      "label": "Die Zeitleiste",
+      "title": "Zentrale Meilensteine."
+    },
+    "cta": {
+      "title": "Du bist Teil dieser Geschichte.",
+      "sub": "Es begann damit, dass ein Mensch einem anderen half. Werde Teil des nächsten Kapitels.",
+      "join": "Mach die Challenge",
+      "science": "Zur Wissenschaft"
+    }
+  },
+  "science": {
+    "heroTitle": "Warum es funktioniert.",
+    "heroSub": "Die Neurowissenschaft hinter der Schmetterlingsumarmung — belegt durch Forschung, weltweit von Therapeut*innen genutzt.",
+    "stats": {
+      "who": { "num": "WHO", "sub": "Empfohlene Behandlung" },
+      "years": { "num": "30+", "sub": "Jahre Forschung" },
+      "countries": { "num": "100+", "sub": "Länder nutzen EMDR" }
+    },
+    "brain": {
+      "label": "Wie dein Gehirn arbeitet",
+      "title": "Die Mittellinie überqueren.",
+      "imgAlt": "Gehirnhälften zeigen bilaterale Stimulation",
+      "p1": "Wenn du die Schmetterlingsumarmung ausführst — abwechselnde Stimulation über die Mittellinie deines Körpers — aktivierst du beide Gehirnhälften gleichzeitig. Deine linke Seite nimmt Bewegung rechts wahr. Deine rechte Seite nimmt Bewegung links wahr.",
+      "p2": "Diese bilaterale Stimulation ist der Weg, auf dem dein Gehirn überwältigende Informationen verarbeitet und integriert. Es ist derselbe Mechanismus wie im REM-Schlaf, wenn sich deine Augen hin- und herbewegen. Er hilft deinem Nervensystem, Stress zu verarbeiten."
+    },
+    "emdr": {
+      "label": "Klinische Grundlage",
+      "title": "Auf EMDR-Forschung aufgebaut.",
+      "imgAlt": "Schmetterlingsumarmung mit beruhigenden Wellen",
+      "p1": "Dr. Francine Shapiro entwickelte EMDR (Eye Movement Desensitization and Reprocessing) in den späten 1980er-Jahren. Sie entdeckte, dass bilaterale Augenbewegungen in Kombination mit der Verarbeitung traumatischer Erinnerungen Menschen helfen, posttraumatische Belastungsstörungen zu heilen. Seitdem ist EMDR eine von der WHO empfohlene Behandlung für posttraumatischen Stress.",
+      "p2": "Lucina Artigas adaptierte diese Wissenschaft. Statt therapeutisch begleiteter Augenbewegungen entwickelte sie eine selbstberuhigende Variante: zwei Hände, bilaterale Stimulation, ohne Therapeut*in. Die Schmetterlingsumarmung legt klinische Neurowissenschaft in deine eigenen Hände."
+    },
+    "neuro": {
+      "label": "Die Belege",
+      "title": "Was Hirnscans zeigen.",
+      "imgAlt": "Hirnscan zeigt Aktivierung des präfrontalen Kortex",
+      "p1": "fMRT-Studien mit bilateraler Stimulation zeigen eine reduzierte Aktivität in der Amygdala — dem Teil des Gehirns, der Angst auslöst. Gleichzeitig steigt die Aktivität im präfrontalen Kortex, der dir hilft, klar zu denken, rationale Entscheidungen zu treffen und dich sicher zu fühlen.",
+      "p2": "Anders gesagt: Die Schmetterlingsumarmung sagt deinem Alarmsystem, dass es sich beruhigen kann. Sie lässt die Bedrohung nicht verschwinden. Sie hilft deinem Gehirn zu erkennen, dass du, gerade jetzt, in diesem Moment, atmen kannst."
+    },
+    "quote": {
+      "text": "Die Schmetterlingsumarmung ist keine Therapie. Sie ist das, was Menschen instinktiv tun, wenn jemand leidet. Jetzt wissen wir, warum sie funktioniert.",
+      "attribution": "— Klinische Neurowissenschaft zur bilateralen Stimulation"
+    },
+    "disclaimer": {
+      "badge": "⚕️ Wichtige Unterscheidung",
+      "text": "Die Schmetterlingsumarmung ist ein Werkzeug zur Erdung, kein Ersatz für Therapie. Wenn du mit Trauma, Depression oder Suizidgedanken kämpfst, sprich bitte mit einer Fachperson.",
+      "label": "Wichtige Klarstellung",
+      "title": "Das ist keine Therapie.",
+      "p1": "Die Schmetterlingsumarmung ist evidenzbasiert. Sie wird von Therapeut*innen eingesetzt. Aber die Geste auszuführen, ist nicht dasselbe wie Therapie. Sie ist ein Werkzeug. Eine Geste. Ein Moment, in dem dein Nervensystem etwas mehr Ruhe finden kann.",
+      "p2": "Aber für alltägliche Momente, in denen du gestresst oder überfordert bist oder dich erden willst, sagt die Wissenschaft: Probier sie aus. Dein Gehirn wird es dir danken."
+    },
+    "cta": {
+      "title": "Sei da für psychische Gesundheit.",
+      "sub": "Mach die Challenge. Zeig die Liebe. Hebe 3 weitere.",
+      "learn": "Das Zeichen lernen",
+      "fullStory": "Ganze Geschichte"
+    }
+  },
+  "alliancePage": {
+    "heroTitle": "Wer schon da ist.",
+    "heroSub": "Die führenden Köpfe, Partner und Kulturträger, die das real machen.",
+    "rolesLabel": "Wie die Welt da ist",
+    "rolesTitle": "Jede Rolle. Jede Allianz.",
+    "rolesSub": "Tippe auf eine Rolle, um mehr zu erfahren.",
+    "alliancesLabel": "Allianzpartner",
+    "alliancesTitle": "Eine Milliarde Hände brauchen einen Weg.",
+    "alliancesSub": "Sechs Gründungskategorien. Tippe für das Briefing.",
+    "trustLabel": "Warum du uns vertrauen kannst",
+    "trustTitle": "Auf Vertrauen gebaut.",
+    "trustSub": "501(c)(3) Nonprofit · 100 % für psychische Gesundheit · Für immer kostenlos",
+    "trustAlt": "Vertrauen & Governance",
+    "viewGovernance": "Governance ansehen",
+    "cultureTitle": "Gebaut von Menschen, die Kultur bewegt haben.",
+    "stats": {
+      "leaders": { "num": "1.000+", "label": "Versammelte Leitfiguren", "sub": "Bel-Air 2024" },
+      "reach": { "num": "47 Mio.", "label": "Erreichte Menschen", "sub": "Über 110 Medienplatzierungen" },
+      "raised": { "num": "220 Mio. $", "label": "Gesammelt durch dieselbe Mechanik", "sub": "Ice Bucket Challenge 2014" }
+    },
+    "cultureFoundation": "One Humanity Foundation · 501(c)(3)",
+    "cultureRouted": "Weitergeleitet zur 988 — Suicide & Crisis Lifeline",
+    "ourFoundation": "Unsere Foundation",
+    "orgsLabel": "Für Arbeitsplätze, Schulen & Organisationen",
+    "orgsTitle": "Bring das in deine Kultur",
+    "orgs": {
+      "schools": { "title": "Für Schulen", "desc": "Unterrichtsleitfäden, Folien für Versammlungen, Eltern-Ressourcen. COPPA-konform." },
+      "teams": { "title": "Für Teams", "desc": "Manager-Briefings, All-Hands-Vorlagen und EAP-Integration." },
+      "brands": { "title": "Für Marken", "desc": "Teilnahmerichtlinien, Asset-Kits und Partnerschaftsmöglichkeiten." }
+    },
+    "learnMore": "Mehr erfahren",
+    "protocolTitle": "Das Butterfly Protocol",
+    "protocolDesc": "Die Geste lehrt Erkennen. Das Butterfly Protocol lehrt Reagieren. Ein kostenloses 30-Sekunden-Check-in-Skript, das eure Manager*innen in einer Woche einführen können. Im Einklang mit OSHA-, ADA- und HIPAA-Grenzen.",
+    "protocolBtn": "Mehr zum Protocol",
+    "ctaTitle": "Eure Organisation kann führen.",
+    "ctaSub": "Tritt der Allianz bei. Gestalte die Bewegung mit.",
+    "ctaBtn": "Als Organisation beitreten"
+  },
+  "workingProgress": {
+    "label": "IN ARBEIT",
+    "heading1": "Wir bauen",
+    "heading2": "Etwas Großes",
+    "typed": "Aktuell in Arbeit — bald wieder vorbeischauen.",
+    "systems": "Systeme werden geladen"
+  },
+  "toast": {
+    "copied": "Kopiert"
+  }
+}

@@ -3,12 +3,14 @@ import { initReactI18next } from 'react-i18next';
 import en from './locales/en.json';
 import es from './locales/es.json';
 import fr from './locales/fr.json';
+import de from './locales/de.json';
 import ar from './locales/ar.json';
 
 export const SUPPORTED_LANGUAGES = [
   { code: 'en', label: 'English', flag: '🇬🇧' },
   { code: 'es', label: 'Español', flag: '🇪🇸' },
   { code: 'fr', label: 'Français', flag: '🇫🇷' },
+  { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
   { code: 'ar', label: 'العربية', flag: '🇸🇦' },
 ];
 
@@ -31,8 +33,16 @@ const FRENCH_COUNTRIES = new Set([
 ]);
 
 const ARABIC_COUNTRIES = new Set([
-  'SA', 'AE', 'EG', 'IQ', 'JO', 'KW', 'LB', 'LY', 'MA', 'OM', 'PS',
+  // SA (Saudi Arabia) and AE (UAE / Dubai) intentionally default to English
+  // — most professional/business contexts there expect English by default.
+  // The Arabic option remains available via the manual language switcher.
+  'EG', 'IQ', 'JO', 'KW', 'LB', 'LY', 'MA', 'OM', 'PS',
   'QA', 'SY', 'TN', 'YE', 'BH', 'DZ', 'SD', 'SO', 'TD', 'ER',
+]);
+
+// German-speaking countries (Switzerland stays under FRENCH per existing policy).
+const GERMAN_COUNTRIES = new Set([
+  'DE', 'AT', 'LI',
 ]);
 
 export function mapCountryToLang(cc) {
@@ -40,6 +50,7 @@ export function mapCountryToLang(cc) {
   const code = cc.toUpperCase();
   if (SPANISH_COUNTRIES.has(code)) return 'es';
   if (FRENCH_COUNTRIES.has(code)) return 'fr';
+  if (GERMAN_COUNTRIES.has(code)) return 'de';
   if (ARABIC_COUNTRIES.has(code)) return 'ar';
   return 'en';
 }
@@ -72,6 +83,7 @@ i18n.use(initReactI18next).init({
     en: { translation: en },
     es: { translation: es },
     fr: { translation: fr },
+    de: { translation: de },
     ar: { translation: ar },
   },
   lng: INITIAL_LANG,
